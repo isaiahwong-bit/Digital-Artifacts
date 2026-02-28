@@ -3,7 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Artifacts</title>
+  <title>Digital Artifacts — Beautiful Websites That Grow Your Business</title>
+  <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta name="description" content="Digital Artifacts builds beautiful, fast websites for small businesses, tradies, and creative brands. Custom web design, development, hosting & SEO — based in Australia.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Digital Artifacts — Beautiful Websites That Grow Your Business">
+  <meta property="og:description" content="Clean, modern web design for small businesses, tradies, and creative brands. Design, code, launch — I handle the lot.">
+  <meta property="og:url" content="https://digital-artifacts.vercel.app">
+  <meta property="og:site_name" content="Digital Artifacts">
+  <meta property="og:image" content="https://digital-artifacts.vercel.app/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Digital Artifacts — Beautiful Websites That Grow Your Business">
+  <meta name="twitter:description" content="Clean, modern web design for small businesses, tradies, and creative brands. Design, code, launch — I handle the lot.">
+  <meta name="twitter:image" content="https://digital-artifacts.vercel.app/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
 
   <!-- Fonts: Clash Display + General Sans from Fontshare -->
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
@@ -21,6 +38,7 @@
             divider: '#E8E6E1',
             accent: '#00C853',
             surface: '#FFFFFF',
+            mint: '#E8F5E9',
           },
           fontFamily: {
             display: ['"Clash Display"', 'sans-serif'],
@@ -37,6 +55,9 @@
 
   <!-- Lenis Smooth Scroll -->
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
 
   <style>
     /* === Base Reset === */
@@ -214,136 +235,80 @@
       opacity: 0;
     }
 
-    /* === Services === */
-    .service-item {
+    /* === Project Row === */
+    .project-row {
       border-top: 1px solid #E8E6E1;
       transition: background-color 0.3s ease;
     }
 
-    .service-item:last-child {
+    .project-row:last-child {
       border-bottom: 1px solid #E8E6E1;
     }
 
-    .service-item:hover {
+    .project-row:hover {
       background: rgba(0, 200, 83, 0.03);
     }
 
-    .service-item:hover .service-number {
+    .project-row:hover .project-name {
       color: #00C853;
     }
 
-    .service-item:hover .service-title {
-      color: #00C853;
-    }
-
-    .service-number {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 400;
+    .project-name {
       transition: color 0.3s ease;
     }
 
-    .service-title {
-      transition: color 0.3s ease;
-    }
-
-    /* === Services Showcase === */
-    .service-card-item {
-      transition: transform 0.3s ease;
-    }
-
-    .service-card-item:hover {
-      transform: translateY(-4px);
-    }
-
-    .service-icon-wrap {
+    /* === Tag Pills === */
+    .tag-pill {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 500;
       background: rgba(0, 200, 83, 0.08);
       color: #00C853;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      transition: background-color 0.3s ease;
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      letter-spacing: 0.02em;
     }
 
-    .service-card-item:hover .service-icon-wrap {
+    /* === Service Card === */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(27, 40, 56, 0.08);
+    }
+
+    /* === Pricing Card === */
+    .pricing-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(27, 40, 56, 0.1);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid #00C853;
+    }
+
+    /* === Industry Card === */
+    .industry-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .industry-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(27, 40, 56, 0.06);
+    }
+
+    .industry-card:hover .industry-icon {
       background: rgba(0, 200, 83, 0.15);
     }
 
-    .service-icon-accent {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      color: #8A8A80;
-    }
-
-    .center-image-border {
-      position: absolute;
-      inset: -10px;
-      border: 2px solid #E8E6E1;
-      border-radius: 0.75rem;
-      z-index: -1;
-    }
-
-    .stats-strip-item {
-      opacity: 1;
-    }
-
-    .services-cta-full {
-      position: relative;
-    }
-
-    .services-underline {
-      transform-origin: left;
-    }
-
-    .learn-more-hint {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .service-card-item:hover .learn-more-hint {
-      opacity: 1;
-    }
-
-    /* === Portfolio === */
-    .portfolio-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: 6px;
-    }
-
-    .portfolio-img {
-      transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-      will-change: transform;
-    }
-
-    .portfolio-card:hover .portfolio-img {
-      transform: scale(1.04);
-    }
-
-    .portfolio-card:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-    }
-
-    .portfolio-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2rem;
-      background: linear-gradient(to top, rgba(27, 40, 56, 0.7) 0%, transparent 100%);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .portfolio-card:hover .portfolio-overlay {
-      opacity: 1;
-      transform: translateY(0);
+    .industry-icon {
+      transition: background-color 0.3s ease;
     }
 
     /* === Marquee === */
@@ -428,7 +393,6 @@
       --shimmer-color: rgba(0, 200, 83, 0.5);
     }
 
-    /* Shimmer spark container */
     .cta-btn .shimmer-spark {
       position: absolute;
       inset: 0;
@@ -437,7 +401,6 @@
       filter: blur(2px);
     }
 
-    /* Shimmer spark slide */
     .cta-btn .shimmer-slide {
       position: absolute;
       inset: 0;
@@ -446,7 +409,6 @@
       animation: shimmerSlide var(--speed) ease-in-out infinite;
     }
 
-    /* Shimmer conic gradient */
     .cta-btn .shimmer-spin {
       position: absolute;
       inset: -100%;
@@ -460,7 +422,6 @@
       animation: shimmerSpin 2s linear infinite;
     }
 
-    /* Highlight overlay */
     .cta-btn .shimmer-highlight {
       position: absolute;
       inset: 0;
@@ -478,7 +439,6 @@
       box-shadow: inset 0 -10px 10px rgba(255, 255, 255, 0.25);
     }
 
-    /* Backdrop (fills behind content, inside shimmer border) */
     .cta-btn .shimmer-backdrop {
       position: absolute;
       inset: var(--cut);
@@ -553,12 +513,12 @@
       outline-offset: 4px;
     }
 
-    /* Stagger for mobile menu links */
     .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(5) { transition-delay: 0.3s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .mobile-menu.open .mobile-menu-link:nth-child(6) { transition-delay: 0.35s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
 
     /* === Hamburger === */
     .hamburger {
@@ -634,7 +594,7 @@
       color: #1B2838;
     }
 
-    /* === Tech Label: Monospace section labels with code comment prefix === */
+    /* === Tech Label === */
     .tech-label {
       font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
       font-size: 0.75rem;
@@ -657,12 +617,67 @@
       50% { opacity: 0; }
     }
 
-    /* === Subtle grid background for tech sections === */
+    /* === Tech grid background === */
     .tech-grid-bg {
       background-image:
         linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
       background-size: 40px 40px;
+    }
+
+    /* === Form Styles === */
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.5rem;
+      color: #F7F6F3;
+      font-family: 'General Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input::placeholder {
+      color: rgba(247, 246, 243, 0.4);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #00C853;
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238A8A80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-select option {
+      background: #1B2838;
+      color: #F7F6F3;
+    }
+
+    /* === Why Me Card === */
+    .why-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .why-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(27, 40, 56, 0.06);
+    }
+
+    .why-card:hover .why-icon {
+      background: rgba(0, 200, 83, 0.15);
+      color: #00C853;
+    }
+
+    .why-icon {
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
   </style>
 </head>
@@ -677,22 +692,19 @@
   <!-- ============================== -->
   <nav class="nav-fixed" id="mainNav">
     <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <!-- Logo + Brand Name -->
       <a href="#" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
-        <img src="Brand_Assets/Logo.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-full object-cover">
+        <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-lg object-cover">
         <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
       </a>
 
-      <!-- Desktop Nav Links -->
       <div class="hidden md:flex items-center gap-10">
-        <a href="#about" class="nav-link">About</a>
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#work" class="nav-link">Work</a>
+        <a href="#about" class="nav-link">Services</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
         <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="nav-link">Shop</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
 
-      <!-- Hamburger (Mobile) -->
       <button class="hamburger md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
         <span></span>
         <span></span>
@@ -703,9 +715,9 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" class="mobile-menu-link" onclick="closeMobileMenu()">About</a>
-    <a href="#services" class="mobile-menu-link" onclick="closeMobileMenu()">Services</a>
-    <a href="#work" class="mobile-menu-link" onclick="closeMobileMenu()">Work</a>
+    <a href="#about" class="mobile-menu-link" onclick="closeMobileMenu()">Services</a>
+    <a href="#portfolio" class="mobile-menu-link" onclick="closeMobileMenu()">Portfolio</a>
+    <a href="#pricing" class="mobile-menu-link" onclick="closeMobileMenu()">Pricing</a>
     <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="mobile-menu-link" onclick="closeMobileMenu()">Shop</a>
     <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
   </div>
@@ -723,14 +735,21 @@
       <!-- Hero H1 Headline -->
       <div class="hero-headline mt-10 md:mt-14" style="opacity: 0; transform: translateY(30px);">
         <h1 class="heading-xl text-navy text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
-          Digital Artifacts<span class="text-accent cursor-blink">_</span><br>
-          <span class="text-warm font-display" style="font-weight: 400; font-size: clamp(1rem, 2vw, 1.75rem); letter-spacing: -0.01em; line-height: 1.6;">Tools, Workflows & Websites Built to Perform</span>
+          Beautiful websites<br>that grow your business<span class="text-accent cursor-blink">_</span><br>
+          <span class="text-warm font-display" style="font-weight: 400; font-size: clamp(0.9rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; line-height: 1.6;">Clean, modern web design for small businesses, tradies, and creative brands.</span>
         </h1>
       </div>
 
-      <!-- Hero CTA -->
-      <div class="hero-cta mt-8" style="opacity: 0; transform: translateY(20px);">
-        <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="cta-btn">
+      <!-- Hero CTAs -->
+      <div class="hero-cta mt-8 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
+        <a href="#contact" class="cta-btn">
+          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+          <div class="shimmer-backdrop"></div>
+          <div class="shimmer-highlight"></div>
+          <span>Get in Touch</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-dark">
           <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
           <div class="shimmer-backdrop"></div>
           <div class="shimmer-highlight"></div>
@@ -738,6 +757,9 @@
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
+
+      <!-- Byline -->
+      <p class="text-warm text-xs mt-6 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Isaiah Wong &bull; Australia</p>
 
       <!-- Scroll Indicator -->
       <div class="scroll-indicator flex flex-col items-center gap-3 mt-10 md:mt-14">
@@ -749,308 +771,620 @@
 
 
   <!-- ============================== -->
-  <!-- ABOUT SECTION -->
+  <!-- WHAT I DO -->
   <!-- ============================== -->
   <section id="about" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
-      <!-- Divider -->
       <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-        <!-- Left: Label -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
         <div class="lg:col-span-3">
           <span class="tech-label text-warm font-medium reveal-up">01 About</span>
         </div>
-
-        <!-- Right: Statement -->
         <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy mb-10" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">
-            <span class="about-reveal-text">We're a small studio in Melbourne, Australia. We build interactive tools, automation workflows, and websites that make complex things simple — and make spreadsheets obsolete.</span>
+          <h2 class="heading-lg text-navy mb-6" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
+            <span class="about-reveal-text">What I Do</span>
           </h2>
           <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            Combining deep domain experience with modern web development, we create digital products that punch above their weight. Every tool we build is interactive, works offline, runs in your browser, and is yours forever. No accounts, no subscriptions, no bloat.
+            I love helping businesses get online with sites that are fast, look amazing, and actually bring in customers. Design, code, launch — I handle the lot.
           </p>
         </div>
       </div>
+
+      <!-- 4-Card Services Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="palette" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Website Design</h3>
+          <p class="body-text text-sm">Custom responsive sites that look brilliant on every screen</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="code-2" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Development</h3>
+          <p class="body-text text-sm">Built with modern tools — React, Vite, Next.js — fast and reliable</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="rocket" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Launch & Hosting</h3>
+          <p class="body-text text-sm">Deployed on Vercel with lightning-fast global CDN</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="bar-chart-2" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">SEO & Analytics</h3>
+          <p class="body-text text-sm">Found on Google from day one with built-in best practices</p>
+        </div>
+      </div>
     </div>
   </section>
 
 
   <!-- ============================== -->
-  <!-- SERVICES SECTION -->
+  <!-- PORTFOLIO AT A GLANCE -->
   <!-- ============================== -->
-  <section id="services" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream relative overflow-hidden tech-grid-bg">
-    <!-- Decorative background elements -->
-    <div class="services-deco absolute top-20 left-10 w-64 h-64 rounded-full" style="background: rgba(0,200,83,0.04); filter: blur(60px); opacity: 0;"></div>
-    <div class="services-deco absolute bottom-20 right-10 w-80 h-80 rounded-full" style="background: rgba(138,138,128,0.04); filter: blur(60px); opacity: 0;"></div>
-
-    <div class="max-w-[1440px] mx-auto relative z-10">
-      <!-- Section Header -->
-      <div class="flex flex-col items-center mb-6">
-        <span class="tech-label text-accent font-medium mb-3 flex items-center gap-2 reveal-up">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          02 Services
-        </span>
-        <h2 class="heading-xl text-navy mb-4 text-center reveal-up" style="font-size: clamp(2.5rem, 5vw, 4rem);">What we build</h2>
-        <div class="services-underline w-24 h-[3px] bg-accent rounded-full"></div>
-      </div>
-
-      <p class="text-center max-w-2xl mx-auto mb-20 body-text text-base md:text-lg reveal-up">
-        We build digital tools, automation workflows, and websites that make complex things simple and spreadsheets obsolete.
-      </p>
-
-      <!-- 3-Column Services Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative">
-
-        <!-- Left Column -->
-        <div class="space-y-12 md:space-y-16">
-          <!-- Strategy & Advisory -->
-          <div class="service-card-item group" data-direction="left">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3.7 3.8.5-2.8 2.6.7 3.9L12 12l-3.2 1.7.7-3.9-2.8-2.6 3.8-.5z"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Interactive Tools</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">Custom-built calculators, dashboards, and scenario planners that turn complex data into clear, actionable insights — all running in your browser.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-
-          <!-- Brand & Identity -->
-          <div class="service-card-item group" data-direction="left">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Financial Modelling</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">Investment analysis, ROI calculators, and forecasting tools with real-time calculations, charts, and Australian tax structures built in.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-
-          <!-- Digital Experience -->
-          <div class="service-card-item group" data-direction="left">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3.7 3.8.5-2.8 2.6.7 3.9L12 12l-3.2 1.7.7-3.9-2.8-2.6 3.8-.5z"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Websites & Web Apps</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">Fast, responsive websites and web applications designed with purpose — clean code, beautiful interfaces, built to convert.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Center Image -->
-        <div class="flex justify-center items-stretch order-first md:order-none mb-8 md:mb-0">
-          <div class="relative w-full">
-            <div class="center-image-main rounded-lg overflow-hidden shadow-xl relative h-full min-h-[320px] md:min-h-0">
-              <img
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop&q=80"
-                alt="Our team collaborating on strategy"
-                class="w-full h-full object-cover absolute inset-0"
-                loading="lazy"
-              >
-              <div class="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent flex items-end justify-center p-6">
-                <a href="#work" class="bg-cream text-navy px-5 py-2.5 rounded-full flex items-center gap-2 text-sm font-display font-medium hover:scale-105 transition-transform duration-200">
-                  Our Work <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-            <div class="center-image-border"></div>
-            <!-- Floating accents -->
-            <div class="accent-circle absolute -top-5 -right-5 w-20 h-20 rounded-full" style="background: rgba(0,200,83,0.08);"></div>
-            <div class="accent-circle absolute -bottom-5 -left-5 w-24 h-24 rounded-full" style="background: rgba(138,138,128,0.08);"></div>
-          </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="space-y-12 md:space-y-16">
-          <!-- Technology Solutions -->
-          <div class="service-card-item group" data-direction="right">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3.7 3.8.5-2.8 2.6.7 3.9L12 12l-3.2 1.7.7-3.9-2.8-2.6 3.8-.5z"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Automation Workflows</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">End-to-end workflow automation that connects your tools, eliminates repetitive tasks, and keeps your business running while you sleep.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-
-          <!-- Growth & Marketing -->
-          <div class="service-card-item group" data-direction="right">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Data Dashboards</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">Visual dashboards that bring your numbers to life with real-time gauges, charts, and KPI tracking — no spreadsheets required.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-
-          <!-- Data & Insights -->
-          <div class="service-card-item group" data-direction="right">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="service-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                <svg class="service-icon-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3.7 3.8.5-2.8 2.6.7 3.9L12 12l-3.2 1.7.7-3.9-2.8-2.6 3.8-.5z"/></svg>
-              </div>
-              <h3 class="heading-md text-navy group-hover:text-accent transition-colors duration-300" style="font-size: 1.2rem;">Offline-First Products</h3>
-            </div>
-            <p class="body-text text-sm leading-relaxed pl-[3.5rem]">Digital products built to work anywhere. No accounts, no internet required. One-time purchase, yours forever. Download and go.</p>
-            <div class="learn-more-hint mt-2 pl-[3.5rem] flex items-center text-accent text-xs font-medium gap-1">
-              Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats Strip -->
-      <div class="mt-20 pt-14 border-t border-divider">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8">
-          <div class="stats-strip-item text-center lg:text-left">
-            <span class="font-display font-semibold text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.03em; line-height: 1;">
-              Works Offline
-            </span>
-            <span class="text-warm text-xs uppercase tracking-widest font-body font-medium mt-3 block">Your data never leaves your device</span>
-          </div>
-
-          <div class="stats-strip-item text-center lg:text-left">
-            <span class="font-display font-semibold text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.03em; line-height: 1;">
-              No Subscriptions
-            </span>
-            <span class="text-warm text-xs uppercase tracking-widest font-body font-medium mt-3 block">No monthly fees, no upsells</span>
-          </div>
-
-          <div class="stats-strip-item text-center lg:text-left">
-            <span class="font-display font-semibold text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.03em; line-height: 1;">
-              One-Time Purchase
-            </span>
-            <span class="text-warm text-xs uppercase tracking-widest font-body font-medium mt-3 block">Buy once, yours forever</span>
-          </div>
-
-          <div class="stats-strip-item text-center lg:text-left">
-            <span class="font-display font-semibold text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.03em; line-height: 1;">
-              Australian Built
-            </span>
-            <span class="text-warm text-xs uppercase tracking-widest font-body font-medium mt-3 block">Melbourne studio, local tax structures</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Services CTA — Full-width band -->
-  <section class="services-cta-full bg-navy py-16 md:py-20 px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-      <div class="flex-1 text-center md:text-left">
-        <h3 class="font-display font-semibold text-cream text-2xl md:text-3xl mb-2" style="letter-spacing: -0.02em;">Need a tool, workflow, or website built?</h3>
-        <p class="text-warm text-sm md:text-base">Tell us what you're trying to solve. We'll figure out the best way to build it.</p>
-      </div>
-      <a href="#contact" class="cta-btn flex-shrink-0">
-        <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-        <div class="shimmer-backdrop"></div>
-        <div class="shimmer-highlight"></div>
-        <span>Start a Conversation</span>
-        <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WORK / PORTFOLIO SECTION -->
-  <!-- ============================== -->
-  <section id="work" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+  <section id="stats" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-16 md:mb-24">
-        <!-- Left: Label -->
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Portfolio at a Glance</h2>
+        <p class="body-text text-base md:text-lg reveal-up">Here's what I've been up to — real projects, real results.</p>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
+          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="globe" class="w-7 h-7 text-accent"></i>
+          </div>
+          <span class="heading-xl text-accent block" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Growing</span>
+          <span class="body-text text-sm mt-1 block">Portfolio of Live Sites</span>
+        </div>
+
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-blue-400 reveal-up">
+          <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="rocket" class="w-7 h-7 text-blue-500"></i>
+          </div>
+          <span class="heading-xl text-blue-500 block" style="font-size: clamp(2rem, 4vw, 3rem);">6+</span>
+          <span class="body-text text-sm mt-1 block">Industries Served</span>
+        </div>
+
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
+          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="shield" class="w-7 h-7 text-accent"></i>
+          </div>
+          <span class="heading-xl text-accent block" style="font-size: clamp(2rem, 4vw, 3rem);">100%</span>
+          <span class="body-text text-sm mt-1 block">Uptime Guaranteed</span>
+        </div>
+
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-blue-400 reveal-up">
+          <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="check-circle" class="w-7 h-7 text-blue-500"></i>
+          </div>
+          <span class="heading-xl text-blue-500 block" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AU & UK</span>
+          <span class="body-text text-sm mt-1 block">Clients Worldwide</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- CLIENT PROJECTS -->
+  <!-- ============================== -->
+  <section id="portfolio" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-12 md:mb-16">
         <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">03 Work</span>
+          <span class="tech-label text-warm font-medium reveal-up">02 Work</span>
         </div>
-
-        <!-- Right: Heading -->
         <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">
-            What we've built
-          </h2>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">Client Projects</h2>
         </div>
       </div>
 
-      <!-- Portfolio Grid: Asymmetric -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-        <!-- Project 1 — Large -->
-        <div class="portfolio-card reveal-up group" tabindex="0">
-          <div class="aspect-[4/3] overflow-hidden rounded-md bg-divider">
-            <img src="https://placehold.co/960x720/E8E6E1/8A8A80?text=Project+01" alt="Project 01" class="portfolio-img w-full h-full object-cover" loading="lazy">
+      <!-- Project List -->
+      <div class="mb-16">
+        <!-- Cee Ess Designs -->
+        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Cee Ess Designs</span>
+              <span class="text-warm text-xs">Graphic Design Studio</span>
+            </div>
           </div>
-          <div class="portfolio-overlay rounded-b-md">
-            <span class="text-cream/70 text-xs uppercase tracking-widest font-body">Interactive Tool</span>
-            <h3 class="font-display font-semibold text-cream text-xl mt-1">Investment Property ROI Calculator</h3>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Branding</span>
+            <span class="tag-pill">Portfolio</span>
+            <span class="tag-pill">Custom Domain</span>
           </div>
-        </div>
-
-        <!-- Project 2 — Offset -->
-        <div class="portfolio-card reveal-up group mt-0 md:mt-20" tabindex="0">
-          <div class="aspect-[4/3] overflow-hidden rounded-md bg-divider">
-            <img src="https://placehold.co/960x720/1B2838/8A8A80?text=Project+02" alt="Project 02" class="portfolio-img w-full h-full object-cover" loading="lazy">
-          </div>
-          <div class="portfolio-overlay rounded-b-md">
-            <span class="text-cream/70 text-xs uppercase tracking-widest font-body">Interactive Tool</span>
-            <h3 class="font-display font-semibold text-cream text-xl mt-1">Airbnb ROI Calculator</h3>
-          </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="portfolio-card reveal-up group" tabindex="0">
-          <div class="aspect-[4/3] overflow-hidden rounded-md bg-divider">
-            <img src="https://placehold.co/960x720/00C853/F7F6F3?text=Project+03" alt="Project 03" class="portfolio-img w-full h-full object-cover" loading="lazy">
-          </div>
-          <div class="portfolio-overlay rounded-b-md">
-            <span class="text-cream/70 text-xs uppercase tracking-widest font-body">Dashboard</span>
-            <h3 class="font-display font-semibold text-cream text-xl mt-1">Small Business Financial Dashboard</h3>
-          </div>
-        </div>
-
-        <!-- Project 4 — Offset -->
-        <div class="portfolio-card reveal-up group mt-0 md:mt-20" tabindex="0">
-          <div class="aspect-[4/3] overflow-hidden rounded-md bg-divider">
-            <img src="https://placehold.co/960x720/8A8A80/FAFAF8?text=Project+04" alt="Project 04" class="portfolio-img w-full h-full object-cover" loading="lazy">
-          </div>
-          <div class="portfolio-overlay rounded-b-md">
-            <span class="text-cream/70 text-xs uppercase tracking-widest font-body">Workflow</span>
-            <h3 class="font-display font-semibold text-cream text-xl mt-1">Custom Automation Workflows</h3>
-          </div>
-        </div>
-      </div>
-
-      <!-- View All -->
-      <div class="mt-16 md:mt-24 flex justify-center reveal-up">
-        <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-dark">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>View All Products on Etsy</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
         </a>
+
+        <!-- Jensen Design Service -->
+        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="pen-tool" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Jensen Design Service</span>
+              <span class="text-warm text-xs">Design Agency</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Design</span>
+            <span class="tag-pill">Services</span>
+            <span class="tag-pill">Portfolio</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Full Circle Solutions -->
+        <a href="https://full-circle-solutions.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="settings" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Full Circle Solutions</span>
+              <span class="text-warm text-xs">Business Solutions</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Business</span>
+            <span class="tag-pill">Corporate</span>
+            <span class="tag-pill">Services</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- BaySolar UK -->
+        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="sun" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">BaySolar UK</span>
+              <span class="text-warm text-xs">Solar Energy Company</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Energy</span>
+            <span class="tag-pill">Solar</span>
+            <span class="tag-pill">UK Market</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Digital Artifacts -->
+        <a href="https://digital-artifacts.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="code-2" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Digital Artifacts</span>
+              <span class="text-warm text-xs">Digital Agency</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Agency</span>
+            <span class="tag-pill">Creative</span>
+            <span class="tag-pill">Digital</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+      </div>
+
+      <!-- More Projects -->
+      <div class="mb-8 reveal-up">
+        <span class="tech-label text-warm font-medium block mb-3" style="font-size: 0.7rem;">Continued</span>
+        <h3 class="heading-md text-navy" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">More Projects</h3>
+      </div>
+
+      <div class="mb-16">
+        <!-- Robert Green Carpenter -->
+        <a href="https://robert-green-carpenter.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Robert Green Carpenter</span>
+              <span class="text-warm text-xs">Carpentry Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Trades</span>
+            <span class="tag-pill">Carpentry</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Eastern Suburbs Painting -->
+        <a href="https://eastern-suburbs-painting.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Eastern Suburbs Painting</span>
+              <span class="text-warm text-xs">Painting Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Trades</span>
+            <span class="tag-pill">Painting</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Tom's Firewood -->
+        <a href="https://toms-firewood.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="flame" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Tom's Firewood</span>
+              <span class="text-warm text-xs">Firewood Supply</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Retail</span>
+            <span class="tag-pill">Delivery</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Yaz Services -->
+        <a href="https://yaz-services.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="wrench" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Yaz Services</span>
+              <span class="text-warm text-xs">General Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Services</span>
+            <span class="tag-pill">Multi-trade</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- FEATURED PROJECT — CEE ESS DESIGNS -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-xl reveal-up">
+        <!-- Left Panel -->
+        <div class="bg-mint p-10 md:p-14 flex flex-col justify-center">
+          <span class="tech-label text-accent font-medium mb-6" style="font-size: 0.7rem;">Featured Project</span>
+          <h3 class="heading-xl text-navy mb-3" style="font-size: clamp(2rem, 3.5vw, 3rem);">Cee Ess Designs</h3>
+          <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="text-accent text-sm font-medium mb-6 hover:underline">cee-essdesigns.com.au &rarr;</a>
+          <p class="body-text text-sm mb-8 max-w-md">Melbourne freelance graphic design studio. Full brand portfolio with animated UI, contact forms, SEO optimisation, structured data, and a custom .com.au domain.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-pill">5 brand case studies</span>
+            <span class="tag-pill">Custom domain</span>
+            <span class="tag-pill">Full SEO</span>
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="bg-surface p-10 md:p-14 flex flex-col justify-center gap-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="lock" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Custom Domain + SSL</h4>
+              <p class="body-text text-sm">Live on cee-essdesigns.com.au with HTTPS by default</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="search" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Full SEO Suite</h4>
+              <p class="body-text text-sm">Open Graph, Twitter Cards, structured data (JSON-LD)</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="smartphone" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Mobile-First Design</h4>
+              <p class="body-text text-sm">Animated loading, custom cursor, responsive throughout</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="mail" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Smart Contact Forms</h4>
+              <p class="body-text text-sm">Formspree integration with service type selector</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="star" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Portfolio Showcase</h4>
+              <p class="body-text text-sm">5 dedicated brand case study pages with galleries</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- INDUSTRIES -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Industries I Love Working With</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="hammer" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Trades & Construction</h3>
+          <p class="body-text text-sm">Carpenters, painters, general services</p>
+        </div>
+
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="pen-tool" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Creative & Design</h3>
+          <p class="body-text text-sm">Graphic designers, agencies, studios</p>
+        </div>
+
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="sun" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Energy & Sustainability</h3>
+          <p class="body-text text-sm">Solar installers, green tech</p>
+        </div>
+
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="utensils" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Food & Hospitality</h3>
+          <p class="body-text text-sm">Restaurants, catering, food delivery</p>
+        </div>
+
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="trees" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Landscaping & Outdoors</h3>
+          <p class="body-text text-sm">Tree management, firewood, gardens</p>
+        </div>
+
+        <div class="industry-card bg-surface rounded-xl p-8 text-center border border-divider reveal-up">
+          <div class="industry-icon w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="briefcase" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Business Services</h3>
+          <p class="body-text text-sm">Consultancies, professional services</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- PRICING — WEBSITE PACKAGES -->
+  <!-- ============================== -->
+  <section id="pricing" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream tech-grid-bg">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-16 md:mb-20">
+        <span class="tech-label text-accent font-medium mb-4 block reveal-up">03 Pricing</span>
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Website Packages</h2>
+        <p class="body-text text-base md:text-lg reveal-up">Simple, transparent pricing — 14-day turnaround, no surprises!</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-24">
+        <!-- Starter -->
+        <div class="pricing-card bg-surface rounded-2xl p-8 md:p-10 border border-divider reveal-up">
+          <h3 class="font-display font-semibold text-navy text-lg mb-1">Starter</h3>
+          <p class="heading-xl text-accent mb-2" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">$800 – $1,500</p>
+          <p class="body-text text-sm mb-8">Single-page landing site</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>1-page responsive design</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Mobile optimized</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Contact form</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Basic SEO setup</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Vercel deployment</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>1 round of revisions</li>
+          </ul>
+        </div>
+
+        <!-- Professional (Featured) -->
+        <div class="pricing-card featured bg-navy rounded-2xl p-8 md:p-10 reveal-up relative">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Most Popular</span>
+          <h3 class="font-display font-semibold text-cream text-lg mb-1">Professional</h3>
+          <p class="heading-xl text-accent mb-2" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">$2,000 – $4,000</p>
+          <p class="text-warm text-sm mb-8">Multi-page business site</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>3-6 page site</li>
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Custom design & branding</li>
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>SEO & structured data</li>
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Contact forms & maps</li>
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Custom domain setup</li>
+            <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>3 rounds of revisions</li>
+          </ul>
+        </div>
+
+        <!-- Premium -->
+        <div class="pricing-card bg-surface rounded-2xl p-8 md:p-10 border border-divider reveal-up">
+          <h3 class="font-display font-semibold text-navy text-lg mb-1">Premium</h3>
+          <p class="heading-xl text-accent mb-2" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">$4,500 – $8,000+</p>
+          <p class="body-text text-sm mb-8">Full brand experience</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>6+ pages with CMS</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Advanced animations/UI</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>E-commerce or booking</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Analytics integration</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Full SEO & Open Graph</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Ongoing support included</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ONGOING CARE & HOSTING -->
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Ongoing Care & Hosting</h2>
+        <p class="body-text text-base md:text-lg reveal-up">Your site stays fast, secure, and looking fresh — without you lifting a finger</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+        <!-- Basic Hosting -->
+        <div class="pricing-card bg-surface rounded-2xl p-8 md:p-10 border border-divider border-t-4 border-t-accent reveal-up">
+          <h3 class="font-display font-semibold text-navy text-lg mb-1">Basic Hosting</h3>
+          <p class="heading-xl text-accent mb-6" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">$30/month</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Vercel hosting & CDN</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>SSL certificate</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Uptime monitoring</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Monthly security check</li>
+          </ul>
+        </div>
+
+        <!-- Care Plan -->
+        <div class="pricing-card bg-surface rounded-2xl p-8 md:p-10 border border-divider border-t-4 border-t-blue-400 reveal-up">
+          <h3 class="font-display font-semibold text-navy text-lg mb-1">Care Plan</h3>
+          <p class="heading-xl text-blue-500 mb-6" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">$80 – $150/mo</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>Everything in Basic</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>Up to 2hrs content updates</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>Performance monitoring</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>Monthly backup & report</li>
+          </ul>
+        </div>
+
+        <!-- Growth Plan -->
+        <div class="pricing-card bg-surface rounded-2xl p-8 md:p-10 border border-divider border-t-4 border-t-accent reveal-up">
+          <h3 class="font-display font-semibold text-navy text-lg mb-1">Growth Plan</h3>
+          <p class="heading-xl text-accent mb-6" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">$200 – $400/mo</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Everything in Care</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>SEO monitoring & tweaks</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Analytics review</li>
+            <li class="flex items-center gap-3 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Priority support & new features</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="text-center reveal-up">
+        <p class="body-text text-sm">
+          <span class="font-semibold text-navy">Common Add-ons:</span>
+          Domain registration ($20-50/yr) &bull; Email setup ($5-15/mo) &bull; Extra content updates ($60/hr) &bull; New page or feature (quoted)
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WHY CLIENTS LOVE WORKING WITH ME -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Why Clients Love Working With Me</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="zap" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">14-Day Turnaround</h3>
+          <p class="body-text text-sm">Most sites go live in just 14 days — fast, reliable delivery</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="shield" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Modern & Secure</h3>
+          <p class="body-text text-sm">Vercel edge network, SSL included, blazing fast globally</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="heart" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Personal Touch</h3>
+          <p class="body-text text-sm">You talk directly to me — no agencies, no middlemen</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="dollar-sign" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Honest Pricing</h3>
+          <p class="body-text text-sm">What I quote is what you pay. No surprise invoices.</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="trending-up" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Built to Grow</h3>
+          <p class="body-text text-sm">Your site scales with your business — no rebuilds needed</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="refresh-cw" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Ongoing Care</h3>
+          <p class="body-text text-sm">I stick around to keep things running beautifully</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1061,30 +1395,30 @@
   <!-- ============================== -->
   <section class="py-10 md:py-14 border-t border-b border-divider overflow-hidden bg-cream">
     <div class="marquee-track">
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Tools</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Workflows</span>
-      <span class="marquee-dot"></span>
       <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Calculators</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Dashboards</span>
-      <span class="marquee-dot"></span>
       <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
       <span class="marquee-dot"></span>
       <!-- Duplicate for seamless loop -->
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Tools</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Workflows</span>
-      <span class="marquee-dot"></span>
       <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Calculators</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Dashboards</span>
-      <span class="marquee-dot"></span>
       <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
       <span class="marquee-dot"></span>
     </div>
   </section>
@@ -1093,26 +1427,75 @@
   <!-- ============================== -->
   <!-- CONTACT / CTA SECTION -->
   <!-- ============================== -->
-  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1440px] mx-auto text-center">
-      <span class="tech-label text-warm font-medium reveal-up block mb-8">04 Contact</span>
+  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
+    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
 
-      <h2 class="heading-xl text-cream mb-10 reveal-up" style="font-size: clamp(2.5rem, 6vw, 6rem);">
-        Let's build<br>something useful<span class="text-accent cursor-blink">_</span>
-      </h2>
+    <div class="max-w-[1440px] mx-auto relative z-10">
+      <div class="text-center mb-14">
+        <span class="tech-label text-warm font-medium reveal-up block mb-8">04 Contact</span>
+        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
+          Let's make something<br>great together<span class="text-accent cursor-blink">_</span>
+        </h2>
+        <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
+          Ready to get your business online? I'd love to chat.
+        </p>
+      </div>
 
-      <p class="body-text text-warm max-w-xl mx-auto mb-12 text-base md:text-lg reveal-up">
-        Got a problem that needs a tool, a workflow that needs automating, or a website that needs building? We'd love to hear about it.
-      </p>
+      <!-- Lead Capture Form -->
+      <div class="max-w-2xl mx-auto reveal-up">
+        <form action="https://formspree.io/f/{FORM_ID}" method="POST" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
+              <input type="text" name="name" id="name" required placeholder="Your name" class="form-input">
+            </div>
+            <div>
+              <label for="email" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Email *</label>
+              <input type="email" name="email" id="email" required placeholder="you@company.com" class="form-input">
+            </div>
+          </div>
 
-      <div class="reveal-up">
-        <a href="mailto:hello@digitalartifacts.com" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Get in Touch</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="phone" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Phone Number</label>
+              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX" class="form-input">
+            </div>
+            <div>
+              <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
+              <select name="service" id="service" class="form-input form-select">
+                <option value="" disabled selected>Select a service</option>
+                <option value="website">Website</option>
+                <option value="custom-html-tool">Custom HTML Tool</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
+            <select name="budget" id="budget" class="form-input form-select">
+              <option value="" disabled selected>Select your budget</option>
+              <option value="800-1500">$800 – $1,500</option>
+              <option value="2000-4000">$2,000 – $4,000</option>
+              <option value="4500-8000">$4,500 – $8,000+</option>
+              <option value="not-sure">Not sure yet</option>
+            </select>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
+            <button type="submit" class="cta-btn w-full sm:w-auto">
+              <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+              <div class="shimmer-backdrop"></div>
+              <div class="shimmer-highlight"></div>
+              <span>Send Message</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+            <span class="text-warm/50 text-xs flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-3 h-3"></i> Based in Australia
+            </span>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -1126,9 +1509,9 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
         <!-- Logo + Tagline -->
         <div class="md:col-span-4">
-          <img src="Brand_Assets/Logo.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-full object-cover mb-6" style="filter: brightness(1.5) contrast(0.8);">
+          <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-lg object-cover mb-6">
           <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            Digital Artifacts. Tools, workflows, and websites built to perform.
+            Beautiful digital products — websites, tools, and workflows built to perform.
           </p>
         </div>
 
@@ -1136,29 +1519,26 @@
         <div class="md:col-span-2 md:col-start-7">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
           <div class="flex flex-col gap-3">
-            <a href="#about" class="footer-link">About</a>
-            <a href="#services" class="footer-link">Services</a>
-            <a href="#work" class="footer-link">Work</a>
-            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Shop</a>
+            <a href="#about" class="footer-link">Services</a>
+            <a href="#portfolio" class="footer-link">Portfolio</a>
+            <a href="#pricing" class="footer-link">Pricing</a>
             <a href="#contact" class="footer-link">Contact</a>
           </div>
         </div>
 
-        <!-- Social -->
+        <!-- Connect -->
         <div class="md:col-span-2">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Connect</h4>
           <div class="flex flex-col gap-3">
-            <a href="#" class="footer-link">LinkedIn</a>
-            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Etsy Store</a>
+            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
           </div>
         </div>
 
-        <!-- Contact Info -->
+        <!-- Branding -->
         <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Reach Out</h4>
-          <div class="flex flex-col gap-3">
-            <a href="mailto:hello@digitalartifacts.com" class="footer-link">hello@digitalartifacts.com</a>
-          </div>
+          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
+          <p class="text-warm text-sm">Isaiah - Digital Artifacts</p>
+          <p class="text-warm/50 text-xs mt-2">Australia</p>
         </div>
       </div>
 
@@ -1178,6 +1558,9 @@
   <!-- SCRIPTS -->
   <!-- ============================== -->
   <script>
+    // === Initialize Lucide Icons ===
+    lucide.createIcons();
+
     // === Mobile Menu ===
     const hamburger = document.getElementById('hamburgerBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1233,7 +1616,6 @@
     });
 
     // === Hero Animation ===
-    // Animate sphere
     gsap.to('.hero-sphere', {
       y: 0,
       opacity: 1,
@@ -1242,7 +1624,6 @@
       delay: 0.3,
     });
 
-    // Animate hero headline
     gsap.to('.hero-headline', {
       y: 0,
       opacity: 1,
@@ -1251,16 +1632,15 @@
       delay: 0.8,
     });
 
-    // Animate hero CTA
     gsap.to('.hero-cta', {
       y: 0,
       opacity: 1,
       duration: 0.8,
       ease: 'power3.out',
       delay: 1.1,
+      stagger: 0.15,
     });
 
-    // Animate scroll indicator
     gsap.to('.scroll-indicator', {
       y: 0,
       opacity: 1,
@@ -1391,17 +1771,16 @@
       const uFront = gl.getUniformLocation(program, 'u_colorFront');
       const uPx = gl.getUniformLocation(program, 'u_pxSize');
 
-      // Brand colours to cycle through
       const brandColors = [
-        [0/255, 200/255, 83/255],      // tech green accent
-        [27/255, 40/255, 56/255],      // navy
-        [138/255, 138/255, 128/255],   // warm
+        [0/255, 200/255, 83/255],
+        [27/255, 40/255, 56/255],
+        [138/255, 138/255, 128/255],
       ];
-      const back = [247/255, 246/255, 243/255, 0.0]; // transparent bg
+      const back = [247/255, 246/255, 243/255, 0.0];
 
-      const holdDuration = 3.0;  // seconds to hold each colour
-      const fadeDuration = 2.0;  // seconds to transition between colours
-      const cycleDuration = holdDuration + fadeDuration; // per stop
+      const holdDuration = 3.0;
+      const fadeDuration = 2.0;
+      const cycleDuration = holdDuration + fadeDuration;
 
       function lerpColor(a, b, t) {
         return [
@@ -1421,7 +1800,6 @@
           return brandColors[index];
         }
         const progress = (within - holdDuration) / fadeDuration;
-        // Smooth ease in-out
         const eased = progress < 0.5
           ? 2 * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 2) / 2;
@@ -1485,155 +1863,26 @@
       });
     }
 
-    // === Portfolio Parallax ===
-    gsap.utils.toArray('.portfolio-card').forEach(card => {
-      const img = card.querySelector('.portfolio-img');
-      if (img) {
-        gsap.fromTo(img,
-          { y: -30 },
+    // === Stat Cards Stagger (uses reveal-up for initial state) ===
+    const statCards = gsap.utils.toArray('.stat-card');
+    if (statCards.length) {
+      statCards.forEach(card => card.classList.remove('reveal-up'));
+      statCards.forEach((card, i) => {
+        gsap.fromTo(card,
+          { y: 40, opacity: 0 },
           {
-            y: 30,
-            ease: 'none',
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            delay: i * 0.12,
+            ease: 'power3.out',
             scrollTrigger: {
               trigger: card,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 0.6,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
             }
           }
         );
-      }
-    });
-
-    // === Services Showcase Animations ===
-
-    // Decorative blobs: fade in + parallax
-    gsap.utils.toArray('.services-deco').forEach((el, i) => {
-      gsap.to(el, {
-        opacity: 1,
-        duration: 1.5,
-        scrollTrigger: {
-          trigger: '#services',
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
-      });
-      gsap.to(el, {
-        y: i % 2 === 0 ? -50 : 50,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#services',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.8,
-        }
-      });
-    });
-
-    // Services underline animation
-    const servicesUnderline = document.querySelector('.services-underline');
-    if (servicesUnderline) {
-      gsap.from(servicesUnderline, {
-        scaleX: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: servicesUnderline,
-          start: 'top 90%',
-          toggleActions: 'play none none none',
-        }
-      });
-    }
-
-    // Service cards: slide in from left/right
-    gsap.utils.toArray('.service-card-item').forEach((card) => {
-      const dir = card.dataset.direction;
-      gsap.from(card, {
-        x: dir === 'left' ? -30 : 30,
-        opacity: 0,
-        duration: 0.7,
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        }
-      });
-    });
-
-    // Center image reveal
-    const centerImageMain = document.querySelector('.center-image-main');
-    if (centerImageMain) {
-      gsap.from(centerImageMain, {
-        scale: 0.9,
-        opacity: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: centerImageMain,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
-      });
-    }
-
-    const centerImageBorder = document.querySelector('.center-image-border');
-    if (centerImageBorder) {
-      gsap.from(centerImageBorder, {
-        scale: 1.15,
-        opacity: 0,
-        duration: 0.9,
-        delay: 0.3,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: centerImageBorder,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
-      });
-    }
-
-    // Accent circles fade in
-    gsap.utils.toArray('.accent-circle').forEach((el, i) => {
-      gsap.from(el, {
-        opacity: 0,
-        y: i % 2 === 0 ? 20 : -20,
-        duration: 1,
-        delay: 0.6 + i * 0.2,
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
-    });
-
-    // Stats strip reveal animation
-    gsap.utils.toArray('.stats-strip-item').forEach((item, i) => {
-      gsap.from(item, {
-        y: 20,
-        opacity: 0,
-        duration: 0.7,
-        delay: i * 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 92%',
-          toggleActions: 'play none none none',
-        }
-      });
-    });
-
-    // Services CTA full-width reveal
-    const servicesCtaFull = document.querySelector('.services-cta-full');
-    if (servicesCtaFull) {
-      gsap.from(servicesCtaFull, {
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: servicesCtaFull,
-          start: 'top 92%',
-          toggleActions: 'play none none none',
-        }
       });
     }
   </script>
