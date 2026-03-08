@@ -1330,6 +1330,55 @@
 
 
   <!-- ============================== -->
+  <!-- LEAD MAGNET SECTION -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 relative overflow-hidden" style="background: linear-gradient(135deg, #E8F5E9 0%, #F7F6F3 50%, #E8F5E9 100%);">
+    <div class="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] rounded-full" style="background: rgba(0,200,83,0.08); filter: blur(60px);"></div>
+    <div class="max-w-[900px] mx-auto relative z-10">
+      <div class="bg-white rounded-2xl p-8 md:p-12 border border-accent/20 shadow-lg" style="box-shadow: 0 4px 40px rgba(0,200,83,0.08);">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          <!-- Left: Content -->
+          <div class="flex-1 text-center md:text-left">
+            <span class="inline-flex items-center gap-2 text-accent text-xs font-medium uppercase tracking-wider mb-4">
+              <i data-lucide="download" class="w-4 h-4"></i> Free Download
+            </span>
+            <h2 class="heading-md text-navy text-xl md:text-2xl mb-3" style="line-height: 1.3;">The 27-Point Website Checklist</h2>
+            <p class="body-text text-sm mb-6">Everything your website needs before it goes live. Built for Aussie small businesses, tradies, and creative brands.</p>
+            <ul class="text-xs text-warm space-y-2 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Design, content, and technical essentials</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> SEO and launch day checklist</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Works for any industry or business size</li>
+            </ul>
+          </div>
+          <!-- Right: Form -->
+          <div class="w-full md:w-[320px] flex-shrink-0">
+            <form id="leadMagnetForm" class="space-y-3">
+              <div>
+                <input type="text" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
+              </div>
+              <div>
+                <input type="email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
+              </div>
+              <button type="submit" class="w-full px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center justify-center gap-2">
+                <span>Get the Free Checklist</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Just the checklist straight to your inbox.</p>
+            </form>
+            <div id="leadMagnetSuccess" class="hidden text-center py-4">
+              <div class="flex items-center justify-center gap-2 text-accent text-sm font-medium">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                <span>Check your inbox!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
   <!-- MARQUEE BAND -->
   <!-- ============================== -->
   <section class="py-10 md:py-14 border-t border-b border-divider overflow-hidden bg-cream">
@@ -1384,7 +1433,8 @@
 
       <!-- Lead Capture Form -->
       <div class="max-w-2xl mx-auto reveal-up">
-        <form action="https://formspree.io/f/{FORM_ID}" method="POST" class="space-y-5">
+        <form id="contactForm" action="https://formspree.io/f/{FORM_ID}" method="POST" class="space-y-5">
+          <input type="hidden" name="lead_magnet" value="false">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
@@ -1411,15 +1461,33 @@
             </div>
           </div>
 
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
+              <select name="budget" id="budget" class="form-input form-select">
+                <option value="" disabled selected>Select your budget</option>
+                <option value="800-1500">$800 – $1,500</option>
+                <option value="2000-4000">$2,000 – $4,000</option>
+                <option value="4500-8000">$4,500 – $8,000+</option>
+                <option value="not-sure">Not sure yet</option>
+              </select>
+            </div>
+            <div>
+              <label for="how-heard" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">How did you find me?</label>
+              <select name="how-heard" id="how-heard" class="form-input form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="google">Google Search</option>
+                <option value="social-media">Social Media</option>
+                <option value="referral">Referral</option>
+                <option value="etsy">Etsy</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
-            <select name="budget" id="budget" class="form-input form-select">
-              <option value="" disabled selected>Select your budget</option>
-              <option value="800-1500">$800 – $1,500</option>
-              <option value="2000-4000">$2,000 – $4,000</option>
-              <option value="4500-8000">$4,500 – $8,000+</option>
-              <option value="not-sure">Not sure yet</option>
-            </select>
+            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Tell me about your project</label>
+            <textarea name="message" id="message" rows="4" placeholder="What are you looking for? Any details help..." class="form-input" style="resize: vertical;"></textarea>
           </div>
 
           <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
@@ -1435,6 +1503,21 @@
             </span>
           </div>
         </form>
+
+        <!-- Success/Error Messages -->
+        <div id="formSuccess" class="hidden text-center py-12">
+          <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
+            <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-cream text-xl mb-3">Thanks! I've got your message.</h3>
+          <p class="text-warm text-sm">Check your inbox for a confirmation. I'll be in touch within 24 hours.</p>
+        </div>
+        <div id="formError" class="hidden text-center py-6">
+          <p class="text-red-400 text-sm flex items-center justify-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+            Something went wrong. Please try again or email me directly.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -1822,6 +1905,88 @@
             }
           }
         );
+      });
+    }
+
+    // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
+    const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
+    const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
+
+    function handleFormSubmit(form, isLeadMagnet) {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.lead_magnet = isLeadMagnet;
+      data.submitted_at = new Date().toISOString();
+
+      const promises = [];
+
+      // Send to n8n webhook (if configured)
+      if (N8N_WEBHOOK_URL) {
+        promises.push(
+          fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }).catch(() => null) // Fail silently, Formspree is the backup
+        );
+      }
+
+      // Send to Formspree (if configured and not a placeholder)
+      if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
+        promises.push(
+          fetch(FORMSPREE_URL, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData,
+          }).catch(() => null)
+        );
+      }
+
+      return Promise.allSettled(promises);
+    }
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('button[type="submit"]');
+        const originalText = btn.querySelector('span').textContent;
+        btn.querySelector('span').textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+          await handleFormSubmit(contactForm, false);
+          contactForm.classList.add('hidden');
+          document.getElementById('formSuccess').classList.remove('hidden');
+          lucide.createIcons();
+        } catch (err) {
+          document.getElementById('formError').classList.remove('hidden');
+        } finally {
+          btn.querySelector('span').textContent = originalText;
+          btn.disabled = false;
+        }
+      });
+    }
+
+    // Lead magnet form
+    const leadMagnetForm = document.getElementById('leadMagnetForm');
+    if (leadMagnetForm) {
+      leadMagnetForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = leadMagnetForm.querySelector('button[type="submit"]');
+        btn.querySelector('span').textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+          await handleFormSubmit(leadMagnetForm, true);
+          leadMagnetForm.classList.add('hidden');
+          document.getElementById('leadMagnetSuccess').classList.remove('hidden');
+          lucide.createIcons();
+        } catch (err) {
+          btn.querySelector('span').textContent = 'Get the Free Checklist';
+          btn.disabled = false;
+        }
       });
     }
   </script>

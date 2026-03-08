@@ -1,0 +1,273 @@
+{
+  "name": "DA - Lead Capture + Scoring + Welcome Email",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "da-lead-capture",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Lead Capture",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ {\"success\": true, \"message\": \"Thanks! We'll be in touch.\"} }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate and clean incoming lead data\nconst input = $input.first().json.body || $input.first().json;\n\nconst name = (input.name || '').trim();\nconst email = (input.email || '').trim().toLowerCase();\nconst phone = (input.phone || '').trim();\nconst service = (input.service || '').trim();\nconst budget = (input.budget || '').trim();\nconst message = (input.message || '').trim();\nconst howHeard = (input['how-heard'] || '').trim();\nconst leadMagnet = input.lead_magnet === true || input.lead_magnet === 'true';\nconst submittedAt = input.submitted_at || new Date().toISOString();\n\n// Basic email validation\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nif (!emailRegex.test(email)) {\n  throw new Error('Invalid email address: ' + email);\n}\n\n// Generate lead ID\nconst leadId = 'DA-' + Date.now().toString(36).toUpperCase();\n\nreturn [{\n  json: {\n    lead_id: leadId,\n    name,\n    email,\n    phone,\n    service,\n    budget,\n    message,\n    how_heard: howHeard,\n    lead_magnet: leadMagnet,\n    submitted_at: submittedAt,\n    source: leadMagnet ? 'lead_magnet' : 'contact_form'\n  }\n}];"
+      },
+      "id": "validate-clean",
+      "name": "Validate & Clean Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lead Scoring Logic\nconst lead = $input.first().json;\nlet score = 0;\nconst tags = [];\n\n// Budget scoring\nswitch (lead.budget) {\n  case '4500-8000':\n    score += 40;\n    tags.push('high-budget');\n    break;\n  case '2000-4000':\n    score += 25;\n    tags.push('mid-budget');\n    break;\n  case '800-1500':\n    score += 15;\n    tags.push('starter-budget');\n    break;\n  case 'not-sure':\n    score += 5;\n    tags.push('budget-tbd');\n    break;\n}\n\n// Service selected\nif (lead.service) {\n  score += 10;\n  tags.push(lead.service);\n}\n\n// Phone provided (signals intent)\nif (lead.phone) {\n  score += 10;\n  tags.push('phone-provided');\n}\n\n// Lead magnet download\nif (lead.lead_magnet) {\n  score += 15;\n  tags.push('checklist-download');\n}\n\n// Message provided (engaged prospect)\nif (lead.message && lead.message.length > 20) {\n  score += 5;\n  tags.push('detailed-message');\n}\n\n// Determine tier\nlet tier = 'cool';\nif (score >= 40) tier = 'hot';\nelse if (score >= 20) tier = 'warm';\n\nreturn [{\n  json: {\n    ...lead,\n    score,\n    tier,\n    tags: tags.join(', '),\n    nurture_stage: 0,\n    last_email_sent: '',\n    status: 'new'\n  }\n}];"
+      },
+      "id": "lead-scoring",
+      "name": "Lead Scoring",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "google-sheets-append",
+      "name": "Google Sheets - Save Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        910,
+        520
+      ],
+      "notes": "SETUP REQUIRED: Select your 'Digital Artifacts Leads' Google Sheet and sheet tab. Columns should match: lead_id, name, email, phone, service, budget, message, how_heard, lead_magnet, submitted_at, source, score, tier, tags, nurture_stage, last_email_sent, status"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Hey {{ $json.name }}! I got your message",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nThanks for reaching out to Digital Artifacts! I've got your details and I'll be in touch within 24 hours.\n\nIn the meantime, here are a couple of things that might help:\n\n- Check out some recent work: https://digital-artifacts.vercel.app/#portfolio\n\n{{ $json.lead_magnet ? '- Your Website Checklist is attached below. Have a read through and see how your current site (or your wish list) stacks up. Happy to walk through it with you.' : '' }}\n\nChat soon,\nIsaiah Wong\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "send-welcome-email",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1130,
+        520
+      ],
+      "notes": "SETUP REQUIRED: Connect your Gmail credentials. Update the email body with your Cal.com link once you have one."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "hot-check",
+              "leftValue": "={{ $json.tier }}",
+              "rightValue": "hot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-hot-lead",
+      "name": "Is Hot Lead?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1350,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "isaiahjwong@gmail.com",
+        "subject": "=\ud83d\udd25 HOT LEAD: {{ $json.name }} \u2014 {{ $json.budget }} \u2014 {{ $json.service }}",
+        "emailType": "text",
+        "message": "=HOT LEAD ALERT\n========================\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone || 'Not provided' }}\nService: {{ $json.service || 'Not selected' }}\nBudget: {{ $json.budget || 'Not selected' }}\nHow found us: {{ $json.how_heard || 'Not specified' }}\nSource: {{ $json.source }}\nScore: {{ $json.score }} ({{ $json.tier }})\nTags: {{ $json.tags }}\n\nMessage:\n{{ $json.message || 'No message provided' }}\n\n========================\nReply to this person within 2 hours!\nEmail them at: {{ $json.email }}",
+        "options": {}
+      },
+      "id": "notify-isaiah-hot",
+      "name": "Notify Isaiah - Hot Lead",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1570,
+        420
+      ],
+      "notes": "Sends alert email to Isaiah for hot leads (score >= 40)"
+    },
+    {
+      "parameters": {
+        "sendTo": "isaiahjwong@gmail.com",
+        "subject": "=New Lead: {{ $json.name }} ({{ $json.tier }})",
+        "emailType": "text",
+        "message": "=New lead captured\n========================\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone || 'Not provided' }}\nService: {{ $json.service || 'Not selected' }}\nBudget: {{ $json.budget || 'Not selected' }}\nHow found us: {{ $json.how_heard || 'Not specified' }}\nSource: {{ $json.source }}\nScore: {{ $json.score }} ({{ $json.tier }})\n\nMessage:\n{{ $json.message || 'No message provided' }}\n\n========================\nThis is a {{ $json.tier }} lead. Nurture sequence will begin automatically.",
+        "options": {}
+      },
+      "id": "notify-isaiah-warm",
+      "name": "Notify Isaiah - Warm/Cool",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1570,
+        620
+      ],
+      "notes": "Summary notification for warm/cool leads"
+    }
+  ],
+  "connections": {
+    "Webhook - Lead Capture": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Validate & Clean Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Clean Data": {
+      "main": [
+        [
+          {
+            "node": "Lead Scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Scoring": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Save Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Save Lead": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Is Hot Lead?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Hot Lead?": {
+      "main": [
+        [
+          {
+            "node": "Notify Isaiah - Hot Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Isaiah - Warm/Cool",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

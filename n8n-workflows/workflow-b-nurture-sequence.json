@@ -1,0 +1,528 @@
+{
+  "name": "DA - Nurture Sequence (Daily 9AM AEST)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 9AM AEST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        250,
+        300
+      ],
+      "notes": "SETUP: Make sure your n8n instance timezone is set to Australia/Sydney (AEST)"
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "id": "read-leads",
+      "name": "Google Sheets - Read Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        470,
+        300
+      ],
+      "notes": "SETUP REQUIRED: Select the same 'Digital Artifacts Leads' Google Sheet from Workflow A"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter leads that are due for their next nurture email today\nconst leads = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of leads) {\n  const lead = item.json;\n  \n  // Skip if status is engaged, closed, or unsubscribed\n  if (['engaged', 'closed', 'unsubscribed', 'nurture_complete'].includes(lead.status)) {\n    continue;\n  }\n  \n  const stage = parseInt(lead.nurture_stage) || 0;\n  const submittedAt = new Date(lead.submitted_at);\n  const daysSinceSubmission = Math.floor((now - submittedAt) / (1000 * 60 * 60 * 24));\n  \n  // Nurture schedule: stage \u2192 day threshold\n  const schedule = {\n    0: 2,   // Stage 1 email on day 2\n    1: 5,   // Stage 2 email on day 5\n    2: 9,   // Stage 3 email on day 9\n    3: 14,  // Stage 4 email on day 14\n    4: 21,  // Stage 5 email on day 21\n    5: 30   // Stage 6 email on day 30 (cool leads only)\n  };\n  \n  const nextDay = schedule[stage];\n  \n  // No more stages\n  if (nextDay === undefined) continue;\n  \n  // Stage 6 is only for cool leads\n  if (stage === 5 && lead.tier !== 'cool') continue;\n  \n  // Check if today is the day (or past due)\n  if (daysSinceSubmission >= nextDay) {\n    // Check we haven't already sent today\n    const lastSent = lead.last_email_sent ? new Date(lead.last_email_sent) : null;\n    if (lastSent && lastSent.toDateString() === now.toDateString()) {\n      continue; // Already sent today\n    }\n    \n    results.push({\n      json: {\n        ...lead,\n        next_stage: stage + 1,\n        days_since_submission: daysSinceSubmission\n      }\n    });\n  }\n}\n\nif (results.length === 0) {\n  // Return empty to stop the workflow\n  return [];\n}\n\nreturn results;"
+      },
+      "id": "filter-due-leads",
+      "name": "Filter Leads Due Today",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "0",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 2
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 3
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "4",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 4
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.nurture_stage }}",
+                    "rightValue": "5",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputIndex": 5
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-stage",
+      "name": "Switch by Stage",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Most small biz websites make these 3 mistakes",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nI've been building websites for small businesses for a while now, and I keep seeing the same three things holding sites back:\n\n1. Slow load times. If your site takes more than 3 seconds to load, most visitors leave before they even see what you offer. A quick fix? Compress your images and make sure your hosting isn't dragging you down.\n\n2. Not mobile-friendly. Over 60% of web traffic in Australia comes from phones. If your site doesn't look great on mobile, you're losing more than half your audience.\n\n3. No clear call-to-action. Every page should make it obvious what you want visitors to do next. \"Get a Quote\", \"Book Now\", \"Call Us\". Don't make people guess.\n\nWhich one of these resonates most with your business?\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-1",
+      "name": "Email 1 - 3 Mistakes",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "How a graphic designer went from no website to fully booked",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nWanted to share a quick story.\n\nA graphic designer came to me last year with no online presence. She was relying entirely on word of mouth and Instagram DMs. Great work, but no way for new clients to find her or see her full portfolio.\n\nWe built her a clean, professional site with a portfolio showcase, contact form, and proper SEO. Within a few weeks she was getting enquiries through Google from people she'd never met.\n\nThe site loads fast, looks great on mobile, and she can update her portfolio whenever she wants. She told me it was the best investment she'd made for her business.\n\nIf you're curious what that looks like, here's her site: https://cee-essdesigns.com.au\n\nEvery business is different, but the pattern is the same. A solid website turns \"word of mouth\" into \"found on Google\".\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-2",
+      "name": "Email 2 - Case Study",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "The hidden cost of a cheap website",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nI get it. DIY website builders like Wix and Squarespace seem like a bargain. $20 a month, drag and drop, done.\n\nBut here's what most people don't realise until later:\n\n- You spend hours fiddling with templates that never quite look right\n- Your site loads slowly because the builder adds bloated code\n- You rank poorly on Google because the SEO options are limited\n- When something breaks, you're on your own\n- After 12 months of the subscription, you've spent more than a custom site would have cost. And you still don't love it.\n\nA custom-built site costs more upfront, but you get something that's fast, looks professional, ranks well, and actually works for your business from day one.\n\nNot saying DIY is always wrong. For some people it works great. But if your website is a key part of how customers find you, it's worth doing properly.\n\nJust something to think about.\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-3",
+      "name": "Email 3 - Hidden Cost",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Quick question about your website plans",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nJust wanted to check in. Are you still thinking about getting your business online (or upgrading what you've got)?\n\nI've got a few spots opening up this month and would be happy to jump on a quick 15-minute call to see if I can help. No pressure at all. Just a chat to understand what you need and whether it makes sense to work together.\n\nIf you're keen, just reply to this email and we'll find a time.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-4",
+      "name": "Email 4 - Check In",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Your website roadmap (free)",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nI wanted to offer you something I usually only do for paying clients.\n\nIf you're thinking about a website (new or redesign), I'll map out exactly what pages and features your site needs, what it would cost, and how long it'd take. For free.\n\nEven if you don't end up going with me, you'll walk away with a clear plan you can take to anyone.\n\nNo strings attached. I just enjoy helping businesses figure out their online presence.\n\nInterested? Just reply and I'll set it up.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-5",
+      "name": "Email 5 - Free Roadmap",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Still on your radar?",
+        "emailType": "text",
+        "message": "=Hey {{ $json.name }},\n\nNo rush on this. I just wanted to make sure a website doesn't fall off your list if it's something you're still thinking about.\n\nWhenever you're ready, I'm here. Happy to answer any questions, even if it's just \"where do I start?\"\n\nIn the meantime, feel free to check out some of my recent work: https://digital-artifacts.vercel.app/#portfolio\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "options": {
+          "replyTo": "isaiahjwong@gmail.com"
+        }
+      },
+      "id": "email-stage-6",
+      "name": "Email 6 - Re-engage (Cool Only)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare the update data for Google Sheets\nconst lead = $input.first().json;\nconst now = new Date().toISOString();\n\nreturn [{\n  json: {\n    lead_id: lead.lead_id,\n    nurture_stage: lead.next_stage,\n    last_email_sent: now,\n    status: lead.next_stage >= 6 ? 'nurture_complete' : lead.status\n  }\n}];"
+      },
+      "id": "prepare-update",
+      "name": "Prepare Sheet Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "lead_id"
+          ]
+        },
+        "options": {}
+      },
+      "id": "update-sheet",
+      "name": "Google Sheets - Update Stage",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1670,
+        300
+      ],
+      "notes": "SETUP REQUIRED: Select the same Google Sheet. Set 'lead_id' as the matching column for updates."
+    }
+  ],
+  "connections": {
+    "Daily 9AM AEST": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Read Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Read Leads": {
+      "main": [
+        [
+          {
+            "node": "Filter Leads Due Today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Leads Due Today": {
+      "main": [
+        [
+          {
+            "node": "Switch by Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch by Stage": {
+      "main": [
+        [
+          {
+            "node": "Email 1 - 3 Mistakes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email 2 - Case Study",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email 3 - Hidden Cost",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email 4 - Check In",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email 5 - Free Roadmap",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email 6 - Re-engage (Cool Only)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 1 - 3 Mistakes": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 2 - Case Study": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 3 - Hidden Cost": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 4 - Check In": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 5 - Free Roadmap": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 6 - Re-engage (Cool Only)": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sheet Update": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Update Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  }
+}
