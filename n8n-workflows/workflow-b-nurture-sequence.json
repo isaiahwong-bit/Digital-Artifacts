@@ -208,9 +208,9 @@
         "sendTo": "={{ $json.email }}",
         "subject": "Most small biz websites make these 3 mistakes",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nI've been building websites for small businesses for a while now, and I keep seeing the same three things holding sites back:\n\n1. Slow load times. If your site takes more than 3 seconds to load, most visitors leave before they even see what you offer. A quick fix? Compress your images and make sure your hosting isn't dragging you down.\n\n2. Not mobile-friendly. Over 60% of web traffic in Australia comes from phones. If your site doesn't look great on mobile, you're losing more than half your audience.\n\n3. No clear call-to-action. Every page should make it obvious what you want visitors to do next. \"Get a Quote\", \"Book Now\", \"Call Us\". Don't make people guess.\n\nWhich one of these resonates most with your business?\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "message": "=Hey {{ $json.name }},\n\nI've been building websites for small businesses for a while now, and I keep seeing the same three things holding sites back:\n\n1. Slow load times. If your site takes more than 3 seconds to load, most visitors leave before they even see what you offer. A quick fix? Compress your images and make sure your hosting isn't dragging you down.\n\n2. Not mobile-friendly. Over 60% of web traffic in Australia comes from phones. If your site doesn't look great on mobile, you're losing more than half your audience.\n\n3. No clear call-to-action. Every page should make it obvious what you want visitors to do next. \"Get a Quote\", \"Book Now\", \"Call Us\". Don't make people guess.\n\nWhich one of these resonates most with your business?\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-1",
@@ -229,7 +229,7 @@
         "emailType": "text",
         "message": "=Hey {{ $json.name }},\n\nWanted to share a quick story.\n\nA graphic designer came to me last year with no online presence. She was relying entirely on word of mouth and Instagram DMs. Great work, but no way for new clients to find her or see her full portfolio.\n\nWe built her a clean, professional site with a portfolio showcase, contact form, and proper SEO. Within a few weeks she was getting enquiries through Google from people she'd never met.\n\nThe site loads fast, looks great on mobile, and she can update her portfolio whenever she wants. She told me it was the best investment she'd made for her business.\n\nIf you're curious what that looks like, here's her site: https://cee-essdesigns.com.au\n\nEvery business is different, but the pattern is the same. A solid website turns \"word of mouth\" into \"found on Google\".\n\nCheers,\nIsaiah\nDigital Artifacts",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-2",
@@ -248,7 +248,7 @@
         "emailType": "text",
         "message": "=Hey {{ $json.name }},\n\nI get it. DIY website builders like Wix and Squarespace seem like a bargain. $20 a month, drag and drop, done.\n\nBut here's what most people don't realise until later:\n\n- You spend hours fiddling with templates that never quite look right\n- Your site loads slowly because the builder adds bloated code\n- You rank poorly on Google because the SEO options are limited\n- When something breaks, you're on your own\n- After 12 months of the subscription, you've spent more than a custom site would have cost. And you still don't love it.\n\nA custom-built site costs more upfront, but you get something that's fast, looks professional, ranks well, and actually works for your business from day one.\n\nNot saying DIY is always wrong. For some people it works great. But if your website is a key part of how customers find you, it's worth doing properly.\n\nJust something to think about.\n\nCheers,\nIsaiah\nDigital Artifacts",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-3",
@@ -265,9 +265,9 @@
         "sendTo": "={{ $json.email }}",
         "subject": "Quick question about your website plans",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nJust wanted to check in. Are you still thinking about getting your business online (or upgrading what you've got)?\n\nI've got a few spots opening up this month and would be happy to jump on a quick 15-minute call to see if I can help. No pressure at all. Just a chat to understand what you need and whether it makes sense to work together.\n\nIf you're keen, just reply to this email and we'll find a time.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "message": "=Hey {{ $json.name }},\n\nJust wanted to check in. Are you still thinking about getting your business online (or upgrading what you've got)?\n\nI've got a few spots opening up this month and would be happy to jump on a quick 15-minute call to see if I can help. No pressure at all. Just a chat to understand what you need and whether it makes sense to work together.\n\nIf you're keen, just reply to this email and we'll find a time.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-4",
@@ -284,9 +284,9 @@
         "sendTo": "={{ $json.email }}",
         "subject": "Your website roadmap (free)",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nI wanted to offer you something I usually only do for paying clients.\n\nIf you're thinking about a website (new or redesign), I'll map out exactly what pages and features your site needs, what it would cost, and how long it'd take. For free.\n\nEven if you don't end up going with me, you'll walk away with a clear plan you can take to anyone.\n\nNo strings attached. I just enjoy helping businesses figure out their online presence.\n\nInterested? Just reply and I'll set it up.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "message": "=Hey {{ $json.name }},\n\nI wanted to offer you something I usually only do for paying clients.\n\nIf you're thinking about a website (new or redesign), I'll map out exactly what pages and features your site needs, what it would cost, and how long it'd take. For free.\n\nEven if you don't end up going with me, you'll walk away with a clear plan you can take to anyone.\n\nNo strings attached. I just enjoy helping businesses figure out their online presence.\n\nInterested? Just reply and I'll set it up.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-5",
@@ -303,9 +303,9 @@
         "sendTo": "={{ $json.email }}",
         "subject": "Still on your radar?",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nNo rush on this. I just wanted to make sure a website doesn't fall off your list if it's something you're still thinking about.\n\nWhenever you're ready, I'm here. Happy to answer any questions, even if it's just \"where do I start?\"\n\nIn the meantime, feel free to check out some of my recent work: https://digital-artifacts.vercel.app/#portfolio\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "message": "=Hey {{ $json.name }},\n\nNo rush on this. I just wanted to make sure a website doesn't fall off your list if it's something you're still thinking about.\n\nWhenever you're ready, I'm here. Happy to answer any questions, even if it's just \"where do I start?\"\n\nIn the meantime, feel free to check out some of my recent work: https://digitalartifacts.com.au/#portfolio\n\nCheers,\nIsaiah\nDigital Artifacts",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "email-stage-6",

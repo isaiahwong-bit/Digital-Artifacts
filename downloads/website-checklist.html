@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The 27-Point Website Checklist | Digital Artifacts</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --navy: #0a1628;
+      --navy-light: #132039;
+      --cream: #f5f0e8;
+      --cream-light: #faf7f2;
+      --green: #4ade80;
+      --green-dark: #22c55e;
+      --green-muted: #166534;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: white;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media print {
+      .page { page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+      .no-print { display: none !important; }
+    }
+
+    @media screen {
+      .page {
+        margin: 20px auto;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        border-radius: 4px;
+      }
+    }
+
+    /* === COVER PAGE === */
+    .cover {
+      background: var(--navy);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 50px;
+      min-height: 297mm;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(74, 222, 128, 0.15);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 100px;
+      margin-bottom: 40px;
+    }
+
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      max-width: 500px;
+    }
+
+    .cover h1 span {
+      color: var(--green);
+    }
+
+    .cover .subtitle {
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 420px;
+      margin-bottom: 50px;
+    }
+
+    .cover-features {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .cover-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .cover-feature .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cover-divider {
+      width: 60px;
+      height: 2px;
+      background: rgba(74, 222, 128, 0.3);
+      margin-bottom: 30px;
+    }
+
+    .cover-brand {
+      font-size: 14px;
+      color: #64748b;
+      letter-spacing: 1px;
+    }
+
+    .cover-brand strong {
+      color: white;
+      font-weight: 600;
+    }
+
+    .cover-url {
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 8px;
+      opacity: 0.7;
+    }
+
+    /* === CONTENT PAGES === */
+    .content-page {
+      padding: 45px 50px;
+      min-height: 297mm;
+      position: relative;
+      background: white;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .page-header-brand {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .page-header-title {
+      font-size: 10px;
+      color: var(--text-light);
+    }
+
+    .section-intro {
+      background: var(--cream-light);
+      border-left: 3px solid var(--green);
+      padding: 18px 22px;
+      margin-bottom: 30px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .section-intro p {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--navy);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .section-title {
+      display: inline;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      vertical-align: middle;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 6px;
+      margin-bottom: 18px;
+      padding-left: 38px;
+    }
+
+    .checklist {
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      transition: background 0.2s;
+    }
+
+    .checklist li:nth-child(odd) {
+      background: var(--cream-light);
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checklist li:nth-child(odd) .checkbox {
+      border-color: #cbd5e1;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .item-desc {
+      font-size: 11.5px;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .item-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green-dark);
+      min-width: 18px;
+      margin-top: 2px;
+    }
+
+    /* === BONUS TIP === */
+    .bonus-tip {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: white;
+      padding: 20px 24px;
+      border-radius: 10px;
+      margin-top: 25px;
+    }
+
+    .bonus-tip-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .bonus-tip p {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    /* === CTA PAGE === */
+    .cta-page {
+      background: var(--navy);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 50px;
+      min-height: 297mm;
+    }
+
+    .cta-checkmark {
+      width: 70px;
+      height: 70px;
+      background: rgba(74, 222, 128, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 35px;
+    }
+
+    .cta-checkmark svg {
+      width: 35px;
+      height: 35px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .cta-page h2 {
+      font-size: 34px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .cta-page h2 span {
+      color: var(--green);
+    }
+
+    .cta-page .cta-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 400px;
+      margin-bottom: 40px;
+    }
+
+    .cta-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 35px 40px;
+      max-width: 420px;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+
+    .cta-box h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .cta-box p {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--green);
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .cta-or {
+      font-size: 12px;
+      color: #64748b;
+      margin: 16px 0;
+    }
+
+    .cta-email {
+      font-size: 14px;
+      color: var(--green);
+    }
+
+    .cta-footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+
+    .cta-footer p {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.8;
+    }
+
+    .cta-footer strong {
+      color: white;
+    }
+
+    /* Print button */
+    .print-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .print-btn {
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover {
+      background: var(--navy-light);
+    }
+
+    .page-footer {
+      position: absolute;
+      bottom: 25px;
+      left: 50px;
+      right: 50px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRINT BUTTON -->
+  <div class="print-bar no-print">
+    <button class="print-btn" onclick="window.print()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Save as PDF
+    </button>
+  </div>
+
+  <!-- PAGE 1: COVER -->
+  <div class="page cover">
+    <div class="cover-badge">Free Resource</div>
+    <h1>The <span>27-Point</span> Website Checklist</h1>
+    <p class="subtitle">Everything your website needs before it goes live. Built for Aussie small businesses, tradies, and creative brands.</p>
+    <div class="cover-features">
+      <div class="cover-feature"><div class="dot"></div> 5 sections</div>
+      <div class="cover-feature"><div class="dot"></div> 27 checkpoints</div>
+      <div class="cover-feature"><div class="dot"></div> Actionable tips</div>
+    </div>
+    <div class="cover-divider"></div>
+    <p class="cover-brand">By <strong>Digital Artifacts</strong></p>
+    <p class="cover-url">digitalartifacts.com.au</p>
+  </div>
+
+  <!-- PAGE 2: SECTIONS 1 & 2 -->
+  <div class="page content-page">
+    <div class="page-header">
+      <div class="page-header-brand">Digital Artifacts</div>
+      <div class="page-header-title">The 27-Point Website Checklist</div>
+    </div>
+
+    <div class="section-intro">
+      <p>Use this checklist before building, redesigning, or launching your website. Tick off each item as you go. If you're missing more than 5, it's worth getting a second pair of eyes on your site.</p>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section">
+      <div>
+        <span class="section-number">1</span>
+        <h2 class="section-title">Before You Start</h2>
+      </div>
+      <p class="section-subtitle">Get your foundations right and the rest falls into place.</p>
+
+      <ul class="checklist">
+        <li>
+          <span class="item-number">01</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Define your website's #1 goal</div>
+            <div class="item-desc">Is it to get enquiries? Sell products? Showcase your work? Every decision flows from this.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">02</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Know your target audience</div>
+            <div class="item-desc">Write down who your ideal customer is. Age, location, what they're searching for. Build for them, not you.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">03</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Secure your domain name</div>
+            <div class="item-desc">Keep it short, memorable, and easy to spell. Avoid hyphens. Grab the .com.au if you're Aussie.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">04</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Choose reliable hosting</div>
+            <div class="item-desc">Your hosting affects speed and uptime. Vercel, Netlify, or a quality Australian host are solid choices.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">05</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Plan your page structure</div>
+            <div class="item-desc">Map out every page you need: Home, About, Services, Contact, Portfolio. Don't wing it.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section">
+      <div>
+        <span class="section-number">2</span>
+        <h2 class="section-title">Design Essentials</h2>
+      </div>
+      <p class="section-subtitle">First impressions happen in under 3 seconds. Make them count.</p>
+
+      <ul class="checklist">
+        <li>
+          <span class="item-number">06</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Mobile-responsive design</div>
+            <div class="item-desc">60%+ of Australian web traffic is mobile. If your site breaks on phones, you're losing most of your visitors.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">07</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Consistent branding</div>
+            <div class="item-desc">Use the same colours, fonts, and tone everywhere. Consistency = trust.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">08</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Professional logo</div>
+            <div class="item-desc">Doesn't need to be expensive. But it needs to be clean, scalable, and not clip art from 2008.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">09</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Readable typography</div>
+            <div class="item-desc">Stick to 2 fonts max. Body text should be 16px minimum. If people squint, they leave.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">10</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Clear navigation</div>
+            <div class="item-desc">5-7 menu items max. Visitors should find anything on your site in 2 clicks or fewer.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">11</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Strong hero section with CTA</div>
+            <div class="item-desc">Your homepage hero should answer: who you are, what you do, and what to do next. In 5 seconds.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">12</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Fast load time (under 3 seconds)</div>
+            <div class="item-desc">Compress images, minify code, use lazy loading. Test at PageSpeed Insights.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="page-footer">
+      <span></span>
+      <span>Page 2 of 4</span>
+    </div>
+  </div>
+
+  <!-- PAGE 3: SECTIONS 3 & 4 -->
+  <div class="page content-page">
+    <div class="page-header">
+      <div class="page-header-brand">Digital Artifacts</div>
+      <div class="page-header-title">The 27-Point Website Checklist</div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section">
+      <div>
+        <span class="section-number">3</span>
+        <h2 class="section-title">Content That Converts</h2>
+      </div>
+      <p class="section-subtitle">A beautiful site with bad copy is like a shopfront with no signage.</p>
+
+      <ul class="checklist">
+        <li>
+          <span class="item-number">13</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Compelling headline on every page</div>
+            <div class="item-desc">Lead with the benefit to your customer, not your business name. "Get More Bookings" beats "Welcome to Our Site".</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">14</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Dedicated services/products page</div>
+            <div class="item-desc">Describe each service clearly with pricing (or a range). Make it easy for people to understand what they're getting.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">15</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">About page that builds trust</div>
+            <div class="item-desc">Show the human behind the business. Include a photo, your story, and why you do what you do.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">16</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Social proof (testimonials/reviews)</div>
+            <div class="item-desc">Real quotes from real clients. Even 3 good ones are enough. Google reviews work too.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">17</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Clear calls-to-action on every page</div>
+            <div class="item-desc">"Get a Quote", "Book Now", "Call Us Today". Every page should tell visitors what to do next.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">18</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Working contact form</div>
+            <div class="item-desc">Test it yourself. Name, email, message at minimum. Add phone and service type for better lead quality.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section">
+      <div>
+        <span class="section-number">4</span>
+        <h2 class="section-title">Technical Must-Haves</h2>
+      </div>
+      <p class="section-subtitle">The invisible stuff that makes or breaks your Google ranking.</p>
+
+      <ul class="checklist">
+        <li>
+          <span class="item-number">19</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">SSL certificate (HTTPS)</div>
+            <div class="item-desc">Non-negotiable. Google penalises non-HTTPS sites. Most hosts include it free.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">20</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">SEO meta tags on every page</div>
+            <div class="item-desc">Title tag (60 chars) and meta description (155 chars) for every page. This is what shows on Google.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">21</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Open Graph tags for social sharing</div>
+            <div class="item-desc">Control how your site looks when shared on Facebook, LinkedIn, and Twitter. Include an image.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">22</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Google Analytics installed</div>
+            <div class="item-desc">You can't improve what you don't measure. GA4 is free and takes 5 minutes to set up.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">23</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Schema markup (structured data)</div>
+            <div class="item-desc">Helps Google understand your business. LocalBusiness schema is a must for service-based businesses.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="bonus-tip">
+      <div class="bonus-tip-label">Pro Tip</div>
+      <p>Run your site through Google's free PageSpeed Insights tool after launch. Aim for a score above 90 on both mobile and desktop. Anything below 50 is costing you customers.</p>
+    </div>
+
+    <div class="page-footer">
+      <span></span>
+      <span>Page 3 of 4</span>
+    </div>
+  </div>
+
+  <!-- PAGE 4: SECTION 5 + CTA -->
+  <div class="page content-page" style="display: flex; flex-direction: column;">
+    <div class="page-header">
+      <div class="page-header-brand">Digital Artifacts</div>
+      <div class="page-header-title">The 27-Point Website Checklist</div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section">
+      <div>
+        <span class="section-number">5</span>
+        <h2 class="section-title">Launch Day & Beyond</h2>
+      </div>
+      <p class="section-subtitle">A website isn't "set and forget". These keep you ahead.</p>
+
+      <ul class="checklist">
+        <li>
+          <span class="item-number">24</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Test on 3+ devices and browsers</div>
+            <div class="item-desc">Check on iPhone, Android, and a tablet. Test Chrome, Safari, and Firefox. Things break in unexpected places.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">25</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Submit to Google Search Console</div>
+            <div class="item-desc">Tell Google your site exists. Submit your sitemap. Monitor for crawl errors. Free and essential.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">26</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Set up Google Business Profile</div>
+            <div class="item-desc">Critical for local search. Link your website, add photos, collect reviews. This is how people find you on Maps.</div>
+          </div>
+        </li>
+        <li>
+          <span class="item-number">27</span>
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <div class="item-title">Plan for regular updates</div>
+            <div class="item-desc">Update content quarterly. Add new testimonials. Refresh images. Google rewards sites that stay active.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="bonus-tip">
+      <div class="bonus-tip-label">Your Score</div>
+      <p><strong style="color: var(--green);">23-27 ticked?</strong> Your site is in great shape. Keep it maintained.<br>
+      <strong style="color: #fbbf24;">15-22 ticked?</strong> Good foundations, but there are gaps that could be costing you leads.<br>
+      <strong style="color: #f87171;">Under 15?</strong> Your website probably isn't working as hard as it should. Time for an upgrade.</p>
+    </div>
+
+    <!-- CTA SECTION -->
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-top: 30px;">
+      <div style="text-align: center; max-width: 420px;">
+        <div style="width: 50px; height: 50px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3 style="font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 10px;">Need help ticking every box?</h3>
+        <p style="font-size: 13px; color: var(--text-light); line-height: 1.6; margin-bottom: 20px;">Book a free 15-minute chat. I'll look at your current site (or wish list) and tell you exactly what's needed. No pressure, no pitch.</p>
+        <a href="https://digitalartifacts.com.au/#contact" style="display: inline-block; background: var(--navy); color: white; font-size: 13px; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none;">Get in Touch</a>
+        <p style="font-size: 11px; color: var(--text-light); margin-top: 12px;">hello@digitalartifacts.com.au</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span></span>
+      <span>Page 4 of 4</span>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -103,9 +103,9 @@
         "sendTo": "={{ $json.email }}",
         "subject": "=Hey {{ $json.name }}! I got your message",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nThanks for reaching out to Digital Artifacts! I've got your details and I'll be in touch within 24 hours.\n\nIn the meantime, here are a couple of things that might help:\n\n- Check out some recent work: https://digital-artifacts.vercel.app/#portfolio\n\n{{ $json.lead_magnet ? '- Your Website Checklist is attached below. Have a read through and see how your current site (or your wish list) stacks up. Happy to walk through it with you.' : '' }}\n\nChat soon,\nIsaiah Wong\nDigital Artifacts\nhttps://digital-artifacts.vercel.app",
+        "message": "=Hey {{ $json.name }},\n\nThanks for reaching out to Digital Artifacts! I've got your details and I'll be in touch within 24 hours.\n\nIn the meantime, here are a couple of things that might help:\n\n- Check out some recent work: https://digitalartifacts.com.au/#portfolio\n\n{{ $json.lead_magnet ? '- Here\\'s your free 27-Point Website Checklist: https://digitalartifacts.com.au/downloads/website-checklist.html\\n\\nHave a read through and see how your current site (or your wish list) stacks up. Happy to walk through it with you.' : '' }}\n\nChat soon,\nIsaiah Wong\nDigital Artifacts\nhttps://digitalartifacts.com.au",
         "options": {
-          "replyTo": "isaiahjwong@gmail.com"
+          "replyTo": "hello@digitalartifacts.com.au"
         }
       },
       "id": "send-welcome-email",
@@ -152,7 +152,7 @@
     },
     {
       "parameters": {
-        "sendTo": "isaiahjwong@gmail.com",
+        "sendTo": "hello@digitalartifacts.com.au",
         "subject": "=\ud83d\udd25 HOT LEAD: {{ $json.name }} \u2014 {{ $json.budget }} \u2014 {{ $json.service }}",
         "emailType": "text",
         "message": "=HOT LEAD ALERT\n========================\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone || 'Not provided' }}\nService: {{ $json.service || 'Not selected' }}\nBudget: {{ $json.budget || 'Not selected' }}\nHow found us: {{ $json.how_heard || 'Not specified' }}\nSource: {{ $json.source }}\nScore: {{ $json.score }} ({{ $json.tier }})\nTags: {{ $json.tags }}\n\nMessage:\n{{ $json.message || 'No message provided' }}\n\n========================\nReply to this person within 2 hours!\nEmail them at: {{ $json.email }}",
@@ -170,7 +170,7 @@
     },
     {
       "parameters": {
-        "sendTo": "isaiahjwong@gmail.com",
+        "sendTo": "hello@digitalartifacts.com.au",
         "subject": "=New Lead: {{ $json.name }} ({{ $json.tier }})",
         "emailType": "text",
         "message": "=New lead captured\n========================\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone || 'Not provided' }}\nService: {{ $json.service || 'Not selected' }}\nBudget: {{ $json.budget || 'Not selected' }}\nHow found us: {{ $json.how_heard || 'Not specified' }}\nSource: {{ $json.source }}\nScore: {{ $json.score }} ({{ $json.tier }})\n\nMessage:\n{{ $json.message || 'No message provided' }}\n\n========================\nThis is a {{ $json.tier }} lead. Nurture sequence will begin automatically.",
