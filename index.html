@@ -1363,12 +1363,15 @@
                 <span>Get the Free Checklist</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </button>
-              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Just the checklist straight to your inbox.</p>
+              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Your checklist downloads instantly.</p>
             </form>
             <div id="leadMagnetSuccess" class="hidden text-center py-4">
-              <div class="flex items-center justify-center gap-2 text-accent text-sm font-medium">
-                <i data-lucide="check-circle" class="w-5 h-5"></i>
-                <span>Check your inbox!</span>
+              <div class="flex flex-col items-center gap-2 text-accent text-sm font-medium">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="check-circle" class="w-5 h-5"></i>
+                  <span>Your checklist is downloading!</span>
+                </div>
+                <a href="/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
               </div>
             </div>
           </div>
@@ -1433,7 +1436,7 @@
 
       <!-- Lead Capture Form -->
       <div class="max-w-2xl mx-auto reveal-up">
-        <form id="contactForm" action="https://formspree.io/f/{FORM_ID}" method="POST" class="space-y-5">
+        <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
           <input type="hidden" name="lead_magnet" value="false">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
@@ -1980,6 +1983,14 @@
 
         try {
           await handleFormSubmit(leadMagnetForm, true);
+          // Trigger PDF download
+          const dlLink = document.createElement('a');
+          dlLink.href = '/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf';
+          dlLink.download = '27-Point-Website-Checklist-Digital-Artifacts.pdf';
+          document.body.appendChild(dlLink);
+          dlLink.click();
+          document.body.removeChild(dlLink);
+          // Show success message
           leadMagnetForm.classList.add('hidden');
           document.getElementById('leadMagnetSuccess').classList.remove('hidden');
           lucide.createIcons();
