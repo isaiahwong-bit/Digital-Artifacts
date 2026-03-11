@@ -7,7 +7,7 @@
         "path": "da-lead-capture",
         "responseMode": "responseNode",
         "options": {
-          "allowedOrigins": "*"
+          "allowedOrigins": "https://digitalartifacts.com.au"
         }
       },
       "id": "webhook-trigger",
@@ -28,7 +28,7 @@
             "entries": [
               {
                 "name": "Access-Control-Allow-Origin",
-                "value": "*"
+                "value": "https://digitalartifacts.com.au"
               }
             ]
           }
@@ -74,13 +74,13 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "mode": "list",
-          "value": ""
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
         "sheetName": {
           "__rl": true,
           "mode": "list",
-          "value": ""
+          "value": "Sheet1"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
@@ -101,9 +101,9 @@
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "=Hey {{ $json.name }}! I got your message",
+        "subject": "={{ $json.lead_magnet ? 'Hey ' + $json.name + '! Here\\'s your checklist' : 'Hey ' + $json.name + '! I got your message' }}",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nThanks for reaching out to Digital Artifacts! I've got your details and I'll be in touch within 24 hours.\n\nIn the meantime, here are a couple of things that might help:\n\n- Check out some recent work: https://digitalartifacts.com.au/#portfolio\n\n{{ $json.lead_magnet ? '- Here\\'s your free 27-Point Website Checklist: https://digitalartifacts.com.au/downloads/website-checklist.html\\n\\nHave a read through and see how your current site (or your wish list) stacks up. Happy to walk through it with you.' : '' }}\n\nChat soon,\nIsaiah Wong\nDigital Artifacts\nhttps://digitalartifacts.com.au",
+        "message": "=Hey {{ $json.name }},\n\nThanks for reaching out to Digital Artifacts! I've got your details and I'll be in touch within 24 hours.\n\nIn the meantime, here are a couple of things that might help:\n\n- Check out some recent work: https://digitalartifacts.com.au/#portfolio\n\n{{ $json.lead_magnet ? '- Here\\'s your free 27-Point Website Checklist: https://digitalartifacts.com.au/downloads/The%2027-Point%20Website%20Checklist%20_%20Digital%20Artifacts.pdf\\n\\nHave a read through and see how your current site (or your wish list) stacks up. Happy to walk through it with you.' : '' }}\n\nChat soon,\nIsaiah Wong\nDigital Artifacts\nhttps://digitalartifacts.com.au",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }

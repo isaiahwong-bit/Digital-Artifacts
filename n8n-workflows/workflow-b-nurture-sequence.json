@@ -27,13 +27,13 @@
         "operation": "read",
         "documentId": {
           "__rl": true,
-          "mode": "list",
-          "value": ""
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
         "sheetName": {
           "__rl": true,
           "mode": "list",
-          "value": ""
+          "value": "Sheet1"
         },
         "options": {}
       },
@@ -49,7 +49,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Filter leads that are due for their next nurture email today\nconst leads = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of leads) {\n  const lead = item.json;\n  \n  // Skip if status is engaged, closed, or unsubscribed\n  if (['engaged', 'closed', 'unsubscribed', 'nurture_complete'].includes(lead.status)) {\n    continue;\n  }\n  \n  const stage = parseInt(lead.nurture_stage) || 0;\n  const submittedAt = new Date(lead.submitted_at);\n  const daysSinceSubmission = Math.floor((now - submittedAt) / (1000 * 60 * 60 * 24));\n  \n  // Nurture schedule: stage \u2192 day threshold\n  const schedule = {\n    0: 2,   // Stage 1 email on day 2\n    1: 5,   // Stage 2 email on day 5\n    2: 9,   // Stage 3 email on day 9\n    3: 14,  // Stage 4 email on day 14\n    4: 21,  // Stage 5 email on day 21\n    5: 30   // Stage 6 email on day 30 (cool leads only)\n  };\n  \n  const nextDay = schedule[stage];\n  \n  // No more stages\n  if (nextDay === undefined) continue;\n  \n  // Stage 6 is only for cool leads\n  if (stage === 5 && lead.tier !== 'cool') continue;\n  \n  // Check if today is the day (or past due)\n  if (daysSinceSubmission >= nextDay) {\n    // Check we haven't already sent today\n    const lastSent = lead.last_email_sent ? new Date(lead.last_email_sent) : null;\n    if (lastSent && lastSent.toDateString() === now.toDateString()) {\n      continue; // Already sent today\n    }\n    \n    results.push({\n      json: {\n        ...lead,\n        next_stage: stage + 1,\n        days_since_submission: daysSinceSubmission\n      }\n    });\n  }\n}\n\nif (results.length === 0) {\n  // Return empty to stop the workflow\n  return [];\n}\n\nreturn results;"
+        "jsCode": "// Filter leads that are due for their next nurture email today\nconst leads = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of leads) {\n  const lead = item.json;\n  \n  // Skip if status is engaged, closed, or unsubscribed\n  if (['engaged', 'closed', 'unsubscribed', 'nurture_complete'].includes(lead.status)) {\n    continue;\n  }\n  \n  // Skip contact form leads — they're handled manually\n  if (lead.source === 'contact_form') {\n    continue;\n  }\n  \n  const stage = parseInt(lead.nurture_stage) || 0;\n  const submittedAt = new Date(lead.submitted_at);\n  const daysSinceSubmission = Math.floor((now - submittedAt) / (1000 * 60 * 60 * 24));\n  \n  // Nurture schedule: stage \u2192 day threshold\n  const schedule = {\n    0: 2,   // Stage 1 email on day 2\n    1: 5,   // Stage 2 email on day 5\n    2: 9,   // Stage 3 email on day 9\n    3: 14,  // Stage 4 email on day 14\n    4: 21,  // Stage 5 email on day 21\n    5: 30   // Stage 6 email on day 30 (cool leads only)\n  };\n  \n  const nextDay = schedule[stage];\n  \n  // No more stages\n  if (nextDay === undefined) continue;\n  \n  // Stage 6 is only for cool leads\n  if (stage === 5 && lead.tier !== 'cool') continue;\n  \n  // Check if today is the day (or past due)\n  if (daysSinceSubmission >= nextDay) {\n    // Check we haven't already sent today\n    const lastSent = lead.last_email_sent ? new Date(lead.last_email_sent) : null;\n    if (lastSent && lastSent.toDateString() === now.toDateString()) {\n      continue; // Already sent today\n    }\n    \n    results.push({\n      json: {\n        ...lead,\n        next_stage: stage + 1,\n        days_since_submission: daysSinceSubmission\n      }\n    });\n  }\n}\n\nif (results.length === 0) {\n  // Return empty to stop the workflow\n  return [];\n}\n\nreturn results;"
       },
       "id": "filter-due-leads",
       "name": "Filter Leads Due Today",
@@ -335,13 +335,13 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "mode": "list",
-          "value": ""
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
         "sheetName": {
           "__rl": true,
           "mode": "list",
-          "value": ""
+          "value": "Sheet1"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
