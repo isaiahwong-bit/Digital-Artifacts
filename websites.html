@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Artifacts | Automation & Web Design Studio</title>
+  <title>Website Design & Development | Digital Artifacts</title>
   <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
   <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
-  <meta name="description" content="Digital Artifacts builds workflow automations and beautiful websites for small businesses. We find the gaps in your business and bridge them with smart technology. Based in Australia.">
+  <meta name="description" content="Custom website design and development for small businesses. Beautiful, fast, responsive sites built to grow your business. Based in Australia.">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Digital Artifacts | Automation & Web Design Studio">
-  <meta property="og:description" content="Workflow automations and beautiful websites for small businesses. We find the gaps and bridge them with smart technology.">
-  <meta property="og:url" content="https://digitalartifacts.com.au">
+  <meta property="og:title" content="Website Design & Development | Digital Artifacts">
+  <meta property="og:description" content="Custom web design and development for small businesses ready to stand out online. Design, code, launch — we handle the lot.">
+  <meta property="og:url" content="https://digitalartifacts.com.au/websites.html">
   <meta property="og:site_name" content="Digital Artifacts">
   <meta property="og:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Digital Artifacts | Automation & Web Design Studio">
-  <meta name="twitter:description" content="Workflow automations and beautiful websites for small businesses. We find the gaps and bridge them with smart technology.">
+  <meta name="twitter:title" content="Website Design & Development | Digital Artifacts">
+  <meta name="twitter:description" content="Custom web design and development for small businesses ready to stand out online. Design, code, launch — we handle the lot.">
   <meta name="twitter:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
 
-  <link rel="canonical" href="https://digitalartifacts.com.au/">
+  <link rel="canonical" href="https://digitalartifacts.com.au/websites.html">
 
   <!-- Fonts: Clash Display + General Sans from Fontshare -->
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
@@ -165,59 +165,22 @@
       border-radius: 2px;
     }
 
+    .nav-link.active::after {
+      width: 100%;
+    }
+
     /* === Hero === */
     .hero-section {
-      min-height: 100vh;
+      min-height: 70vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding-top: 5rem;
     }
 
-    .hero-line {
-      overflow: hidden;
-    }
-
-    .hero-char {
-      display: inline-block;
-      transform: translateY(110%);
-      opacity: 0;
-    }
-
     .hero-subtitle {
       opacity: 0;
       transform: translateY(20px);
-    }
-
-    /* === Scroll Indicator === */
-    .scroll-indicator {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 48px;
-      background: #E8E6E1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .scroll-line::after {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #1B2838;
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0% { top: -100%; }
-      50% { top: 0%; }
-      100% { top: 100%; }
     }
 
     /* === Reveal Animations === */
@@ -293,39 +256,6 @@
 
     .pricing-card.featured {
       border: 2px solid #00C853;
-    }
-
-    /* === Marquee === */
-    .marquee-track {
-      display: flex;
-      gap: 3rem;
-      animation: marqueeScroll 25s linear infinite;
-      will-change: transform;
-    }
-
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes marqueeScroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-
-    .marquee-item {
-      white-space: nowrap;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .marquee-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #00C853;
-      flex-shrink: 0;
-      align-self: center;
     }
 
     /* === CTA Shimmer Button === */
@@ -501,8 +431,6 @@
     .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
     .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(5) { transition-delay: 0.3s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(6) { transition-delay: 0.35s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
 
     /* === Hamburger === */
     .hamburger {
@@ -645,7 +573,7 @@
       color: #F7F6F3;
     }
 
-    /* === Why Us Card === */
+    /* === Why Card === */
     .why-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -676,15 +604,15 @@
   <!-- ============================== -->
   <nav class="nav-fixed" id="mainNav">
     <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <a href="#" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
+      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
         <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-lg object-cover">
         <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
       </a>
 
       <div class="hidden md:flex items-center gap-10">
-        <a href="#about" class="nav-link">About</a>
+        <a href="/" class="nav-link">Home</a>
         <a href="/automations.html" class="nav-link">Automations</a>
-        <a href="/websites.html" class="nav-link">Websites</a>
+        <a href="/websites.html" class="nav-link active">Websites</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
 
@@ -698,7 +626,7 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" class="mobile-menu-link" onclick="closeMobileMenu()">About</a>
+    <a href="/" class="mobile-menu-link" onclick="closeMobileMenu()">Home</a>
     <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automations</a>
     <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
     <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
@@ -707,68 +635,54 @@
   <!-- ============================== -->
   <!-- HERO SECTION -->
   <!-- ============================== -->
-  <section class="hero-section bg-cream relative px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
-      <!-- Dithered Sphere -->
-      <div class="hero-sphere" style="opacity: 0; transform: translateY(20px);">
-        <canvas id="sphereCanvas" style="display: block; border-radius: 50%; width: min(520px, 70vw); height: min(520px, 70vw);"></canvas>
-      </div>
+  <section class="hero-section bg-navy relative px-6 md:px-12 lg:px-16 overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
+    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
 
+    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center relative z-10">
       <!-- Hero H1 Headline -->
-      <div class="hero-headline mt-10 md:mt-14" style="opacity: 0; transform: translateY(30px);">
-        <h1 class="heading-xl text-navy text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
-          Stop doing things<br class="hidden sm:inline">the hard way<span class="text-accent cursor-blink">_</span>
+      <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
+        <h1 class="heading-xl text-cream text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
+          Beautiful Websites<br class="hidden sm:inline"> That Grow Your Business<span class="text-accent cursor-blink">_</span>
         </h1>
-        <p class="text-warm font-display text-center mt-4" style="font-weight: 400; font-size: clamp(0.9rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; line-height: 1.6;">Smarter systems, beautiful websites, and time given back to small businesses across Australia.</p>
       </div>
 
-      <!-- Hero CTAs -->
-      <div class="hero-cta mt-8 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
+      <p class="hero-subtitle text-warm max-w-2xl mx-auto text-base md:text-lg mt-6" style="opacity: 0; transform: translateY(20px);">
+        Custom web design and development for small businesses ready to stand out online.
+      </p>
+
+      <!-- Hero CTA -->
+      <div class="hero-cta mt-10 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
         <a href="#contact" class="cta-btn">
           <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
           <div class="shimmer-backdrop"></div>
           <div class="shimmer-highlight"></div>
-          <span>Get in Touch</span>
+          <span>Start Your Project</span>
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#about" class="cta-btn cta-btn-dark">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>See What We Do</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <!-- Byline -->
-      <p class="text-warm text-xs mt-6 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; Australia</p>
-
-      <!-- Scroll Indicator -->
-      <div class="scroll-indicator flex flex-col items-center gap-3 mt-10 md:mt-14">
-        <span class="text-warm text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
-        <div class="scroll-line"></div>
       </div>
     </div>
   </section>
 
 
   <!-- ============================== -->
-  <!-- WHAT WE DO -->
+  <!-- WHAT WE DO — SERVICES -->
   <!-- ============================== -->
-  <section id="about" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+  <section id="services" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
       <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
         <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">01 About</span>
+          <span class="tech-label text-warm font-medium reveal-up">01 Services</span>
         </div>
         <div class="lg:col-span-9">
           <h2 class="heading-lg text-navy mb-6" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            <span class="about-reveal-text">We Find the Gaps</span>
+            <span class="about-reveal-text">What We Do</span>
           </h2>
           <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            Every business has inefficiencies hiding in plain sight. Repetitive tasks, disconnected tools, manual processes eating up hours every week. We find those gaps and bridge them with automation, smart workflows, and websites that actually work for you.
+            We help businesses get online with sites that are fast, look amazing, and actually bring in customers. Design, code, launch — we handle the lot.
           </p>
         </div>
       </div>
@@ -777,34 +691,34 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
         <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="workflow" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Workflow Automation</h3>
-          <p class="body-text text-sm">Eliminate repetitive admin. We build automations that handle lead capture, emails, approvals, and data entry so you don't have to</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
             <i data-lucide="palette" class="w-6 h-6 text-accent"></i>
           </div>
           <h3 class="heading-md text-navy text-lg mb-2">Website Design</h3>
-          <p class="body-text text-sm">Custom responsive sites that look brilliant on every screen, load fast, and bring in customers</p>
+          <p class="body-text text-sm">Custom responsive sites that look brilliant on every screen</p>
         </div>
 
         <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="plug" class="w-6 h-6 text-accent"></i>
+            <i data-lucide="code-2" class="w-6 h-6 text-accent"></i>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Integration & Tools</h3>
-          <p class="body-text text-sm">Connect the systems you already use. CRMs, email, spreadsheets, Slack, and more, all wired into one seamless flow</p>
+          <h3 class="heading-md text-navy text-lg mb-2">Development</h3>
+          <p class="body-text text-sm">Built with modern tools like React, Vite and Next.js. Fast and reliable</p>
         </div>
 
         <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="life-buoy" class="w-6 h-6 text-accent"></i>
+            <i data-lucide="rocket" class="w-6 h-6 text-accent"></i>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Ongoing Support</h3>
-          <p class="body-text text-sm">We stick around. Hosting, monitoring, updates, and new workflows as your business grows</p>
+          <h3 class="heading-md text-navy text-lg mb-2">Launch & Hosting</h3>
+          <p class="body-text text-sm">Deployed on Vercel with lightning-fast global CDN</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="bar-chart-2" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">SEO & Analytics</h3>
+          <p class="body-text text-sm">Found on Google from day one with built-in best practices</p>
         </div>
       </div>
     </div>
@@ -812,47 +726,46 @@
 
 
   <!-- ============================== -->
-  <!-- THE PROBLEM -->
+  <!-- PORTFOLIO AT A GLANCE -->
   <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-navy">
+  <section id="stats" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
       <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">02 The Problem</span>
-        <h2 class="heading-xl text-cream mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Sound Familiar?</h2>
-        <p class="text-warm text-base md:text-lg reveal-up max-w-2xl mx-auto">Most businesses lose hours every week on tasks that could run themselves. Here's what we see over and over.</p>
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Portfolio at a Glance</h2>
+        <p class="body-text text-base md:text-lg reveal-up">Here's what we've been up to. Real projects, real results.</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-red-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="clipboard-list" class="w-6 h-6 text-red-400"></i>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
+          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="globe" class="w-7 h-7 text-accent"></i>
           </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Manual Data Entry</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Copy-pasting between spreadsheets, CRMs, and inboxes. Every. Single. Day.</p>
+          <span class="heading-xl text-accent block" style="font-size: clamp(2rem, 4vw, 3rem);">9+</span>
+          <span class="body-text text-sm mt-1 block">Live Sites Delivered</span>
         </div>
 
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="unplug" class="w-6 h-6 text-orange-400"></i>
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-navy reveal-up">
+          <div class="w-14 h-14 rounded-full bg-navy/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="rocket" class="w-7 h-7 text-navy"></i>
           </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Disconnected Tools</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Your email, CRM, invoicing, and calendar don't talk to each other. Things fall through the cracks.</p>
+          <span class="heading-xl text-navy block" style="font-size: clamp(2rem, 4vw, 3rem);">6+</span>
+          <span class="body-text text-sm mt-1 block">Industries Served</span>
         </div>
 
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="repeat" class="w-6 h-6 text-yellow-400"></i>
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
+          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="shield" class="w-7 h-7 text-accent"></i>
           </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Repetitive Admin</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Follow-up emails, lead sorting, approval requests. The same tasks, day after day.</p>
+          <span class="heading-xl text-accent block" style="font-size: clamp(2rem, 4vw, 3rem);">100%</span>
+          <span class="body-text text-sm mt-1 block">Uptime Guaranteed</span>
         </div>
 
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="globe" class="w-6 h-6 text-blue-400"></i>
+        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-navy reveal-up">
+          <div class="w-14 h-14 rounded-full bg-navy/10 flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="check-circle" class="w-7 h-7 text-navy"></i>
           </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">No Online Presence</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Your competitors have a website that works for them 24/7. You're still relying on word of mouth.</p>
+          <span class="heading-xl text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AU & UK</span>
+          <span class="body-text text-sm mt-1 block">International Clients</span>
         </div>
       </div>
     </div>
@@ -860,87 +773,438 @@
 
 
   <!-- ============================== -->
-  <!-- TWO SERVICE PATHS -->
+  <!-- CLIENT PROJECTS -->
+  <!-- ============================== -->
+  <section id="portfolio" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-12 md:mb-16">
+        <div class="lg:col-span-3">
+          <span class="tech-label text-warm font-medium reveal-up">02 Work</span>
+        </div>
+        <div class="lg:col-span-9">
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">Client Projects</h2>
+        </div>
+      </div>
+
+      <!-- Project List -->
+      <div class="mb-16">
+        <!-- Cee Ess Designs -->
+        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Cee Ess Designs</span>
+              <span class="text-warm text-xs">Graphic Design Studio</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Branding</span>
+            <span class="tag-pill">Portfolio</span>
+            <span class="tag-pill">Custom Domain</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Jensen Design Service -->
+        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="pen-tool" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Jensen Design Service</span>
+              <span class="text-warm text-xs">Design Agency</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Design</span>
+            <span class="tag-pill">Services</span>
+            <span class="tag-pill">Portfolio</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Full Circle Solutions -->
+        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="settings" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Full Circle Solutions</span>
+              <span class="text-warm text-xs">Business Solutions</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Business</span>
+            <span class="tag-pill">Corporate</span>
+            <span class="tag-pill">Services</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- BaySolar UK -->
+        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="sun" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">BaySolar UK</span>
+              <span class="text-warm text-xs">Solar Energy Company</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Energy</span>
+            <span class="tag-pill">Solar</span>
+            <span class="tag-pill">UK Market</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Foliole Tree Management -->
+        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="trees" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Foliole Tree Management</span>
+              <span class="text-warm text-xs">Tree & Landscaping Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Landscaping</span>
+            <span class="tag-pill">Tree Care</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+      </div>
+
+      <!-- Templates -->
+      <div class="mb-8 reveal-up">
+        <span class="tech-label text-warm font-medium block mb-3" style="font-size: 0.7rem;">Templates</span>
+        <h3 class="heading-md text-navy" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Ready-Made Templates</h3>
+      </div>
+
+      <div class="mb-16">
+        <!-- Robert Green Carpenter -->
+        <a href="https://robert-green-carpenter.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Robert Green Carpenter</span>
+              <span class="text-warm text-xs">Carpentry Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Trades</span>
+            <span class="tag-pill">Carpentry</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Eastern Suburbs Painting -->
+        <a href="https://eastern-suburbs-painting.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Eastern Suburbs Painting</span>
+              <span class="text-warm text-xs">Painting Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Trades</span>
+            <span class="tag-pill">Painting</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Tom's Firewood -->
+        <a href="https://toms-firewood.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="flame" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Tom's Firewood</span>
+              <span class="text-warm text-xs">Firewood Supply</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Retail</span>
+            <span class="tag-pill">Delivery</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+        <!-- Yaz Services -->
+        <a href="https://yaz-services.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
+          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="wrench" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <span class="project-name font-display font-semibold text-navy block">Yaz Services</span>
+              <span class="text-warm text-xs">General Services</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 md:flex-1">
+            <span class="tag-pill">Services</span>
+            <span class="tag-pill">Multi-trade</span>
+            <span class="tag-pill">Local</span>
+          </div>
+          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- FEATURED PROJECT — CEE ESS DESIGNS -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-xl reveal-up">
+        <!-- Left Panel -->
+        <div class="bg-mint p-10 md:p-14 flex flex-col justify-center">
+          <span class="tech-label text-accent font-medium mb-6" style="font-size: 0.7rem;">Featured Project</span>
+          <h3 class="heading-xl text-navy mb-3" style="font-size: clamp(2rem, 3.5vw, 3rem);">Cee Ess Designs</h3>
+          <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="text-accent text-sm font-medium mb-6 hover:underline">cee-essdesigns.com.au &rarr;</a>
+          <p class="body-text text-sm mb-8 max-w-md">Melbourne graphic design studio. Full brand portfolio with animated UI, contact forms, SEO optimisation, structured data, and a custom .com.au domain.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-pill">5 brand case studies</span>
+            <span class="tag-pill">Custom domain</span>
+            <span class="tag-pill">Full SEO</span>
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="bg-surface p-10 md:p-14 flex flex-col justify-center gap-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="lock" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Custom Domain + SSL</h4>
+              <p class="body-text text-sm">Live on cee-essdesigns.com.au with HTTPS by default</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="search" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Full SEO Suite</h4>
+              <p class="body-text text-sm">Open Graph, Twitter Cards, structured data (JSON-LD)</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="smartphone" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Mobile-First Design</h4>
+              <p class="body-text text-sm">Animated loading, custom cursor, responsive throughout</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="mail" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Smart Contact Forms</h4>
+              <p class="body-text text-sm">Formspree integration with service type selector</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="star" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-navy text-base mb-1">Portfolio Showcase</h4>
+              <p class="body-text text-sm">5 dedicated brand case study pages with galleries</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ============================== -->
+  <!-- PRICING — WEBSITE PACKAGES -->
+  <!-- ============================== -->
+  <section id="pricing" class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream tech-grid-bg">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="text-center mb-10 md:mb-14">
+        <span class="tech-label text-accent font-medium mb-3 block reveal-up">03 Pricing</span>
+        <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Website Packages</h2>
+        <p class="body-text text-sm md:text-base reveal-up">Simple, transparent pricing. 14-day turnaround, no surprises!</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-16">
+        <!-- Silver -->
+        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider reveal-up">
+          <h3 class="font-display font-semibold text-navy text-base mb-1">Silver</h3>
+          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$800 – $1,500</p>
+          <p class="body-text text-xs mb-5">Single-page landing site</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>1-page responsive design</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Mobile optimized</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Contact form</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Basic SEO setup</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Vercel deployment</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>1 round of revisions</li>
+          </ul>
+        </div>
+
+        <!-- Gold (Featured) -->
+        <div class="pricing-card featured bg-navy rounded-xl p-6 md:p-7 reveal-up relative">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[0.65rem] font-semibold px-3 py-0.5 rounded-full uppercase tracking-wider">Most Popular</span>
+          <h3 class="font-display font-semibold text-cream text-base mb-1">Gold</h3>
+          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$2,000 – $4,000</p>
+          <p class="text-warm text-xs mb-5">Multi-page business site</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>3-6 page site</li>
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Custom design & branding</li>
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SEO & structured data</li>
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Contact forms & maps</li>
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Custom domain setup</li>
+            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>3 rounds of revisions</li>
+          </ul>
+        </div>
+
+        <!-- Platinum -->
+        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider reveal-up">
+          <h3 class="font-display font-semibold text-navy text-base mb-1">Platinum</h3>
+          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$4,500 – $8,000+</p>
+          <p class="body-text text-xs mb-5">Full brand experience</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>6+ pages with CMS</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Advanced animations/UI</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>E-commerce or booking</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Analytics integration</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Full SEO & Open Graph</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Ongoing support included</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ONGOING CARE & HOSTING -->
+      <div class="text-center mb-10 md:mb-14">
+        <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.5rem, 3vw, 2.25rem);">Ongoing Care & Hosting</h2>
+        <p class="body-text text-sm reveal-up">Your site stays fast, secure, and looking fresh. You don't have to lift a finger</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-10">
+        <!-- Basic Hosting -->
+        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-accent reveal-up">
+          <h3 class="font-display font-semibold text-navy text-base mb-1">Basic Hosting</h3>
+          <p class="heading-lg text-accent mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$30/month</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Vercel hosting & CDN</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SSL certificate</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Uptime monitoring</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Monthly security check</li>
+          </ul>
+        </div>
+
+        <!-- Care Plan -->
+        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-navy reveal-up">
+          <h3 class="font-display font-semibold text-navy text-base mb-1">Care Plan</h3>
+          <p class="heading-lg text-navy mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$80 – $150/mo</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Everything in Basic</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Up to 2hrs content updates</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Performance monitoring</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Monthly backup & report</li>
+          </ul>
+        </div>
+
+        <!-- Growth Plan -->
+        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-accent reveal-up">
+          <h3 class="font-display font-semibold text-navy text-base mb-1">Growth Plan</h3>
+          <p class="heading-lg text-accent mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$200 – $400/mo</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Everything in Care</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SEO monitoring & tweaks</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Analytics review</li>
+            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Priority support & new features</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="text-center reveal-up">
+        <p class="body-text text-xs">
+          <span class="font-semibold text-navy">Common Add-ons:</span>
+          Domain registration ($20-50/yr) &bull; Email setup ($5-15/mo) &bull; Extra content updates ($60/hr) &bull; New page or feature (quoted)
+        </p>
+      </div>
+
+      <div class="text-center mt-12 reveal-up">
+        <a href="#contact" class="cta-btn">
+          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+          <div class="shimmer-backdrop"></div>
+          <div class="shimmer-highlight"></div>
+          <span>Start Your Project</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WHY CLIENTS LOVE WORKING WITH US -->
   <!-- ============================== -->
   <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
       <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">03 How We Help</span>
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Two Ways We Grow Your Business</h2>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        <!-- Automation Card -->
-        <a href="/automations.html" class="group block bg-surface rounded-2xl overflow-hidden border border-divider hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 reveal-up">
-          <div class="p-10 md:p-12">
-            <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-              <i data-lucide="workflow" class="w-7 h-7 text-accent"></i>
-            </div>
-            <h3 class="heading-lg text-navy mb-3" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Automation & Workflows</h3>
-            <p class="body-text text-sm mb-6 max-w-md">Stop doing things manually. We build automations that handle lead capture, email sequences, approvals, data syncing, and more. Saving you hours every week.</p>
-            <ul class="space-y-2 mb-8">
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Lead classification & scoring</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Email automation & follow-ups</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Approval workflows via Slack</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> CRM & tool integrations</li>
-            </ul>
-            <span class="inline-flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all">
-              Explore Automations
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Websites Card -->
-        <a href="/websites.html" class="group block bg-surface rounded-2xl overflow-hidden border border-divider hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 reveal-up">
-          <div class="p-10 md:p-12">
-            <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-              <i data-lucide="monitor" class="w-7 h-7 text-accent"></i>
-            </div>
-            <h3 class="heading-lg text-navy mb-3" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Website Design & Development</h3>
-            <p class="body-text text-sm mb-6 max-w-md">Beautiful, fast websites that grow your business. Custom designs built for small businesses, tradies, and creative brands across Australia and the UK.</p>
-            <ul class="space-y-2 mb-8">
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Custom responsive design</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> SEO & structured data</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Hosting & ongoing care</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> 14-day turnaround</li>
-            </ul>
-            <span class="inline-flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all">
-              See Our Website Work
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHY DIGITAL ARTIFACTS -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">04 Why Us</span>
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Why Digital Artifacts</h2>
+        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Why Clients Love Working With Us</h2>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="search" class="w-6 h-6 text-accent"></i>
+            <i data-lucide="zap" class="w-6 h-6 text-accent"></i>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">We Find the Gaps</h3>
-          <p class="body-text text-sm">We audit your processes and tools first, then build exactly what's needed. Nothing more, nothing less</p>
+          <h3 class="heading-md text-navy text-lg mb-2">14-Day Turnaround</h3>
+          <p class="body-text text-sm">Most sites go live in just 14 days. Fast, reliable delivery</p>
         </div>
 
         <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="zap" class="w-6 h-6 text-accent"></i>
+            <i data-lucide="shield" class="w-6 h-6 text-accent"></i>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Fast Delivery</h3>
-          <p class="body-text text-sm">Websites in 14 days. Automations scoped and built fast. No dragging things out</p>
+          <h3 class="heading-md text-navy text-lg mb-2">Modern & Secure</h3>
+          <p class="body-text text-sm">Vercel edge network, SSL included, blazing fast globally</p>
+        </div>
+
+        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="heart" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Personal Touch</h3>
+          <p class="body-text text-sm">You work directly with our team. No outsourcing, no middlemen</p>
         </div>
 
         <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
@@ -948,23 +1212,15 @@
             <i data-lucide="dollar-sign" class="w-6 h-6 text-accent"></i>
           </div>
           <h3 class="heading-md text-navy text-lg mb-2">Honest Pricing</h3>
-          <p class="body-text text-sm">What we quote is what you pay. Transparent pricing, no surprise invoices</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="heart" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Boutique Studio</h3>
-          <p class="body-text text-sm">You work directly with us. No layers of account managers or outsourced teams</p>
+          <p class="body-text text-sm">What we quote is what you pay. No surprise invoices.</p>
         </div>
 
         <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
           <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
             <i data-lucide="trending-up" class="w-6 h-6 text-accent"></i>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Built to Scale</h3>
-          <p class="body-text text-sm">Everything we build grows with your business. Add new workflows, pages, or integrations any time</p>
+          <h3 class="heading-md text-navy text-lg mb-2">Built to Grow</h3>
+          <p class="body-text text-sm">Your site scales with your business. No rebuilds needed</p>
         </div>
 
         <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
@@ -972,97 +1228,19 @@
             <i data-lucide="refresh-cw" class="w-6 h-6 text-accent"></i>
           </div>
           <h3 class="heading-md text-navy text-lg mb-2">Ongoing Care</h3>
-          <p class="body-text text-sm">We stick around to keep things running smoothly. Hosting, monitoring, and new features as you need them</p>
+          <p class="body-text text-sm">We stick around to keep things running beautifully</p>
         </div>
       </div>
-    </div>
-  </section>
 
-
-
-
-  <!-- ============================== -->
-  <!-- LEAD MAGNET SECTION -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 relative overflow-hidden" style="background: linear-gradient(135deg, #E8F5E9 0%, #F7F6F3 50%, #E8F5E9 100%);">
-    <div class="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] rounded-full" style="background: rgba(0,200,83,0.08); filter: blur(60px);"></div>
-    <div class="max-w-[900px] mx-auto relative z-10">
-      <div class="bg-white rounded-2xl p-8 md:p-12 border border-accent/20 shadow-lg" style="box-shadow: 0 4px 40px rgba(0,200,83,0.08);">
-        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          <!-- Left: Content -->
-          <div class="flex-1 text-center md:text-left">
-            <span class="inline-flex items-center gap-2 text-accent text-xs font-medium uppercase tracking-wider mb-4">
-              <i data-lucide="download" class="w-4 h-4"></i> Free Download
-            </span>
-            <h2 class="heading-md text-navy text-xl md:text-2xl mb-3" style="line-height: 1.3;">The 27-Point Website Checklist</h2>
-            <p class="body-text text-sm mb-6">Everything your website needs before it goes live. Built for Aussie small businesses, tradies, and creative brands.</p>
-            <ul class="text-xs text-warm space-y-2 mb-6">
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Design, content, and technical essentials</li>
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> SEO and launch day checklist</li>
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Works for any industry or business size</li>
-            </ul>
-          </div>
-          <!-- Right: Form -->
-          <div class="w-full md:w-[320px] flex-shrink-0">
-            <form id="leadMagnetForm" class="space-y-3">
-              <div>
-                <input type="text" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
-              </div>
-              <div>
-                <input type="email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
-              </div>
-              <button type="submit" class="w-full px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center justify-center gap-2">
-                <span>Get the Free Checklist</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Your checklist downloads instantly.</p>
-            </form>
-            <div id="leadMagnetSuccess" class="hidden text-center py-4">
-              <div class="flex flex-col items-center gap-2 text-accent text-sm font-medium">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="check-circle" class="w-5 h-5"></i>
-                  <span>Your checklist is downloading!</span>
-                </div>
-                <a href="/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="text-center mt-12 reveal-up">
+        <a href="#contact" class="cta-btn">
+          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+          <div class="shimmer-backdrop"></div>
+          <div class="shimmer-highlight"></div>
+          <span>Ready to Start?</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- MARQUEE BAND -->
-  <!-- ============================== -->
-  <section class="py-10 md:py-14 border-t border-b border-divider overflow-hidden bg-cream">
-    <div class="marquee-track">
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
-      <span class="marquee-dot"></span>
-      <!-- Duplicate for seamless loop -->
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
-      <span class="marquee-dot"></span>
     </div>
   </section>
 
@@ -1077,12 +1255,12 @@
 
     <div class="max-w-[1440px] mx-auto relative z-10">
       <div class="text-center mb-14">
-        <span class="tech-label text-warm font-medium reveal-up block mb-8">Contact</span>
+        <span class="tech-label text-warm font-medium reveal-up block mb-8">04 Contact</span>
         <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
           Let's make something<br>great together<span class="text-accent cursor-blink">_</span>
         </h2>
         <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          Whether it's automation, a website, or both. We'd love to hear what you're working on.
+          Ready to get your business online? We'd love to chat.
         </p>
       </div>
 
@@ -1090,6 +1268,7 @@
       <div class="max-w-2xl mx-auto reveal-up">
         <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
           <input type="hidden" name="lead_magnet" value="false">
+          <input type="hidden" name="source_page" value="websites">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
@@ -1109,9 +1288,9 @@
             <div>
               <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
               <select name="service" id="service" class="form-input form-select">
-                <option value="" disabled selected>Select a service</option>
+                <option value="" disabled>Select a service</option>
+                <option value="website" selected>Website Design</option>
                 <option value="automation">Automation & Workflows</option>
-                <option value="website">Website Design</option>
                 <option value="both">Both — Automation + Website</option>
                 <option value="not-sure">Not sure yet</option>
               </select>
@@ -1123,9 +1302,9 @@
               <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
               <select name="budget" id="budget" class="form-input form-select">
                 <option value="" disabled selected>Select your budget</option>
-                <option value="800-2000">$800 – $2,000</option>
-                <option value="2000-5000">$2,000 – $5,000</option>
-                <option value="5000+">$5,000+</option>
+                <option value="800-1500">$800 – $1,500</option>
+                <option value="2000-4000">$2,000 – $4,000</option>
+                <option value="4500-8000">$4,500 – $8,000+</option>
                 <option value="not-sure">Not sure yet</option>
               </select>
             </div>
@@ -1198,7 +1377,7 @@
         <div class="md:col-span-2 md:col-start-7">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
           <div class="flex flex-col gap-3">
-            <a href="#about" class="footer-link">About</a>
+            <a href="/" class="footer-link">Home</a>
             <a href="/automations.html" class="footer-link">Automations</a>
             <a href="/websites.html" class="footer-link">Websites</a>
             <a href="#contact" class="footer-link">Contact</a>
@@ -1286,20 +1465,20 @@
     });
 
     // === Hero Animation ===
-    gsap.to('.hero-sphere', {
-      y: 0,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
-
     gsap.to('.hero-headline', {
       y: 0,
       opacity: 1,
       duration: 1,
       ease: 'power3.out',
-      delay: 0.8,
+      delay: 0.3,
+    });
+
+    gsap.to('.hero-subtitle', {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.6,
     });
 
     gsap.to('.hero-cta', {
@@ -1307,193 +1486,9 @@
       opacity: 1,
       duration: 0.8,
       ease: 'power3.out',
-      delay: 1.1,
+      delay: 0.9,
       stagger: 0.15,
     });
-
-    gsap.to('.scroll-indicator', {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: 1.4,
-    });
-
-    // === Dithered Sphere (WebGL2) ===
-    (function initSphere() {
-      const canvas = document.getElementById('sphereCanvas');
-      if (!canvas) return;
-
-      const size = 1040;
-      canvas.width = size;
-      canvas.height = size;
-
-      const gl = canvas.getContext('webgl2');
-      if (!gl) { console.error('WebGL2 not supported'); return; }
-
-      const vertSrc = `#version 300 es
-        precision mediump float;
-        layout(location=0) in vec4 a_position;
-        void main(){ gl_Position = a_position; }`;
-
-      const fragSrc = `#version 300 es
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-        uniform vec4 u_colorBack;
-        uniform vec4 u_colorFront;
-        uniform float u_pxSize;
-        out vec4 fragColor;
-
-        #define TWO_PI 6.28318530718
-        #define PI 3.14159265358979323846
-
-        const int bayer8x8[64] = int[64](
-          0,32,8,40,2,34,10,42,
-          48,16,56,24,50,18,58,26,
-          12,44,4,36,14,46,6,38,
-          60,28,52,20,62,30,54,22,
-          3,35,11,43,1,33,9,41,
-          51,19,59,27,49,17,57,25,
-          15,47,7,39,13,45,5,37,
-          63,31,55,23,61,29,53,21
-        );
-
-        float getBayerValue(vec2 uv){
-          ivec2 pos = ivec2(mod(uv, 8.0));
-          int index = pos.y * 8 + pos.x;
-          return float(bayer8x8[index]) / 64.0;
-        }
-
-        void main(){
-          float t = 0.5 * u_time;
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv -= 0.5;
-
-          float pxSize = u_pxSize;
-          vec2 pxSizeUv = gl_FragCoord.xy;
-          pxSizeUv -= 0.5 * u_resolution;
-          pxSizeUv /= pxSize;
-          vec2 pixelizedUv = floor(pxSizeUv) * pxSize / u_resolution.xy;
-          pixelizedUv += 0.5;
-          pixelizedUv -= 0.5;
-
-          vec2 shape_uv = pixelizedUv * 2.0;
-          vec2 dithering_uv = pxSizeUv;
-
-          float d = 1.0 - pow(length(shape_uv), 2.0);
-          vec3 pos = vec3(shape_uv, sqrt(max(d, 0.0)));
-          vec3 lightPos = normalize(vec3(cos(1.5 * t), 0.8, sin(1.25 * t)));
-          float shape = 0.5 + 0.5 * dot(lightPos, pos);
-          shape *= step(0.0, d);
-
-          float dithering = getBayerValue(dithering_uv);
-          dithering -= 0.5;
-          float res = step(0.5, shape + dithering);
-
-          vec3 fgColor = u_colorFront.rgb * u_colorFront.a;
-          float fgOpacity = u_colorFront.a;
-          vec3 bgColor = u_colorBack.rgb * u_colorBack.a;
-          float bgOpacity = u_colorBack.a;
-
-          vec3 color = fgColor * res;
-          float opacity = fgOpacity * res;
-          color += bgColor * (1.0 - opacity);
-          opacity += bgOpacity * (1.0 - opacity);
-
-          fragColor = vec4(color, opacity);
-        }`;
-
-      function createShader(type, source) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, source);
-        gl.compileShader(s);
-        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-          console.error(gl.getShaderInfoLog(s));
-          gl.deleteShader(s);
-          return null;
-        }
-        return s;
-      }
-
-      const vs = createShader(gl.VERTEX_SHADER, vertSrc);
-      const fs = createShader(gl.FRAGMENT_SHADER, fragSrc);
-      const program = gl.createProgram();
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error(gl.getProgramInfoLog(program));
-        return;
-      }
-
-      const posLoc = gl.getAttribLocation(program, 'a_position');
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
-      gl.enableVertexAttribArray(posLoc);
-      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-      gl.viewport(0, 0, size, size);
-
-      const uTime = gl.getUniformLocation(program, 'u_time');
-      const uRes = gl.getUniformLocation(program, 'u_resolution');
-      const uBack = gl.getUniformLocation(program, 'u_colorBack');
-      const uFront = gl.getUniformLocation(program, 'u_colorFront');
-      const uPx = gl.getUniformLocation(program, 'u_pxSize');
-
-      const brandColors = [
-        [0/255, 200/255, 83/255],
-        [27/255, 40/255, 56/255],
-        [138/255, 138/255, 128/255],
-      ];
-      const back = [247/255, 246/255, 243/255, 0.0];
-
-      const holdDuration = 3.0;
-      const fadeDuration = 2.0;
-      const cycleDuration = holdDuration + fadeDuration;
-
-      function lerpColor(a, b, t) {
-        return [
-          a[0] + (b[0] - a[0]) * t,
-          a[1] + (b[1] - a[1]) * t,
-          a[2] + (b[2] - a[2]) * t,
-        ];
-      }
-
-      function getCurrentColor(elapsed) {
-        const total = cycleDuration * brandColors.length;
-        const looped = elapsed % total;
-        const index = Math.floor(looped / cycleDuration);
-        const within = looped - index * cycleDuration;
-
-        if (within < holdDuration) {
-          return brandColors[index];
-        }
-        const progress = (within - holdDuration) / fadeDuration;
-        const eased = progress < 0.5
-          ? 2 * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-        const next = (index + 1) % brandColors.length;
-        return lerpColor(brandColors[index], brandColors[next], eased);
-      }
-
-      const startTime = Date.now();
-
-      function render() {
-        const t = (Date.now() - startTime) * 0.001;
-        const col = getCurrentColor(t);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.useProgram(program);
-        gl.uniform1f(uTime, t);
-        gl.uniform2f(uRes, size, size);
-        gl.uniform4fv(uBack, back);
-        gl.uniform4fv(uFront, [col[0], col[1], col[2], 1.0]);
-        gl.uniform1f(uPx, 5);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        requestAnimationFrame(render);
-      }
-      render();
-    })();
 
     // === Scroll Reveal Animations ===
     gsap.utils.toArray('.reveal-up').forEach(el => {
@@ -1533,6 +1528,29 @@
       });
     }
 
+    // === Stat Cards Stagger ===
+    const statCards = gsap.utils.toArray('.stat-card');
+    if (statCards.length) {
+      statCards.forEach(card => card.classList.remove('reveal-up'));
+      statCards.forEach((card, i) => {
+        gsap.fromTo(card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            delay: i * 0.12,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+            }
+          }
+        );
+      });
+    }
+
     // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
     const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
     const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
@@ -1542,6 +1560,7 @@
       const data = Object.fromEntries(formData.entries());
       data.lead_magnet = isLeadMagnet;
       data.submitted_at = new Date().toISOString();
+      data.source_page = 'websites';
 
       const promises = [];
 
@@ -1552,11 +1571,11 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
-          }).catch(() => null) // Fail silently, Formspree is the backup
+          }).catch(() => null)
         );
       }
 
-      // Send to Formspree (if configured and not a placeholder)
+      // Send to Formspree (if configured)
       if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
         promises.push(
           fetch(FORMSPREE_URL, {
@@ -1589,35 +1608,6 @@
           document.getElementById('formError').classList.remove('hidden');
         } finally {
           btn.querySelector('span').textContent = originalText;
-          btn.disabled = false;
-        }
-      });
-    }
-
-    // Lead magnet form
-    const leadMagnetForm = document.getElementById('leadMagnetForm');
-    if (leadMagnetForm) {
-      leadMagnetForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = leadMagnetForm.querySelector('button[type="submit"]');
-        btn.querySelector('span').textContent = 'Sending...';
-        btn.disabled = true;
-
-        try {
-          await handleFormSubmit(leadMagnetForm, true);
-          // Trigger PDF download
-          const dlLink = document.createElement('a');
-          dlLink.href = '/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf';
-          dlLink.download = '27-Point-Website-Checklist-Digital-Artifacts.pdf';
-          document.body.appendChild(dlLink);
-          dlLink.click();
-          document.body.removeChild(dlLink);
-          // Show success message
-          leadMagnetForm.classList.add('hidden');
-          document.getElementById('leadMagnetSuccess').classList.remove('hidden');
-          lucide.createIcons();
-        } catch (err) {
-          btn.querySelector('span').textContent = 'Get the Free Checklist';
           btn.disabled = false;
         }
       });

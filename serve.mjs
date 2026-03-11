@@ -20,6 +20,7 @@ const MIME_TYPES = {
   '.webm': 'video/webm',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  '.pdf': 'application/pdf',
 };
 
 const server = createServer(async (req, res) => {

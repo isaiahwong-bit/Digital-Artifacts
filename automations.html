@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automation & Workflows | Digital Artifacts</title>
+  <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta name="description" content="Digital Artifacts builds custom automation workflows that save you hours every week. Lead pipelines, approval flows, email sequences, and CRM integrations. Based in Australia.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Automation & Workflows | Digital Artifacts">
+  <meta property="og:description" content="We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.">
+  <meta property="og:url" content="https://digitalartifacts.com.au/automations.html">
+  <meta property="og:site_name" content="Digital Artifacts">
+  <meta property="og:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Automation & Workflows | Digital Artifacts">
+  <meta name="twitter:description" content="We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.">
+  <meta name="twitter:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+
+  <link rel="canonical" href="https://digitalartifacts.com.au/automations.html">
+
+  <!-- Fonts: Clash Display + General Sans from Fontshare -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1B2838',
+            cream: '#F7F6F3',
+            warm: '#8A8A80',
+            divider: '#E8E6E1',
+            accent: '#00C853',
+            surface: '#FFFFFF',
+            mint: '#E8F5E9',
+          },
+          fontFamily: {
+            display: ['"Clash Display"', 'sans-serif'],
+            body: ['"General Sans"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* === Base Reset === */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      background: #F7F6F3;
+      color: #1B2838;
+      font-family: 'General Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+
+    /* === Typography === */
+    .font-display { font-family: 'Clash Display', sans-serif; }
+    .font-body { font-family: 'General Sans', sans-serif; }
+
+    .heading-xl {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .heading-lg {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+
+    .heading-md {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .body-text {
+      font-family: 'General Sans', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      color: #8A8A80;
+    }
+
+    /* === Nav === */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .nav-fixed.scrolled {
+      background: rgba(247, 246, 243, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 0 #E8E6E1;
+    }
+
+    .nav-link {
+      position: relative;
+      color: #1B2838;
+      font-family: 'General Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.25rem 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 1.5px;
+      background: #00C853;
+      transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .nav-link:hover::after,
+    .nav-link:focus-visible::after {
+      width: 100%;
+    }
+
+    .nav-link:active {
+      opacity: 0.7;
+    }
+
+    .nav-link:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    /* === Hero === */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 5rem;
+    }
+
+    .hero-subtitle {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* === Reveal Animations === */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    .reveal-word {
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .reveal-word-inner {
+      display: inline-block;
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    /* === Tag Pills === */
+    .tag-pill {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: rgba(0, 200, 83, 0.08);
+      color: #00C853;
+      letter-spacing: 0.02em;
+    }
+
+    /* === Service Card === */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(27, 40, 56, 0.08);
+    }
+
+    /* === Pricing Card === */
+    .pricing-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(27, 40, 56, 0.1);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid #00C853;
+    }
+
+    /* === CTA Shimmer Button === */
+    .cta-btn {
+      --shimmer-color: rgba(255, 255, 255, 0.6);
+      --bg: #00C853;
+      --radius: 100px;
+      --speed: 3s;
+      --cut: 0.05em;
+      --spread: 90deg;
+      position: relative;
+      z-index: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem 2.25rem;
+      background: var(--bg);
+      color: #F7F6F3;
+      font-family: 'General Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      overflow: hidden;
+      transform: translateZ(0);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.04);
+    }
+
+    .cta-btn:active {
+      transform: scale(0.98) translateY(1px);
+    }
+
+    .cta-btn:focus-visible {
+      outline: 2px solid #F7F6F3;
+      outline-offset: 4px;
+    }
+
+    .cta-btn-dark {
+      --bg: #1B2838;
+      --shimmer-color: rgba(0, 200, 83, 0.5);
+    }
+
+    .cta-btn .shimmer-spark {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      overflow: visible;
+      filter: blur(2px);
+    }
+
+    .cta-btn .shimmer-slide {
+      position: absolute;
+      inset: 0;
+      aspect-ratio: 1;
+      height: 100cqh;
+      animation: shimmerSlide var(--speed) ease-in-out infinite;
+    }
+
+    .cta-btn .shimmer-spin {
+      position: absolute;
+      inset: -100%;
+      width: auto;
+      background: conic-gradient(
+        from calc(270deg - (var(--spread) * 0.5)),
+        transparent 0,
+        var(--shimmer-color) var(--spread),
+        transparent var(--spread)
+      );
+      animation: shimmerSpin 2s linear infinite;
+    }
+
+    .cta-btn .shimmer-highlight {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      box-shadow: inset 0 -8px 10px rgba(255, 255, 255, 0.12);
+      transition: box-shadow 0.3s ease;
+      pointer-events: none;
+    }
+
+    .cta-btn:hover .shimmer-highlight {
+      box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.25);
+    }
+
+    .cta-btn:active .shimmer-highlight {
+      box-shadow: inset 0 -10px 10px rgba(255, 255, 255, 0.25);
+    }
+
+    .cta-btn .shimmer-backdrop {
+      position: absolute;
+      inset: var(--cut);
+      z-index: -2;
+      background: var(--bg);
+      border-radius: var(--radius);
+    }
+
+    @keyframes shimmerSlide {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    @keyframes shimmerSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* === Arrow Icon === */
+    .arrow-icon {
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .cta-btn:hover .arrow-icon {
+      transform: translateX(4px);
+    }
+
+    /* === Mobile Menu === */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: #F7F6F3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-menu-link {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: #1B2838;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: color 0.3s ease;
+    }
+
+    .mobile-menu.open .mobile-menu-link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu-link:hover {
+      color: #00C853;
+    }
+
+    .mobile-menu-link:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 4px;
+    }
+
+    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
+
+    /* === Hamburger === */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      z-index: 101;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 1.5px;
+      background: #1B2838;
+      display: block;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(7.5px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-7.5px) rotate(-45deg);
+    }
+
+    /* === Footer Links === */
+    .footer-link {
+      color: #8A8A80;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: #F7F6F3;
+    }
+
+    .footer-link:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    /* === Grain Texture Overlay === */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+    }
+
+    /* === Selection === */
+    ::selection {
+      background: rgba(0, 200, 83, 0.12);
+      color: #1B2838;
+    }
+
+    /* === Tech Label === */
+    .tech-label {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tech-label::before {
+      content: '// ';
+      opacity: 0.4;
+    }
+
+    /* === Terminal cursor blink === */
+    .cursor-blink {
+      animation: cursorBlink 1.2s step-end infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* === Tech grid background === */
+    .tech-grid-bg {
+      background-image:
+        linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* === Form Styles === */
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.5rem;
+      color: #F7F6F3;
+      font-family: 'General Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input::placeholder {
+      color: rgba(247, 246, 243, 0.4);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #00C853;
+      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238A8A80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-select option {
+      background: #1B2838;
+      color: #F7F6F3;
+    }
+
+    /* === Tool Badge === */
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-family: 'General Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      background: rgba(0, 200, 83, 0.06);
+      border: 1px solid rgba(0, 200, 83, 0.15);
+      color: #1B2838;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .tool-badge:hover {
+      transform: translateY(-2px);
+      background: rgba(0, 200, 83, 0.12);
+    }
+
+    /* === Example Card === */
+    .example-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    }
+
+    /* === Scroll Indicator === */
+    .scroll-indicator {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: rgba(232, 230, 225, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #F7F6F3;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0% { top: -100%; }
+      50% { top: 0%; }
+      100% { top: 100%; }
+    }
+  </style>
+</head>
+
+<body class="bg-cream text-navy font-body overflow-x-hidden">
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <!-- ============================== -->
+  <!-- NAVIGATION -->
+  <!-- ============================== -->
+  <nav class="nav-fixed" id="mainNav">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
+      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
+        <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-lg object-cover">
+        <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-10">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/automations.html" class="nav-link active">Automations</a>
+        <a href="/websites.html" class="nav-link">Websites</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+
+      <button class="hamburger md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" class="mobile-menu-link" onclick="closeMobileMenu()">Home</a>
+    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automations</a>
+    <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
+    <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
+  </div>
+
+
+  <!-- ============================== -->
+  <!-- HERO SECTION -->
+  <!-- ============================== -->
+  <section class="hero-section bg-navy relative px-6 md:px-12 lg:px-16">
+    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
+
+      <!-- Label -->
+      <div class="hero-label mb-6" style="opacity: 0; transform: translateY(20px);">
+        <span class="tag-pill text-xs uppercase tracking-wider">Automation & Workflows</span>
+      </div>
+
+      <!-- Hero H1 Headline -->
+      <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
+        <h1 class="heading-xl text-cream text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
+          What could you do with<br class="hidden sm:inline"> 10 extra hours every week<span class="text-accent cursor-blink">?</span>
+        </h1>
+        <p class="text-warm font-display text-center mt-4" style="font-weight: 400; font-size: clamp(0.9rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; line-height: 1.6;">We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.</p>
+      </div>
+
+      <!-- Hero CTAs -->
+      <div class="hero-cta mt-8 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
+        <a href="#contact" class="cta-btn">
+          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+          <div class="shimmer-backdrop"></div>
+          <div class="shimmer-highlight"></div>
+          <span>Let's Talk Automation</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Byline -->
+      <p class="text-warm/60 text-xs mt-6 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; Australia</p>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator flex flex-col items-center gap-3 mt-10 md:mt-14">
+        <span class="text-warm/60 text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- THE PROBLEM -->
+  <!-- ============================== -->
+  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
+        <div class="lg:col-span-3">
+          <span class="tech-label text-warm font-medium reveal-up">01 The Problem</span>
+        </div>
+        <div class="lg:col-span-9">
+          <h2 class="heading-lg text-navy mb-6 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
+            You're spending hours on tasks a machine could handle
+          </h2>
+          <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
+            Most businesses lose 10+ hours every week to repetitive admin. These are the usual suspects.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4-Card Pain Points Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="users" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Manual lead sorting & follow-up</h3>
+          <p class="body-text text-sm">New leads come in and sit in an inbox. Someone has to read, classify, and assign them manually. Leads go cold while you're still sorting.</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="copy" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Copy-pasting data between tools</h3>
+          <p class="body-text text-sm">Moving data from your CRM to a spreadsheet, then to an email, then back again. The same information lives in five places and none of them agree.</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="mail" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Repetitive email responses</h3>
+          <p class="body-text text-sm">Typing the same replies over and over. Welcome emails, follow-ups, status updates. Important work, but it doesn't need a human every time.</p>
+        </div>
+
+        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <i data-lucide="clock" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-navy text-lg mb-2">Approval bottlenecks that slow everything down</h3>
+          <p class="body-text text-sm">Tasks pile up waiting for a single person to review and approve. One missed Slack message means a day of delays.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WHY AUTOMATE — EDUCATIONAL -->
+  <!-- ============================== -->
+  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream tech-grid-bg">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
+        <div class="lg:col-span-3">
+          <span class="tech-label text-warm font-medium reveal-up">02 Why Automate</span>
+        </div>
+        <div class="lg:col-span-9">
+          <h2 class="heading-lg text-navy mb-6 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
+            Time is the one thing you can't get back
+          </h2>
+          <p class="body-text max-w-2xl text-base md:text-lg reveal-up mb-8">
+            Every hour spent on repetitive admin is an hour not spent on clients, strategy, or growth. Automation isn't about replacing people. It's about freeing them up to do the work that actually matters.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational value cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
+        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">10+</div>
+          <h3 class="heading-md text-navy text-base mb-2">Hours saved per week</h3>
+          <p class="body-text text-sm">The average small business loses over 10 hours a week to tasks that could run automatically. That's a full working day, every week.</p>
+        </div>
+
+        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">3 in 4</div>
+          <h3 class="heading-md text-navy text-base mb-2">Businesses are increasing automation spend</h3>
+          <p class="body-text text-sm">The majority of businesses are actively investing in automation to stay competitive. The question isn't if, it's when.</p>
+        </div>
+
+        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
+          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">5min</div>
+          <h3 class="heading-md text-navy text-base mb-2">Lead response vs. 5 hours</h3>
+          <p class="body-text text-sm">Studies show responding to a lead within 5 minutes makes you 21x more likely to convert them. Automated follow-ups mean you never miss that window.</p>
+        </div>
+      </div>
+
+      <!-- The cost of NOT automating -->
+      <div class="bg-navy rounded-2xl p-10 md:p-14 reveal-up">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <h3 class="heading-lg text-cream mb-4" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">The real cost of "we'll do it manually"</h3>
+            <p class="text-warm text-sm mb-6" style="line-height: 1.8;">Every manual process has a hidden price tag. It's not just the time. It's the leads that go cold, the errors from copy-pasting, the bottlenecks when someone's on leave, and the ceiling it puts on your growth.</p>
+            <p class="text-warm text-sm" style="line-height: 1.8;">Automation removes the ceiling. Your workflows run 24/7, don't make typos, and scale without hiring.</p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
+              </div>
+              <div>
+                <h4 class="text-cream font-display font-semibold text-sm mb-1">Leads go cold in hours</h4>
+                <p class="text-warm text-xs" style="line-height: 1.6;">By the time you manually sort and respond, they've already spoken to your competitor</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
+              </div>
+              <div>
+                <h4 class="text-cream font-display font-semibold text-sm mb-1">Human error creeps in</h4>
+                <p class="text-warm text-xs" style="line-height: 1.6;">Copy-pasting data between tools leads to mismatches, duplicates, and missed follow-ups</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
+              </div>
+              <div>
+                <h4 class="text-cream font-display font-semibold text-sm mb-1">You can't scale what depends on you</h4>
+                <p class="text-warm text-xs" style="line-height: 1.6;">If every task needs a person, growth means hiring. Automation means the same team does more</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- HOW IT WORKS -->
+  <!-- ============================== -->
+  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-16 md:mb-24">
+        <span class="tech-label text-warm font-medium reveal-up block mb-6">03 Process</span>
+        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">How It Works</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 max-w-4xl mx-auto">
+        <!-- Step 1 -->
+        <div class="text-center reveal-up">
+          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">1</div>
+          <h3 class="heading-md text-navy text-xl mb-3">Audit</h3>
+          <p class="body-text text-sm">We map your current workflows and find where time is being wasted. No guesswork. We identify the biggest wins first.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="text-center reveal-up">
+          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">2</div>
+          <h3 class="heading-md text-navy text-xl mb-3">Build</h3>
+          <p class="body-text text-sm">We design and build custom automations tailored to your tools and team. You see it working before it goes live.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="text-center reveal-up">
+          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">3</div>
+          <h3 class="heading-md text-navy text-xl mb-3">Launch & Support</h3>
+          <p class="body-text text-sm">We deploy, monitor, and refine. Every project includes ongoing support to keep things running and evolving as your business grows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WHAT WE BUILD -->
+  <!-- ============================== -->
+  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-16 md:mb-24">
+        <span class="tech-label text-warm font-medium reveal-up block mb-6">04 Examples</span>
+        <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">What We Build</h2>
+        <p class="body-text text-warm max-w-xl mx-auto mt-4 reveal-up">Real automation examples we deliver for clients. Every workflow is tailored to your tools and team.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <!-- Lead Classification Pipeline -->
+        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
+            <i data-lucide="git-branch" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-cream text-xl mb-3">Lead Classification Pipeline</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">New leads are automatically pulled from your CRM, classified by AI, scored, and routed to the right team member via Slack. No manual sorting.</p>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <span class="tag-pill">CRM</span>
+            <span class="tag-pill">AI</span>
+            <span class="tag-pill">Slack</span>
+          </div>
+        </div>
+
+        <!-- Approval Workflows -->
+        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
+            <i data-lucide="check-square" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-cream text-xl mb-3">Approval Workflows</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">Draft responses are prepared automatically. Your team approves or rejects via Slack. Approved replies are sent, logged in your CRM, and confirmed. All hands-free.</p>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <span class="tag-pill">Slack</span>
+            <span class="tag-pill">CRM</span>
+            <span class="tag-pill">n8n</span>
+          </div>
+        </div>
+
+        <!-- Email Automation -->
+        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
+          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
+            <i data-lucide="mail-check" class="w-6 h-6 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-cream text-xl mb-3">Email Automation</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">Welcome sequences, follow-ups, and nurture campaigns that run themselves. Personalised based on lead behaviour and engagement.</p>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <span class="tag-pill">Email</span>
+            <span class="tag-pill">CRM</span>
+            <span class="tag-pill">AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- TOOLS & INTEGRATIONS -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-14 md:mb-20">
+        <span class="tech-label text-warm font-medium reveal-up block mb-6">05 Integrations</span>
+        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Tools We Work With</h2>
+        <p class="body-text max-w-xl mx-auto mt-4 reveal-up">We integrate with the platforms your team already uses. No rip-and-replace.</p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto reveal-up">
+        <div class="tool-badge"><i data-lucide="workflow" class="w-4 h-4 text-accent"></i> n8n</div>
+        <div class="tool-badge"><i data-lucide="database" class="w-4 h-4 text-accent"></i> HubSpot</div>
+        <div class="tool-badge"><i data-lucide="message-square" class="w-4 h-4 text-accent"></i> Slack</div>
+        <div class="tool-badge"><i data-lucide="cloud" class="w-4 h-4 text-accent"></i> Google Workspace</div>
+        <div class="tool-badge"><i data-lucide="mail" class="w-4 h-4 text-accent"></i> Outlook</div>
+        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> OpenAI</div>
+        <div class="tool-badge"><i data-lucide="zap" class="w-4 h-4 text-accent"></i> Zapier</div>
+        <div class="tool-badge"><i data-lucide="settings" class="w-4 h-4 text-accent"></i> Make</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- PRICING -->
+  <!-- ============================== -->
+  <section id="pricing" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
+    <div class="max-w-[900px] mx-auto">
+      <div class="text-center mb-14 md:mb-20">
+        <span class="tech-label text-warm font-medium reveal-up block mb-6">06 Pricing</span>
+        <h2 class="heading-lg text-cream mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Custom Automation Project</h2>
+        <p class="text-warm text-sm md:text-base reveal-up max-w-2xl mx-auto">Every project is scoped and quoted based on your needs. The build is a one-time cost, and every project includes an ongoing monthly retainer to keep things running, monitored, and evolving.</p>
+      </div>
+
+      <div class="pricing-card featured bg-white/[0.04] rounded-2xl p-10 md:p-14 relative reveal-up">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          <!-- Build Phase -->
+          <div>
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
+                <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
+              </div>
+              <h3 class="font-display font-semibold text-cream text-lg">The Build</h3>
+            </div>
+            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">One-time project fee. We audit your workflows, design the automation, build it, test it, and deploy it.</p>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Workflow audit & mapping</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Custom automation build</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Testing & deployment</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Documentation & training</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Tool & integration setup</li>
+            </ul>
+          </div>
+
+          <!-- Ongoing Retainer -->
+          <div>
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
+                <i data-lucide="refresh-cw" class="w-5 h-5 text-accent"></i>
+              </div>
+              <h3 class="font-display font-semibold text-cream text-lg">Ongoing Retainer</h3>
+            </div>
+            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">Monthly fee included with every project. We monitor your automations, fix issues, and build new workflows as your business grows.</p>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>24/7 monitoring & alerts</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Bug fixes & optimisation</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Priority support</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>New automations each month</li>
+              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Monthly performance report</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <p class="heading-lg text-accent" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Custom Quote</p>
+            <p class="text-warm text-xs mt-1">Scoped to your business. No hidden fees.</p>
+          </div>
+          <a href="#contact" class="cta-btn">
+            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+            <div class="shimmer-backdrop"></div>
+            <div class="shimmer-highlight"></div>
+            <span>Get a Quote</span>
+            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- CONTACT -->
+  <!-- ============================== -->
+  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
+    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
+
+    <div class="max-w-[1440px] mx-auto relative z-10">
+      <div class="text-center mb-14">
+        <span class="tech-label text-warm font-medium reveal-up block mb-8">07 Contact</span>
+        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
+          Ready to automate<span class="text-accent cursor-blink">?</span>
+        </h2>
+        <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
+          Tell us about the tasks eating up your time. We'll show you what's possible.
+        </p>
+      </div>
+
+      <!-- Lead Capture Form -->
+      <div class="max-w-2xl mx-auto reveal-up">
+        <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
+          <input type="hidden" name="lead_magnet" value="false">
+          <input type="hidden" name="page" value="automations">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
+              <input type="text" name="name" id="name" required placeholder="Your name" class="form-input">
+            </div>
+            <div>
+              <label for="email" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Email *</label>
+              <input type="email" name="email" id="email" required placeholder="you@company.com" class="form-input">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="phone" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Phone Number</label>
+              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX" class="form-input">
+            </div>
+            <div>
+              <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
+              <select name="service" id="service" class="form-input form-select">
+                <option value="automation" selected>Automation & Workflows</option>
+                <option value="website">Website Design</option>
+                <option value="both">Both — Automation + Website</option>
+                <option value="not-sure">Not sure yet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
+              <select name="budget" id="budget" class="form-input form-select">
+                <option value="" disabled selected>Select your budget</option>
+                <option value="1500-3000">$1,500 – $3,000</option>
+                <option value="3000-5000">$3,000 – $5,000</option>
+                <option value="5000+">$5,000+</option>
+                <option value="not-sure">Not sure yet</option>
+              </select>
+            </div>
+            <div>
+              <label for="how-heard" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">How did you find us?</label>
+              <select name="how-heard" id="how-heard" class="form-input form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="google">Google Search</option>
+                <option value="social-media">Social Media</option>
+                <option value="referral">Referral</option>
+                <option value="existing-client">Existing Client</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Tell us about your workflows</label>
+            <textarea name="message" id="message" rows="4" placeholder="What tasks are eating up your time? What tools do you currently use?" class="form-input" style="resize: vertical;"></textarea>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
+            <button type="submit" class="cta-btn w-full sm:w-auto">
+              <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+              <div class="shimmer-backdrop"></div>
+              <div class="shimmer-highlight"></div>
+              <span>Send Message</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+            <span class="text-warm/50 text-xs flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-3 h-3"></i> Based in Australia
+            </span>
+          </div>
+        </form>
+
+        <!-- Success/Error Messages -->
+        <div id="formSuccess" class="hidden text-center py-12">
+          <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
+            <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
+          </div>
+          <h3 class="heading-md text-cream text-xl mb-3">Thanks! We've got your message.</h3>
+          <p class="text-warm text-sm">We'll be in touch within 24 hours.</p>
+        </div>
+        <div id="formError" class="hidden text-center py-6">
+          <p class="text-red-400 text-sm flex items-center justify-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+            Something went wrong. Please try again or email us directly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- FOOTER -->
+  <!-- ============================== -->
+  <footer class="bg-navy py-16 md:py-20 px-6 md:px-12 lg:px-16 border-t border-white/10">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
+        <!-- Logo + Tagline -->
+        <div class="md:col-span-4">
+          <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-lg object-cover mb-6">
+          <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
+            Beautiful digital products. Websites, tools, and workflows built to perform.
+          </p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="md:col-span-2 md:col-start-7">
+          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
+          <div class="flex flex-col gap-3">
+            <a href="/" class="footer-link">Home</a>
+            <a href="/automations.html" class="footer-link">Automations</a>
+            <a href="/websites.html" class="footer-link">Websites</a>
+            <a href="#contact" class="footer-link">Contact</a>
+          </div>
+        </div>
+
+        <!-- Connect -->
+        <div class="md:col-span-2">
+          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Connect</h4>
+          <div class="flex flex-col gap-3">
+            <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
+            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
+          </div>
+        </div>
+
+        <!-- Branding -->
+        <div class="md:col-span-2">
+          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
+          <p class="text-warm text-sm">Digital Artifacts</p>
+          <p class="text-warm/50 text-xs mt-2">Australia</p>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <p class="text-warm/50 text-xs">&copy; 2026 Digital Artifacts. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================== -->
+  <!-- SCRIPTS -->
+  <!-- ============================== -->
+  <script>
+    // === Initialize Lucide Icons ===
+    lucide.createIcons();
+
+    // === Mobile Menu ===
+    const hamburger = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMobileMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // === Lenis Smooth Scroll ===
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    // Sync GSAP ScrollTrigger with Lenis
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    // === Nav Scroll State ===
+    const nav = document.getElementById('mainNav');
+    const navBrandText = document.getElementById('navBrandText');
+    ScrollTrigger.create({
+      start: 'top -80',
+      onUpdate: (self) => {
+        if (self.scroll() > 80) {
+          nav.classList.add('scrolled');
+          navBrandText.style.opacity = '0';
+          navBrandText.style.transform = 'translateX(-8px)';
+          navBrandText.style.pointerEvents = 'none';
+        } else {
+          nav.classList.remove('scrolled');
+          navBrandText.style.opacity = '1';
+          navBrandText.style.transform = 'translateX(0)';
+          navBrandText.style.pointerEvents = '';
+        }
+      }
+    });
+
+    // === Hero Animation ===
+    gsap.to('.hero-label', {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.3,
+    });
+
+    gsap.to('.hero-headline', {
+      y: 0,
+      opacity: 1,
+      duration: 1,
+      ease: 'power3.out',
+      delay: 0.6,
+    });
+
+    gsap.to('.hero-cta', {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.9,
+      stagger: 0.15,
+    });
+
+    gsap.to('.scroll-indicator', {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      ease: 'power2.out',
+      delay: 1.2,
+    });
+
+    // === Scroll Reveal Animations ===
+    gsap.utils.toArray('.reveal-up').forEach(el => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
+        ease: 'power3.out',
+      });
+    });
+
+    // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
+    const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
+    const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
+
+    function handleFormSubmit(form, isLeadMagnet) {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.lead_magnet = isLeadMagnet;
+      data.submitted_at = new Date().toISOString();
+
+      const promises = [];
+
+      // Send to n8n webhook (if configured)
+      if (N8N_WEBHOOK_URL) {
+        promises.push(
+          fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }).catch(() => null)
+        );
+      }
+
+      // Send to Formspree (if configured)
+      if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
+        promises.push(
+          fetch(FORMSPREE_URL, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData,
+          }).catch(() => null)
+        );
+      }
+
+      return Promise.allSettled(promises);
+    }
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('button[type="submit"]');
+        const originalText = btn.querySelector('span').textContent;
+        btn.querySelector('span').textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+          await handleFormSubmit(contactForm, false);
+          contactForm.classList.add('hidden');
+          document.getElementById('formSuccess').classList.remove('hidden');
+          lucide.createIcons();
+        } catch (err) {
+          document.getElementById('formError').classList.remove('hidden');
+        } finally {
+          btn.querySelector('span').textContent = originalText;
+          btn.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
