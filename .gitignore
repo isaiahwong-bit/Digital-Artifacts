@@ -6,3 +6,9 @@ Brand_Assets/*.docx
 Brand_Assets/~$*
 CLAUDE*.md
 .vercel
+
+# Remotion video project build artifacts
+video/node_modules/
+video/out/
+video/.remotion/
+video/public/n8n-workflow-source.mov
