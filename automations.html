@@ -129,7 +129,7 @@
 
     .nav-link {
       position: relative;
-      color: #1B2838;
+      color: #F7F6F3;
       font-family: 'General Sans', sans-serif;
       font-weight: 500;
       font-size: 0.875rem;
@@ -137,6 +137,11 @@
       text-transform: uppercase;
       text-decoration: none;
       padding: 0.25rem 0;
+      transition: color 0.4s ease;
+    }
+
+    .nav-fixed.scrolled .nav-link {
+      color: #1B2838;
     }
 
     .nav-link::after {
@@ -431,9 +436,13 @@
     .hamburger span {
       width: 24px;
       height: 1.5px;
-      background: #1B2838;
+      background: #F7F6F3;
       display: block;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease, background 0.4s ease;
+    }
+
+    .nav-fixed.scrolled .hamburger span {
+      background: #1B2838;
     }
 
     .hamburger.active span:nth-child(1) {
@@ -627,7 +636,7 @@
     <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
       <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
         <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-lg object-cover">
-        <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
+        <span id="navBrandText" class="font-display font-semibold text-cream text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
       </a>
 
       <div class="hidden md:flex items-center gap-10">
@@ -1261,11 +1270,13 @@
           navBrandText.style.opacity = '0';
           navBrandText.style.transform = 'translateX(-8px)';
           navBrandText.style.pointerEvents = 'none';
+          navBrandText.style.color = '#1B2838';
         } else {
           nav.classList.remove('scrolled');
           navBrandText.style.opacity = '1';
           navBrandText.style.transform = 'translateX(0)';
           navBrandText.style.pointerEvents = '';
+          navBrandText.style.color = '#F7F6F3';
         }
       }
     });
