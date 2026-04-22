@@ -14,13 +14,13 @@
   <meta property="og:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
   <meta property="og:url" content="https://digitalartifacts.com.au">
   <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Digital Artifacts | AI Operating Systems for Small Business">
   <meta name="twitter:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <link rel="canonical" href="https://digitalartifacts.com.au/">
 
@@ -1557,9 +1557,9 @@
               <div class="flex flex-col items-center gap-2 text-accent text-sm font-medium">
                 <div class="flex items-center gap-2">
                   <i data-lucide="check-circle" class="w-5 h-5"></i>
-                  <span>On the way to your inbox.</span>
+                  <span>Your Blueprint is downloading!</span>
                 </div>
-                <p class="text-warm/60 text-xs mt-1">Check your email in the next few minutes.</p>
+                <a href="/downloads/The 4-Layer Blueprint _ Digital Artifacts.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
               </div>
             </div>
           </div>
@@ -2175,7 +2175,7 @@
       });
     }
 
-    // Lead magnet form — 4-Layer Blueprint (emailed after submission)
+    // Lead magnet form — 4-Layer Blueprint
     const leadMagnetForm = document.getElementById('leadMagnetForm');
     if (leadMagnetForm) {
       leadMagnetForm.addEventListener('submit', async (e) => {
@@ -2186,6 +2186,14 @@
 
         try {
           await handleFormSubmit(leadMagnetForm, true);
+          // Trigger PDF download
+          const dlLink = document.createElement('a');
+          dlLink.href = '/downloads/The 4-Layer Blueprint _ Digital Artifacts.pdf';
+          dlLink.download = '4-Layer-Blueprint-Digital-Artifacts.pdf';
+          document.body.appendChild(dlLink);
+          dlLink.click();
+          document.body.removeChild(dlLink);
+          // Show success message
           leadMagnetForm.classList.add('hidden');
           document.getElementById('leadMagnetSuccess').classList.remove('hidden');
           lucide.createIcons();
