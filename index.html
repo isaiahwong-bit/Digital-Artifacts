@@ -2125,6 +2125,8 @@
       const data = Object.fromEntries(formData.entries());
       data.lead_magnet = isLeadMagnet;
       data.submitted_at = new Date().toISOString();
+      data.source_page = 'home';
+      data.source_url = window.location.href;
 
       const promises = [];
 

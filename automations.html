@@ -1906,6 +1906,8 @@ tone-of-voice.md. End with a clear next step.</pre>
       const data = Object.fromEntries(formData.entries());
       data.lead_magnet = isLeadMagnet;
       data.submitted_at = new Date().toISOString();
+      data.source_page = 'automations';
+      data.source_url = window.location.href;
 
       const promises = [];
 

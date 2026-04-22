@@ -7,6 +7,11 @@ Brand_Assets/~$*
 CLAUDE*.md
 .vercel
 
+# Secrets (real values go in n8n Credentials UI, not this repo)
+.env
+.env.local
+.env.*.local
+
 # Remotion video project build artifacts
 video/node_modules/
 video/out/
