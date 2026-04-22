@@ -1,0 +1,340 @@
+{
+  "name": "DA - Telegram Callback (Approve / Edit / Reject)",
+  "meta": {
+    "description": "Handles inline-keyboard callbacks from workflow-a's approval message. approve → send Gmail; reject → log + acknowledge; edit → send Isaiah the draft as text to copy. Sheet row for the lead is updated in all three cases."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["callback_query"],
+        "additionalFields": {}
+      },
+      "id": "tg-trigger",
+      "name": "Telegram Trigger - Callback",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 320],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const cb = $input.first().json.callback_query || $input.first().json;\nconst data = cb.data || '';\nconst [action, leadId] = data.split(':');\nconst chatId = cb.message?.chat?.id;\nconst messageId = cb.message?.message_id;\nconst callbackId = cb.id;\n\nif (!['approve', 'edit', 'reject'].includes(action)) {\n  throw new Error('Unknown callback action: ' + action);\n}\n\nreturn [{ json: { action, lead_id: leadId, chat_id: chatId, message_id: messageId, callback_id: callbackId }}];"
+      },
+      "id": "parse-callback",
+      "name": "Parse Callback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 320]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "filtersUI": {
+          "values": [
+            { "lookupColumn": "lead_id", "lookupValue": "={{ $json.lead_id }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sheet-lookup",
+      "name": "Sheet: Lookup Lead Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [680, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge callback metadata back onto the sheet row so downstream nodes have everything.\nconst cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nreturn [{ json: { ...row, ...cb } }];"
+      },
+      "id": "merge-lookup",
+      "name": "Merge Row + Callback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "approve", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "approve" },
+            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "reject", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "reject" },
+            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "edit", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "edit" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-action",
+      "name": "Switch: Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.draft_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.draft_body }}",
+        "options": { "replyTo": "hello@digitalartifacts.com.au" }
+      },
+      "id": "gmail-approve",
+      "name": "Gmail: Send Approved Draft",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1360, 180]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": ["lead_id"],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "status": "sent_approved"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-approve",
+      "name": "Sheet: Mark Approved",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1580, 180]
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $json.callback_id }}",
+        "results": "Sent.",
+        "additionalFields": {}
+      },
+      "id": "ack-approve",
+      "name": "TG: Ack Approve",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1800, 180],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "editMessageText",
+        "chatId": "={{ $json.chat_id }}",
+        "messageId": "={{ $json.message_id }}",
+        "text": "=✅ SENT to {{ $json.email }}\\n\\n{{ $json.draft_subject }}\\n\\n{{ $json.draft_body }}",
+        "additionalFields": { "disable_web_page_preview": true }
+      },
+      "id": "edit-msg-approve",
+      "name": "TG: Update Message (Sent)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [2020, 180],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": ["lead_id"],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "status": "rejected"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-reject",
+      "name": "Sheet: Mark Rejected",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1360, 320]
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $json.callback_id }}",
+        "results": "Rejected, no reply sent.",
+        "additionalFields": {}
+      },
+      "id": "ack-reject",
+      "name": "TG: Ack Reject",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1580, 320],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "editMessageText",
+        "chatId": "={{ $json.chat_id }}",
+        "messageId": "={{ $json.message_id }}",
+        "text": "=❌ REJECTED · {{ $json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
+        "additionalFields": { "disable_web_page_preview": true }
+      },
+      "id": "edit-msg-reject",
+      "name": "TG: Update Message (Rejected)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1800, 320],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "operation": "answerQuery",
+        "queryId": "={{ $json.callback_id }}",
+        "results": "Draft saved in sheet. Edit + send manually.",
+        "additionalFields": { "show_alert": true }
+      },
+      "id": "ack-edit",
+      "name": "TG: Ack Edit",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1360, 460],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=✏️ EDIT MODE · {{ $json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $json.draft_subject }}",
+        "additionalFields": { "disable_web_page_preview": true }
+      },
+      "id": "tg-edit-guide",
+      "name": "TG: Edit Guidance",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1580, 460],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_telegram_credential_id",
+          "name": "telegramApi.daAdminbot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": ["lead_id"],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "status": "editing_manual"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-edit",
+      "name": "Sheet: Mark Editing",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1800, 460]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger - Callback": {
+      "main": [[{ "node": "Parse Callback", "type": "main", "index": 0 }]]
+    },
+    "Parse Callback": {
+      "main": [[{ "node": "Sheet: Lookup Lead Row", "type": "main", "index": 0 }]]
+    },
+    "Sheet: Lookup Lead Row": {
+      "main": [[{ "node": "Merge Row + Callback", "type": "main", "index": 0 }]]
+    },
+    "Merge Row + Callback": {
+      "main": [[{ "node": "Switch: Action", "type": "main", "index": 0 }]]
+    },
+    "Switch: Action": {
+      "main": [
+        [{ "node": "Gmail: Send Approved Draft", "type": "main", "index": 0 }],
+        [{ "node": "Sheet: Mark Rejected", "type": "main", "index": 0 }],
+        [{ "node": "TG: Ack Edit", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail: Send Approved Draft": {
+      "main": [[{ "node": "Sheet: Mark Approved", "type": "main", "index": 0 }]]
+    },
+    "Sheet: Mark Approved": {
+      "main": [[{ "node": "TG: Ack Approve", "type": "main", "index": 0 }]]
+    },
+    "TG: Ack Approve": {
+      "main": [[{ "node": "TG: Update Message (Sent)", "type": "main", "index": 0 }]]
+    },
+    "Sheet: Mark Rejected": {
+      "main": [[{ "node": "TG: Ack Reject", "type": "main", "index": 0 }]]
+    },
+    "TG: Ack Reject": {
+      "main": [[{ "node": "TG: Update Message (Rejected)", "type": "main", "index": 0 }]]
+    },
+    "TG: Ack Edit": {
+      "main": [[{ "node": "TG: Edit Guidance", "type": "main", "index": 0 }]]
+    },
+    "TG: Edit Guidance": {
+      "main": [[{ "node": "Sheet: Mark Editing", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
