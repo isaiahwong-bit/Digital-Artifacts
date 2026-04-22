@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Artifacts | Automation & Web Design Studio</title>
+  <title>Digital Artifacts | AI Operating Systems for Small Business</title>
   <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
   <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
-  <meta name="description" content="Digital Artifacts builds workflow automations and beautiful websites for small businesses. We find the gaps in your business and bridge them with smart technology. Based in Australia.">
+  <meta name="description" content="Digital Artifacts builds AI operating systems for small business. A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Digital Artifacts | Automation & Web Design Studio">
-  <meta property="og:description" content="Workflow automations and beautiful websites for small businesses. We find the gaps and bridge them with smart technology.">
+  <meta property="og:title" content="Digital Artifacts | AI Operating Systems for Small Business">
+  <meta property="og:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
   <meta property="og:url" content="https://digitalartifacts.com.au">
   <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Digital Artifacts | Automation & Web Design Studio">
-  <meta name="twitter:description" content="Workflow automations and beautiful websites for small businesses. We find the gaps and bridge them with smart technology.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta name="twitter:title" content="Digital Artifacts | AI Operating Systems for Small Business">
+  <meta name="twitter:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
+  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <link rel="canonical" href="https://digitalartifacts.com.au/">
 
@@ -663,6 +663,347 @@
     .why-icon {
       transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+    /* === 4-Layer Stack Diagram === */
+    .layer-stack {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .layer-stack::before {
+      content: '';
+      position: absolute;
+      left: 48px;
+      top: 72px;
+      bottom: 72px;
+      width: 1.5px;
+      background: linear-gradient(to bottom, rgba(0,200,83,0) 0%, rgba(0,200,83,0.4) 15%, rgba(0,200,83,0.4) 85%, rgba(0,200,83,0) 100%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .layer-stack {
+        gap: 0.75rem;
+      }
+      .layer-stack::before {
+        left: 18px;
+        top: 40px;
+        bottom: 40px;
+      }
+    }
+
+    .layer-band {
+      position: relative;
+      background: #1B2838;
+      border-radius: 1rem;
+      padding: 2rem 2.5rem 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 2px solid transparent;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: border-left-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .layer-band.is-active {
+      border-left-color: #00C853;
+      box-shadow: 0 0 0 1px rgba(0, 200, 83, 0.18), 0 24px 60px -30px rgba(0, 200, 83, 0.4);
+    }
+
+    .layer-band__num {
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      font-weight: 600;
+      color: rgba(0, 200, 83, 0.5);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      min-width: 3.5rem;
+    }
+
+    .layer-band__body {
+      min-width: 0;
+    }
+
+    .layer-band__name {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.25rem, 2vw, 1.625rem);
+      color: #F7F6F3;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .layer-band__desc {
+      color: rgba(247, 246, 243, 0.6);
+      font-family: 'General Sans', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      max-width: 46ch;
+    }
+
+    .layer-band__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      max-width: 280px;
+      justify-content: flex-end;
+    }
+
+    .layer-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.7rem;
+      background: rgba(0, 200, 83, 0.08);
+      color: #00C853;
+      border: 1px solid rgba(0, 200, 83, 0.22);
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .layer-band.is-active .layer-chip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .layer-band.is-active .layer-chip:nth-child(1) { transition-delay: 0.1s; }
+    .layer-band.is-active .layer-chip:nth-child(2) { transition-delay: 0.2s; }
+    .layer-band.is-active .layer-chip:nth-child(3) { transition-delay: 0.3s; }
+    .layer-band.is-active .layer-chip:nth-child(4) { transition-delay: 0.4s; }
+    .layer-band.is-active .layer-chip:nth-child(5) { transition-delay: 0.5s; }
+
+    @media (max-width: 768px) {
+      .layer-band {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.75rem 1rem;
+        padding: 1.5rem 1.5rem 1.75rem 2.75rem;
+      }
+      .layer-band__num {
+        font-size: 2rem;
+      }
+      .layer-band__chips {
+        grid-column: 1 / -1;
+        max-width: none;
+        justify-content: flex-start;
+      }
+    }
+
+    /* === Industry Tabs === */
+    .industry-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid #E8E6E1;
+      padding-bottom: 0;
+      margin-bottom: 2.5rem;
+    }
+
+    .industry-tab {
+      position: relative;
+      padding: 0.75rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #8A8A80;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease;
+      margin-bottom: -1px;
+    }
+
+    .industry-tab:hover {
+      color: #1B2838;
+    }
+
+    .industry-tab.is-active {
+      color: #1B2838;
+      border-bottom-color: #00C853;
+    }
+
+    .industry-tab:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .industry-panel {
+      display: none;
+    }
+
+    .industry-panel.is-active {
+      display: grid;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .industry-col {
+      border-left: 2px solid rgba(0, 200, 83, 0.35);
+      padding: 0.25rem 0 0.25rem 1.25rem;
+    }
+
+    .industry-col__label {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #00C853;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .industry-col__list {
+      color: #1B2838;
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .industry-col__list li {
+      list-style: none;
+    }
+
+    .industry-col__list code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      background: rgba(0, 200, 83, 0.07);
+      color: #007F3A;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+
+    /* === Trust / Governing Rule === */
+    .trust-paths {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .trust-path {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 2rem;
+    }
+
+    .trust-path--write {
+      border-top: 2px solid rgba(0, 200, 83, 0.6);
+    }
+
+    .trust-path--read {
+      border-top: 2px solid rgba(247, 246, 243, 0.3);
+    }
+
+    .trust-path__label {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(247, 246, 243, 0.5);
+      margin-bottom: 1rem;
+    }
+
+    .trust-path__title {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 1.125rem;
+      color: #F7F6F3;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .trust-flow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .trust-flow__node {
+      padding: 0.4rem 0.8rem;
+      background: rgba(0, 200, 83, 0.08);
+      border: 1px solid rgba(0, 200, 83, 0.25);
+      color: #00C853;
+      border-radius: 0.5rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+    }
+
+    .trust-flow__node--muted {
+      background: rgba(247, 246, 243, 0.06);
+      border-color: rgba(247, 246, 243, 0.15);
+      color: rgba(247, 246, 243, 0.75);
+    }
+
+    .trust-flow__arrow {
+      color: rgba(247, 246, 243, 0.4);
+      font-family: 'SF Mono', monospace;
+    }
+
+    .trust-divider {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(0, 200, 83, 0.3), transparent);
+    }
+
+    @media (max-width: 900px) {
+      .trust-paths {
+        grid-template-columns: 1fr;
+      }
+      .trust-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(0, 200, 83, 0.3), transparent);
+      }
+    }
+
+    /* === Outcome rows === */
+    .outcome-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid #E8E6E1;
+      align-items: baseline;
+    }
+
+    .outcome-row:last-child {
+      border-bottom: 1px solid #E8E6E1;
+    }
+
+    .outcome-row__num {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: #00C853;
+      text-transform: uppercase;
+      padding-top: 0.5rem;
+    }
+
+    .outcome-row__text {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      color: #1B2838;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
   </style>
 </head>
 
@@ -682,9 +1023,9 @@
       </a>
 
       <div class="hidden md:flex items-center gap-10">
-        <a href="#about" class="nav-link">About</a>
-        <a href="/automations.html" class="nav-link">Automations</a>
+        <a href="/automations.html" class="nav-link">Automation</a>
         <a href="/websites.html" class="nav-link">Websites</a>
+        <a href="#how" class="nav-link">How it works</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
 
@@ -698,9 +1039,9 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" class="mobile-menu-link" onclick="closeMobileMenu()">About</a>
-    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automations</a>
+    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automation</a>
     <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
+    <a href="#how" class="mobile-menu-link" onclick="closeMobileMenu()">How it works</a>
     <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
   </div>
 
@@ -708,103 +1049,96 @@
   <!-- HERO SECTION -->
   <!-- ============================== -->
   <section class="hero-section bg-cream relative px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
-      <!-- Dithered Sphere -->
-      <div class="hero-sphere" style="opacity: 0; transform: translateY(20px);">
-        <canvas id="sphereCanvas" style="display: block; border-radius: 50%; width: min(520px, 70vw); height: min(520px, 70vw);"></canvas>
+    <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+
+      <!-- Left: Type-led pitch -->
+      <div class="lg:col-span-7 order-2 lg:order-1">
+        <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
+          <span class="tech-label text-accent font-medium mb-6 block">AI operating systems</span>
+          <h1 class="heading-xl text-navy" style="font-size: clamp(2.25rem, 5.2vw, 5rem);">
+            We build the brain<br class="hidden sm:inline">your business<br class="hidden sm:inline">runs on<span class="text-accent cursor-blink">_</span>
+          </h1>
+          <p class="body-text mt-6 max-w-xl" style="font-size: clamp(1rem, 1.3vw, 1.125rem); color: #1B2838; opacity: 0.75;">
+            A 4-layer framework: <strong class="text-navy">Context, Skills, Automation, Agent</strong>. Deployed for whatever your team needs an operating system to do. An executive assistant. A sales-ops brain. A job dispatcher. A compliance officer that never sleeps.
+          </p>
+        </div>
+
+        <!-- Hero CTAs -->
+        <div class="hero-cta mt-8 flex flex-col sm:flex-row items-start gap-4" style="opacity: 0; transform: translateY(20px);">
+          <a href="#layers" class="cta-btn">
+            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+            <div class="shimmer-backdrop"></div>
+            <div class="shimmer-highlight"></div>
+            <span>See the 4-layer system</span>
+            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="cta-btn cta-btn-dark">
+            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+            <div class="shimmer-backdrop"></div>
+            <div class="shimmer-highlight"></div>
+            <span>Book a call</span>
+            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Byline -->
+        <p class="text-warm text-xs mt-8 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; AI &amp; automation studio &bull; Australia</p>
       </div>
 
-      <!-- Hero H1 Headline -->
-      <div class="hero-headline mt-10 md:mt-14" style="opacity: 0; transform: translateY(30px);">
-        <h1 class="heading-xl text-navy text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
-          Stop doing things<br class="hidden sm:inline">the hard way<span class="text-accent cursor-blink">_</span>
-        </h1>
-        <p class="text-warm font-display text-center mt-4" style="font-weight: 400; font-size: clamp(0.9rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; line-height: 1.6;">Smarter systems, beautiful websites, and time given back to small businesses across Australia.</p>
+      <!-- Right: Dithered Sphere (secondary motif) -->
+      <div class="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
+        <div class="hero-sphere" style="opacity: 0; transform: translateY(20px);">
+          <canvas id="sphereCanvas" style="display: block; border-radius: 50%; width: min(420px, 68vw); height: min(420px, 68vw);"></canvas>
+        </div>
       </div>
 
-      <!-- Hero CTAs -->
-      <div class="hero-cta mt-8 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
-        <a href="#contact" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Get in Touch</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="#about" class="cta-btn cta-btn-dark">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>See What We Do</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+    </div>
 
-      <!-- Byline -->
-      <p class="text-warm text-xs mt-6 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; Australia</p>
-
-      <!-- Scroll Indicator -->
-      <div class="scroll-indicator flex flex-col items-center gap-3 mt-10 md:mt-14">
-        <span class="text-warm text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator flex flex-col items-center gap-3 mt-14 md:mt-20">
+      <span class="text-warm text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
 
   <!-- ============================== -->
-  <!-- WHAT WE DO -->
+  <!-- THE PROMISE -->
   <!-- ============================== -->
-  <section id="about" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
+  <section id="promise" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
       <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-16">
         <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">01 About</span>
+          <span class="tech-label text-warm font-medium reveal-up">01 The promise</span>
         </div>
         <div class="lg:col-span-9">
           <h2 class="heading-lg text-navy mb-6" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            <span class="about-reveal-text">We Find the Gaps</span>
+            <span class="about-reveal-text">What changes when your team has an operating system</span>
           </h2>
           <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            Every business has inefficiencies hiding in plain sight. Repetitive tasks, disconnected tools, manual processes eating up hours every week. We find those gaps and bridge them with automation, smart workflows, and websites that actually work for you.
+            Most teams run on inbox, memory, and the five people who know everything. That's fragile. We build something durable: a system your business reads every morning, writes to every day, and talks to whenever it needs something.
           </p>
         </div>
       </div>
 
-      <!-- 4-Card Services Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="workflow" class="w-6 h-6 text-accent"></i>
+      <!-- Outcome rows -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-20">
+        <div class="lg:col-span-3"></div>
+        <div class="lg:col-span-9">
+          <div class="outcome-row reveal-up">
+            <div class="outcome-row__num">&rarr; Outcome 01</div>
+            <div class="outcome-row__text">Your team operates on current reality, not two-day-old state buried in someone's inbox.</div>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Workflow Automation</h3>
-          <p class="body-text text-sm">Eliminate repetitive admin. We build automations that handle lead capture, emails, approvals, and data entry so you don't have to</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="palette" class="w-6 h-6 text-accent"></i>
+          <div class="outcome-row reveal-up">
+            <div class="outcome-row__num">&rarr; Outcome 02</div>
+            <div class="outcome-row__text">Repeatable tasks happen without a human starting them. Drafts, briefs, follow-ups, approvals.</div>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Website Design</h3>
-          <p class="body-text text-sm">Custom responsive sites that look brilliant on every screen, load fast, and bring in customers</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="plug" class="w-6 h-6 text-accent"></i>
+          <div class="outcome-row reveal-up">
+            <div class="outcome-row__num">&rarr; Outcome 03</div>
+            <div class="outcome-row__text">Every output is traceable to a file in your brain. No black box, no "where did that come from".</div>
           </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Integration & Tools</h3>
-          <p class="body-text text-sm">Connect the systems you already use. CRMs, email, spreadsheets, Slack, and more, all wired into one seamless flow</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="life-buoy" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Ongoing Support</h3>
-          <p class="body-text text-sm">We stick around. Hosting, monitoring, updates, and new workflows as your business grows</p>
         </div>
       </div>
     </div>
@@ -812,47 +1146,44 @@
 
 
   <!-- ============================== -->
-  <!-- THE PROBLEM -->
+  <!-- WHY PROMPT-ONLY AI FAILS -->
   <!-- ============================== -->
   <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-navy">
     <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">02 The Problem</span>
-        <h2 class="heading-xl text-cream mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Sound Familiar?</h2>
-        <p class="text-warm text-base md:text-lg reveal-up max-w-2xl mx-auto">Most businesses lose hours every week on tasks that could run themselves. Here's what we see over and over.</p>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-14 md:mb-20">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-6 block reveal-up">02 Why one prompt isn't enough</span>
+          <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(2rem, 3.5vw, 3rem);">
+            Prompt-only AI<br>is a black box.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="text-warm text-base md:text-lg reveal-up max-w-2xl" style="line-height: 1.7;">
+            Most teams pay for ChatGPT and hope for the best. One prompt box, no memory, no audit trail, no way to correct it when it gets something wrong. It drifts, hallucinates, and six months in nobody trusts its output.
+          </p>
+          <p class="text-cream text-base md:text-lg reveal-up max-w-2xl mt-4" style="line-height: 1.7;">
+            We split it into four layers so each part is inspectable. And fixable.
+          </p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-red-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="clipboard-list" class="w-6 h-6 text-red-400"></i>
-          </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Manual Data Entry</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Copy-pasting between spreadsheets, CRMs, and inboxes. Every. Single. Day.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
+          <div class="tech-label text-accent mb-3">Pain 01</div>
+          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Manual morning briefings</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">Someone spends the first hour of every day assembling what happened yesterday. It's not strategic work. It's secretarial.</p>
         </div>
 
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="unplug" class="w-6 h-6 text-orange-400"></i>
-          </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Disconnected Tools</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Your email, CRM, invoicing, and calendar don't talk to each other. Things fall through the cracks.</p>
+        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
+          <div class="tech-label text-accent mb-3">Pain 02</div>
+          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Drafts from a blank page</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">Proposals, follow-ups, meeting notes, all written from scratch, all drawing on the same 80% of shared context the team already has.</p>
         </div>
 
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="repeat" class="w-6 h-6 text-yellow-400"></i>
-          </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">Repetitive Admin</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Follow-up emails, lead sorting, approval requests. The same tasks, day after day.</p>
-        </div>
-
-        <div class="bg-white/5 rounded-xl p-8 border border-white/10 reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-5">
-            <i data-lucide="globe" class="w-6 h-6 text-blue-400"></i>
-          </div>
-          <h3 class="font-display font-semibold text-cream text-base mb-2">No Online Presence</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Your competitors have a website that works for them 24/7. You're still relying on word of mouth.</p>
+        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
+          <div class="tech-label text-accent mb-3">Pain 03</div>
+          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Knowledge lives in heads</h3>
+          <p class="text-warm text-sm" style="line-height: 1.7;">One person leaves and three months of institutional memory walks out the door. Nothing was written down where the rest of the system could use it.</p>
         </div>
       </div>
     </div>
@@ -860,125 +1191,330 @@
 
 
   <!-- ============================== -->
-  <!-- TWO SERVICE PATHS -->
+  <!-- THE 4 LAYERS -->
   <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
+  <section id="layers" class="py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">03 How We Help</span>
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Two Ways We Grow Your Business</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-20">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-6 block reveal-up">03 The framework</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 4vw, 3.25rem);">
+            Four layers.<br>One operating system.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            This is the framework behind every build. It's reusable because it separates what your business <em>knows</em> from what the AI <em>does</em>. Swap the model, add a new surface, extend the brain. The stack holds.
+          </p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        <!-- Automation Card -->
-        <a href="/automations.html" class="group block bg-surface rounded-2xl overflow-hidden border border-divider hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 reveal-up">
-          <div class="p-10 md:p-12">
-            <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-              <i data-lucide="workflow" class="w-7 h-7 text-accent"></i>
-            </div>
-            <h3 class="heading-lg text-navy mb-3" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Automation & Workflows</h3>
-            <p class="body-text text-sm mb-6 max-w-md">Stop doing things manually. We build automations that handle lead capture, email sequences, approvals, data syncing, and more. Saving you hours every week.</p>
-            <ul class="space-y-2 mb-8">
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Lead classification & scoring</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Email automation & follow-ups</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Approval workflows via Slack</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> CRM & tool integrations</li>
+      <!-- The stack -->
+      <div class="layer-stack" id="layerStack">
+
+        <!-- Layer 1 — Context -->
+        <div class="layer-band reveal-up" data-layer="1">
+          <div class="layer-band__num">01</div>
+          <div class="layer-band__body">
+            <div class="layer-band__name">Context <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the brain</span></div>
+            <div class="layer-band__desc">Your business, written down. Positioning, clients, pipeline, SOPs, tone of voice. Structured markdown in a Git repo you own. Human-editable, AI-readable, version-controlled forever.</div>
+          </div>
+          <div class="layer-band__chips">
+            <span class="layer-chip">company-brief.md</span>
+            <span class="layer-chip">clients/</span>
+            <span class="layer-chip">pipeline/</span>
+            <span class="layer-chip">tone-of-voice.md</span>
+          </div>
+        </div>
+
+        <!-- Layer 2 — Skills -->
+        <div class="layer-band reveal-up" data-layer="2">
+          <div class="layer-band__num">02</div>
+          <div class="layer-band__body">
+            <div class="layer-band__name">Skills <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the how</span></div>
+            <div class="layer-band__desc">Reusable prompt recipes for the jobs your team does every week. "Draft proposal." "Prep for meeting." "Triage inbound." Each skill knows which parts of Layer 1 to read and what to produce.</div>
+          </div>
+          <div class="layer-band__chips">
+            <span class="layer-chip">proposal-writer</span>
+            <span class="layer-chip">meeting-prep</span>
+            <span class="layer-chip">lead-qualifier</span>
+            <span class="layer-chip">follow-up</span>
+          </div>
+        </div>
+
+        <!-- Layer 3 — Automation -->
+        <div class="layer-band reveal-up" data-layer="3">
+          <div class="layer-band__num">03</div>
+          <div class="layer-band__body">
+            <div class="layer-band__name">Automation <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the triggers</span></div>
+            <div class="layer-band__desc">Scheduled and event-driven workflows that tie Context and Skills to the rest of your stack. n8n runs the wiring: cron jobs, webhooks, API calls, conditional branches, retries.</div>
+          </div>
+          <div class="layer-band__chips">
+            <span class="layer-chip">cron: daily 08:30</span>
+            <span class="layer-chip">webhook: lead</span>
+            <span class="layer-chip">trigger: email</span>
+            <span class="layer-chip">sync: CRM</span>
+          </div>
+        </div>
+
+        <!-- Layer 4 — Agent -->
+        <div class="layer-band reveal-up" data-layer="4">
+          <div class="layer-band__num">04</div>
+          <div class="layer-band__body">
+            <div class="layer-band__name">Agent <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the face</span></div>
+            <div class="layer-band__desc">How your team talks to the system and how the system talks back. Slack, SMS, voice, dashboards, email. Wherever your people already work. One brain, many surfaces.</div>
+          </div>
+          <div class="layer-band__chips">
+            <span class="layer-chip">Slack DM</span>
+            <span class="layer-chip">SMS</span>
+            <span class="layer-chip">Voice (ElevenLabs)</span>
+            <span class="layer-chip">Dashboard</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA row -->
+      <div class="mt-14 md:mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-4 reveal-up">
+        <a href="/automations.html" class="cta-btn cta-btn-dark">
+          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
+          <div class="shimmer-backdrop"></div>
+          <div class="shimmer-highlight"></div>
+          <span>See each layer in depth</span>
+          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <span class="text-warm text-xs max-w-sm" style="line-height: 1.6;">Deep-dive on each layer, with a sample file, a real n8n workflow, and three worked examples.</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WORKED EXAMPLES (INDUSTRY TABS) -->
+  <!-- ============================== -->
+  <section id="how" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-16">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-6 block reveal-up">04 In practice</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
+            Same framework.<br>Different deployment.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            The four layers don't care what industry you're in. Only what your team actually does each day. Here's the same stack, populated three different ways.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="industry-tabs reveal-up" role="tablist" aria-label="Worked examples">
+        <button class="industry-tab is-active" role="tab" aria-selected="true" data-panel="services">Professional services firm</button>
+        <button class="industry-tab" role="tab" aria-selected="false" data-panel="trades">Trades &amp; field services</button>
+        <button class="industry-tab" role="tab" aria-selected="false" data-panel="sales">B2B sales team</button>
+      </div>
+
+      <!-- Panels -->
+      <div class="industry-panels reveal-up">
+
+        <!-- Panel: Services -->
+        <div class="industry-panel is-active grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="services">
+          <div class="industry-col">
+            <span class="industry-col__label">01 &middot; Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Client histories &amp; matter files</li>
+              <li>Proposal templates</li>
+              <li>Billing rates &amp; scope rules</li>
+              <li>Conflict-of-interest register</li>
             </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 &middot; Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>proposal-writer</code></li>
+              <li><code>meeting-prep</code></li>
+              <li><code>client-update</code></li>
+              <li><code>scope-change-memo</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 &middot; Automation</span>
+            <ul class="industry-col__list space-y-1">
+              <li>8:30am daily matters brief</li>
+              <li>Meeting transcript &rarr; draft note</li>
+              <li>RFP inbound &rarr; proposal scaffold</li>
+              <li>Weekly partner pipeline summary</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 &middot; Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Slack <code>@ops</code> for anything</li>
+              <li>Daily brief in DM</li>
+              <li>Voice call from the car</li>
+              <li>Partner dashboard (web)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Panel: Trades -->
+        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="trades">
+          <div class="industry-col">
+            <span class="industry-col__label">01 &middot; Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Supplier pricelists</li>
+              <li>Crew schedules &amp; skills matrix</li>
+              <li>Job templates by trade</li>
+              <li>Site safety &amp; SWMS rules</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 &middot; Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>quote-builder</code></li>
+              <li><code>job-wrap-up-note</code></li>
+              <li><code>supplier-reorder</code></li>
+              <li><code>overdue-chaser</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 &middot; Automation</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Quote request &rarr; draft sent for review</li>
+              <li>Invoice 7 days overdue &rarr; SMS sequence</li>
+              <li>Job complete &rarr; review request</li>
+              <li>6am crew schedule &rarr; SMS</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 &middot; Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>SMS-first for crew</li>
+              <li>Office dashboard (simple web)</li>
+              <li>Voice intake for missed calls</li>
+              <li>Owner daily email at 6pm</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Panel: Sales -->
+        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="sales">
+          <div class="industry-col">
+            <span class="industry-col__label">01 &middot; Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>ICP definitions</li>
+              <li>Pipeline stages &amp; exit criteria</li>
+              <li>Competitor battlecards</li>
+              <li>Objection-handling library</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 &middot; Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>lead-qualifier</code></li>
+              <li><code>discovery-summary</code></li>
+              <li><code>pipeline-movement</code></li>
+              <li><code>deal-risk-flag</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 &middot; Automation</span>
+            <ul class="industry-col__list space-y-1">
+              <li>New lead &rarr; AI classify + HubSpot + Slack</li>
+              <li>Deal stuck 14 days &rarr; risk memo</li>
+              <li>Monday 7am pipeline brief</li>
+              <li>Discovery call &rarr; logged next steps</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 &middot; Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Team Slack channel</li>
+              <li>Inline HubSpot notes</li>
+              <li>Daily email brief at 7am</li>
+              <li>Rep asks <code>@ops</code> anything</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- GOVERNING RULE / TRUST -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-navy">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-14 md:mb-20">
+        <span class="tech-label text-accent font-medium mb-4 block reveal-up">05 The governing rule</span>
+        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2rem, 4.5vw, 3.75rem);">
+          Humans write.<br>AI reads.
+        </h2>
+        <p class="text-warm text-base md:text-lg reveal-up max-w-2xl mx-auto" style="line-height: 1.75;">
+          The brain (Layer 1) is only edited by humans, through a review step. The AI reads it at runtime but never writes to it. Correct a fact once. Every future output is right. No drift, no hallucinated history, no black box.
+        </p>
+      </div>
+
+      <div class="trust-paths reveal-up">
+        <div class="trust-path trust-path--write">
+          <div class="trust-path__label">Write path / humans only</div>
+          <div class="trust-path__title">You correct the brain.</div>
+          <div class="trust-flow">
+            <span class="trust-flow__node">Human</span>
+            <span class="trust-flow__arrow">&rarr;</span>
+            <span class="trust-flow__node">Review</span>
+            <span class="trust-flow__arrow">&rarr;</span>
+            <span class="trust-flow__node">Git commit</span>
+            <span class="trust-flow__arrow">&rarr;</span>
+            <span class="trust-flow__node">Brain</span>
+          </div>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-path trust-path--read">
+          <div class="trust-path__label">Read path / AI runtime</div>
+          <div class="trust-path__title">The system uses the brain.</div>
+          <div class="trust-flow">
+            <span class="trust-flow__node trust-flow__node--muted">Brain</span>
+            <span class="trust-flow__arrow">&rarr;</span>
+            <span class="trust-flow__node trust-flow__node--muted">AI (reads only)</span>
+            <span class="trust-flow__arrow">&rarr;</span>
+            <span class="trust-flow__node trust-flow__node--muted">Output</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WE ALSO BUILD THE INTERFACE -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-24 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <a href="/websites.html" class="group block border border-divider rounded-2xl p-8 md:p-10 bg-surface hover:border-accent/40 transition-colors reveal-up">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
+          <div class="md:col-span-8">
+            <span class="tech-label text-warm font-medium mb-3 block">06 Also</span>
+            <h3 class="heading-md text-navy mb-3" style="font-size: clamp(1.5rem, 2.2vw, 1.875rem); letter-spacing: -0.02em;">
+              We also build the interfaces your operating system shows the world.
+            </h3>
+            <p class="body-text text-sm md:text-base max-w-2xl">
+              Marketing sites, client portals, internal dashboards, job-tracking tools. Layer 4, rendered as a front-end, so the same system your team talks to is the one your customers see.
+            </p>
+          </div>
+          <div class="md:col-span-4 md:text-right">
             <span class="inline-flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all">
-              Explore Automations
+              See the website work
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </div>
-        </a>
-
-        <!-- Websites Card -->
-        <a href="/websites.html" class="group block bg-surface rounded-2xl overflow-hidden border border-divider hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 reveal-up">
-          <div class="p-10 md:p-12">
-            <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
-              <i data-lucide="monitor" class="w-7 h-7 text-accent"></i>
-            </div>
-            <h3 class="heading-lg text-navy mb-3" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Website Design & Development</h3>
-            <p class="body-text text-sm mb-6 max-w-md">Beautiful, fast websites that grow your business. Custom designs built for small businesses, tradies, and creative brands across Australia and the UK.</p>
-            <ul class="space-y-2 mb-8">
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Custom responsive design</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> SEO & structured data</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> Hosting & ongoing care</li>
-              <li class="flex items-center gap-2 text-sm text-navy"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i> 14-day turnaround</li>
-            </ul>
-            <span class="inline-flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all">
-              See Our Website Work
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
   </section>
-
-
-  <!-- ============================== -->
-  <!-- WHY DIGITAL ARTIFACTS -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">04 Why Us</span>
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Why Digital Artifacts</h2>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="search" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">We Find the Gaps</h3>
-          <p class="body-text text-sm">We audit your processes and tools first, then build exactly what's needed. Nothing more, nothing less</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="zap" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Fast Delivery</h3>
-          <p class="body-text text-sm">Websites in 14 days. Automations scoped and built fast. No dragging things out</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="dollar-sign" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Honest Pricing</h3>
-          <p class="body-text text-sm">What we quote is what you pay. Transparent pricing, no surprise invoices</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="heart" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Boutique Studio</h3>
-          <p class="body-text text-sm">You work directly with us. No layers of account managers or outsourced teams</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="trending-up" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Built to Scale</h3>
-          <p class="body-text text-sm">Everything we build grows with your business. Add new workflows, pages, or integrations any time</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="refresh-cw" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Ongoing Care</h3>
-          <p class="body-text text-sm">We stick around to keep things running smoothly. Hosting, monitoring, and new features as you need them</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
 
 
   <!-- ============================== -->
@@ -994,12 +1530,12 @@
             <span class="inline-flex items-center gap-2 text-accent text-xs font-medium uppercase tracking-wider mb-4">
               <i data-lucide="download" class="w-4 h-4"></i> Free Download
             </span>
-            <h2 class="heading-md text-navy text-xl md:text-2xl mb-3" style="line-height: 1.3;">The 27-Point Website Checklist</h2>
-            <p class="body-text text-sm mb-6">Everything your website needs before it goes live. Built for Aussie small businesses, tradies, and creative brands.</p>
+            <h2 class="heading-md text-navy text-xl md:text-2xl mb-3" style="line-height: 1.3;">The 4-Layer Blueprint</h2>
+            <p class="body-text text-sm mb-6">A one-page framework you can sketch onto your own business this afternoon. Map what you already have, find the gaps, scope the first build.</p>
             <ul class="text-xs text-warm space-y-2 mb-6">
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Design, content, and technical essentials</li>
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> SEO and launch day checklist</li>
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Works for any industry or business size</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> What lives in each layer, with prompts</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Three worked examples by industry</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Works for any business with repetitive ops</li>
             </ul>
           </div>
           <!-- Right: Form -->
@@ -1012,18 +1548,18 @@
                 <input type="email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
               </div>
               <button type="submit" class="w-full px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center justify-center gap-2">
-                <span>Get the Free Checklist</span>
+                <span>Get the Blueprint</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </button>
-              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Your checklist downloads instantly.</p>
+              <p class="text-warm/40 text-[10px] text-center">No spam, ever. Your blueprint downloads instantly.</p>
             </form>
             <div id="leadMagnetSuccess" class="hidden text-center py-4">
               <div class="flex flex-col items-center gap-2 text-accent text-sm font-medium">
                 <div class="flex items-center gap-2">
                   <i data-lucide="check-circle" class="w-5 h-5"></i>
-                  <span>Your checklist is downloading!</span>
+                  <span>Your Blueprint is downloading!</span>
                 </div>
-                <a href="/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
+                <a href="/downloads/The 4-Layer Blueprint _ Digital Artifacts.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
               </div>
             </div>
           </div>
@@ -1038,30 +1574,34 @@
   <!-- ============================== -->
   <section class="py-10 md:py-14 border-t border-b border-divider overflow-hidden bg-cream">
     <div class="marquee-track">
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AI Operating Systems</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Daily Briefs</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Meeting Notes</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Approval Flows</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Lead Triage</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Voice Agents</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Dashboards</span>
       <span class="marquee-dot"></span>
       <!-- Duplicate for seamless loop -->
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Websites</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AI Operating Systems</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Automation</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Daily Briefs</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Digital Tools</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Meeting Notes</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Hosting</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Approval Flows</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">SEO</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Lead Triage</span>
       <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Builds</span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Voice Agents</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Dashboards</span>
       <span class="marquee-dot"></span>
     </div>
   </section>
@@ -1077,12 +1617,12 @@
 
     <div class="max-w-[1440px] mx-auto relative z-10">
       <div class="text-center mb-14">
-        <span class="tech-label text-warm font-medium reveal-up block mb-8">Contact</span>
+        <span class="tech-label text-warm font-medium reveal-up block mb-8">07 Contact</span>
         <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
-          Let's make something<br>great together<span class="text-accent cursor-blink">_</span>
+          What would you have<br>your operating system do?<span class="text-accent cursor-blink">_</span>
         </h2>
         <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          Whether it's automation, a website, or both. We'd love to hear what you're working on.
+          A 30-minute call. We'll map the first layer for free and send you back a one-pager of what the build would look like.
         </p>
       </div>
 
@@ -1109,11 +1649,12 @@
             <div>
               <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
               <select name="service" id="service" class="form-input form-select">
-                <option value="" disabled selected>Select a service</option>
-                <option value="automation">Automation & Workflows</option>
-                <option value="website">Website Design</option>
-                <option value="both">Both — Automation + Website</option>
-                <option value="not-sure">Not sure yet</option>
+                <option value="" disabled selected>What are you after?</option>
+                <option value="operating-system">Full 4-layer operating system</option>
+                <option value="automation">A specific workflow / automation</option>
+                <option value="agent">An AI agent (Slack, voice, SMS)</option>
+                <option value="website">Website / interface work</option>
+                <option value="not-sure">Not sure yet, want to talk it through</option>
               </select>
             </div>
           </div>
@@ -1190,7 +1731,7 @@
         <div class="md:col-span-4">
           <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-lg object-cover mb-6">
           <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            Beautiful digital products. Websites, tools, and workflows built to perform.
+            AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
           </p>
         </div>
 
@@ -1198,9 +1739,9 @@
         <div class="md:col-span-2 md:col-start-7">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
           <div class="flex flex-col gap-3">
-            <a href="#about" class="footer-link">About</a>
-            <a href="/automations.html" class="footer-link">Automations</a>
+            <a href="/automations.html" class="footer-link">Automation</a>
             <a href="/websites.html" class="footer-link">Websites</a>
+            <a href="#layers" class="footer-link">The 4 layers</a>
             <a href="#contact" class="footer-link">Contact</a>
           </div>
         </div>
@@ -1510,6 +2051,46 @@
       });
     });
 
+    // === 4-Layer Diagram: staggered reveal + active-state on scroll ===
+    gsap.utils.toArray('#layerStack .layer-band').forEach((band, i) => {
+      gsap.to(band, {
+        scrollTrigger: {
+          trigger: band,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        delay: i * 0.12,
+        ease: 'power3.out',
+      });
+
+      ScrollTrigger.create({
+        trigger: band,
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onToggle: (self) => band.classList.toggle('is-active', self.isActive),
+      });
+    });
+
+    // === Industry Tabs ===
+    const tabs = document.querySelectorAll('.industry-tab');
+    const panels = document.querySelectorAll('.industry-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.panel;
+        tabs.forEach(t => {
+          const active = t === tab;
+          t.classList.toggle('is-active', active);
+          t.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach(p => {
+          p.classList.toggle('is-active', p.dataset.panel === target);
+        });
+      });
+    });
+
     // === About Section: Word-by-word reveal ===
     const aboutText = document.querySelector('.about-reveal-text');
     if (aboutText) {
@@ -1594,7 +2175,7 @@
       });
     }
 
-    // Lead magnet form
+    // Lead magnet form — 4-Layer Blueprint
     const leadMagnetForm = document.getElementById('leadMagnetForm');
     if (leadMagnetForm) {
       leadMagnetForm.addEventListener('submit', async (e) => {
@@ -1607,8 +2188,8 @@
           await handleFormSubmit(leadMagnetForm, true);
           // Trigger PDF download
           const dlLink = document.createElement('a');
-          dlLink.href = '/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf';
-          dlLink.download = '27-Point-Website-Checklist-Digital-Artifacts.pdf';
+          dlLink.href = '/downloads/The 4-Layer Blueprint _ Digital Artifacts.pdf';
+          dlLink.download = '4-Layer-Blueprint-Digital-Artifacts.pdf';
           document.body.appendChild(dlLink);
           dlLink.click();
           document.body.removeChild(dlLink);
@@ -1617,7 +2198,7 @@
           document.getElementById('leadMagnetSuccess').classList.remove('hidden');
           lucide.createIcons();
         } catch (err) {
-          btn.querySelector('span').textContent = 'Get the Free Checklist';
+          btn.querySelector('span').textContent = 'Get the Blueprint';
           btn.disabled = false;
         }
       });

@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Automation & Workflows | Digital Artifacts</title>
+  <title>Automation | A 4-layer framework for AI that actually works | Digital Artifacts</title>
   <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
   <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
-  <meta name="description" content="Digital Artifacts builds custom automation workflows that save you hours every week. Lead pipelines, approval flows, email sequences, and CRM integrations. Based in Australia.">
+  <meta name="description" content="Context, Skills, Automation, Agent. The 4-layer framework we use to build AI operating systems for small business. Deep dive with sample files, real n8n workflows, and worked examples by industry.">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Automation & Workflows | Digital Artifacts">
-  <meta property="og:description" content="We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.">
+  <meta property="og:title" content="Automation | A 4-layer framework for AI that actually works">
+  <meta property="og:description" content="Context, Skills, Automation, Agent. The framework behind every build. Deep dive with sample files, real n8n workflows, and worked examples.">
   <meta property="og:url" content="https://digitalartifacts.com.au/automations.html">
   <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Automation & Workflows | Digital Artifacts">
-  <meta name="twitter:description" content="We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <meta name="twitter:title" content="Automation | A 4-layer framework for AI that actually works">
+  <meta name="twitter:description" content="Context, Skills, Automation, Agent. The framework behind every build. Deep dive with sample files, real n8n workflows, and worked examples.">
+  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
 
   <link rel="canonical" href="https://digitalartifacts.com.au/automations.html">
 
@@ -621,6 +621,261 @@
       50% { top: 0%; }
       100% { top: 100%; }
     }
+
+    /* === Layer Section === */
+    .layer-section {
+      scroll-margin-top: 5rem;
+    }
+
+    .layer-stamp {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: clamp(5rem, 12vw, 9.5rem);
+      line-height: 0.85;
+      letter-spacing: -0.05em;
+      color: rgba(0, 200, 83, 0.12);
+      position: relative;
+    }
+
+    .layer-stamp-dark {
+      color: rgba(0, 200, 83, 0.18);
+    }
+
+    .layer-stamp__slash {
+      color: rgba(0, 200, 83, 0.6);
+      font-weight: 500;
+    }
+
+    /* === Artefact Card (code/file mock) === */
+    .artefact {
+      background: #1B2838;
+      border: 1px solid rgba(0, 200, 83, 0.18);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #E8E6E1;
+    }
+
+    .artefact__bar {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.72rem;
+      color: rgba(247, 246, 243, 0.5);
+      letter-spacing: 0.05em;
+    }
+
+    .artefact__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .artefact__dot:nth-child(1) { background: rgba(230, 95, 95, 0.5); }
+    .artefact__dot:nth-child(2) { background: rgba(230, 180, 95, 0.5); }
+    .artefact__dot:nth-child(3) { background: rgba(95, 200, 120, 0.5); }
+
+    .artefact__file {
+      margin-left: auto;
+      color: rgba(247, 246, 243, 0.65);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .artefact__body {
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+    }
+
+    .artefact pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .artefact .c-key { color: #00C853; }
+    .artefact .c-str { color: #D8C07E; }
+    .artefact .c-cm  { color: rgba(247, 246, 243, 0.4); font-style: italic; }
+    .artefact .c-h1  { color: #F7F6F3; font-weight: 600; }
+    .artefact .c-h2  { color: #BEE3C7; }
+
+    /* === Industry Tabs (deep version) === */
+    .industry-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      border-bottom: 1px solid #E8E6E1;
+      margin-bottom: 2.5rem;
+    }
+
+    .industry-tab {
+      padding: 0.75rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #8A8A80;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease;
+      margin-bottom: -1px;
+    }
+
+    .industry-tab:hover { color: #1B2838; }
+
+    .industry-tab.is-active {
+      color: #1B2838;
+      border-bottom-color: #00C853;
+    }
+
+    .industry-tab:focus-visible {
+      outline: 2px solid #00C853;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .industry-panel { display: none; }
+
+    .industry-panel.is-active {
+      display: grid;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .industry-col {
+      border-left: 2px solid rgba(0, 200, 83, 0.35);
+      padding: 0.25rem 0 0.25rem 1.25rem;
+    }
+
+    .industry-col__label {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #00C853;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .industry-col__group {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 0.78rem;
+      color: #1B2838;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 1.1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .industry-col__list {
+      color: #1B2838;
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .industry-col__list li {
+      list-style: none;
+    }
+
+    .industry-col__list code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.76rem;
+      background: rgba(0, 200, 83, 0.07);
+      color: #007F3A;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+
+    /* === Surface cards (Layer 4 Agent) === */
+    .surface-card {
+      background: rgba(247, 246, 243, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .surface-card:hover {
+      background: rgba(0, 200, 83, 0.06);
+      border-color: rgba(0, 200, 83, 0.25);
+    }
+
+    .surface-card__icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: rgba(0, 200, 83, 0.12);
+      color: #00C853;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .surface-card__title {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      color: #F7F6F3;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .surface-card__desc {
+      color: rgba(247, 246, 243, 0.55);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    /* === Build steps === */
+    .build-step {
+      position: relative;
+      padding: 1.75rem 0 1.75rem 3.5rem;
+      border-top: 1px solid #E8E6E1;
+    }
+
+    .build-step:last-child {
+      border-bottom: 1px solid #E8E6E1;
+    }
+
+    .build-step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: 1.75rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: #00C853;
+    }
+
+    .build-step h3 {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 1.25rem;
+      color: #1B2838;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.015em;
+    }
+
+    .build-step p {
+      color: #8A8A80;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      max-width: 60ch;
+    }
   </style>
 </head>
 
@@ -640,9 +895,9 @@
       </a>
 
       <div class="hidden md:flex items-center gap-10">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/automations.html" class="nav-link active">Automations</a>
+        <a href="/automations.html" class="nav-link active">Automation</a>
         <a href="/websites.html" class="nav-link">Websites</a>
+        <a href="/#layers" class="nav-link">How it works</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
 
@@ -656,9 +911,9 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="/" class="mobile-menu-link" onclick="closeMobileMenu()">Home</a>
-    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automations</a>
+    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automation</a>
     <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
+    <a href="/#layers" class="mobile-menu-link" onclick="closeMobileMenu()">How it works</a>
     <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
   </div>
 
@@ -667,37 +922,42 @@
   <!-- HERO SECTION -->
   <!-- ============================== -->
   <section class="hero-section bg-navy relative px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
+    <div class="max-w-[1440px] mx-auto">
 
       <!-- Label -->
       <div class="hero-label mb-6" style="opacity: 0; transform: translateY(20px);">
-        <span class="tag-pill text-xs uppercase tracking-wider">Automation & Workflows</span>
+        <span class="tag-pill text-xs uppercase tracking-wider">The 4-layer framework</span>
       </div>
 
       <!-- Hero H1 Headline -->
       <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
-        <h1 class="heading-xl text-cream text-center" style="font-size: clamp(2rem, 4.5vw, 4.5rem);">
-          What could you do with<br class="hidden sm:inline"> 10 extra hours every week<span class="text-accent cursor-blink">?</span>
+        <h1 class="heading-xl text-cream max-w-4xl" style="font-size: clamp(2rem, 5.2vw, 5rem);">
+          A 4-layer framework<br class="hidden sm:inline"> for AI that<br class="hidden sm:inline"> actually works<span class="text-accent cursor-blink">_</span>
         </h1>
-        <p class="text-warm font-display text-center mt-4" style="font-weight: 400; font-size: clamp(0.9rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; line-height: 1.6;">We find the gaps in your workflow and bridge them with smart automation. Less admin. More growth.</p>
+        <p class="text-warm font-body max-w-2xl mt-6" style="font-size: clamp(1rem, 1.3vw, 1.125rem); line-height: 1.7;">
+          <strong class="text-cream">Context, Skills, Automation, Agent.</strong> Deployable for any function your business needs to run itself: an executive assistant, a sales-ops brain, a site-ops dashboard, a compliance officer that never sleeps. Same framework, different deployment.
+        </p>
       </div>
 
       <!-- Hero CTAs -->
-      <div class="hero-cta mt-8 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
-        <a href="#contact" class="cta-btn">
+      <div class="hero-cta mt-10 flex flex-col sm:flex-row items-start gap-4" style="opacity: 0; transform: translateY(20px);">
+        <a href="#layer-1" class="cta-btn">
           <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
           <div class="shimmer-backdrop"></div>
           <div class="shimmer-highlight"></div>
-          <span>Let's Talk Automation</span>
+          <span>Start with Layer 01</span>
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="nav-link text-cream" style="padding: 1rem 0.5rem; text-decoration: none;">
+          <span>Book a call &rarr;</span>
         </a>
       </div>
 
       <!-- Byline -->
-      <p class="text-warm/60 text-xs mt-6 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; Australia</p>
+      <p class="text-warm/60 text-xs mt-8 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; AI &amp; automation studio &bull; Australia</p>
 
       <!-- Scroll Indicator -->
-      <div class="scroll-indicator flex flex-col items-center gap-3 mt-10 md:mt-14">
+      <div class="scroll-indicator flex flex-col items-center gap-3 mt-14 md:mt-16 mx-auto w-fit">
         <span class="text-warm/60 text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
         <div class="scroll-line"></div>
       </div>
@@ -706,289 +966,569 @@
 
 
   <!-- ============================== -->
-  <!-- THE PROBLEM -->
-  <!-- ============================== -->
-  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
-        <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">01 The Problem</span>
-        </div>
-        <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy mb-6 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            You're spending hours on tasks a machine could handle
-          </h2>
-          <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            Most businesses lose 10+ hours every week to repetitive admin. These are the usual suspects.
-          </p>
-        </div>
-      </div>
-
-      <!-- 4-Card Pain Points Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="users" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Manual lead sorting & follow-up</h3>
-          <p class="body-text text-sm">New leads come in and sit in an inbox. Someone has to read, classify, and assign them manually. Leads go cold while you're still sorting.</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="copy" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Copy-pasting data between tools</h3>
-          <p class="body-text text-sm">Moving data from your CRM to a spreadsheet, then to an email, then back again. The same information lives in five places and none of them agree.</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="mail" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Repetitive email responses</h3>
-          <p class="body-text text-sm">Typing the same replies over and over. Welcome emails, follow-ups, status updates. Important work, but it doesn't need a human every time.</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="clock" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Approval bottlenecks that slow everything down</h3>
-          <p class="body-text text-sm">Tasks pile up waiting for a single person to review and approve. One missed Slack message means a day of delays.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHY AUTOMATE — EDUCATIONAL -->
-  <!-- ============================== -->
-  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream tech-grid-bg">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
-        <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">02 Why Automate</span>
-        </div>
-        <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy mb-6 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            Time is the one thing you can't get back
-          </h2>
-          <p class="body-text max-w-2xl text-base md:text-lg reveal-up mb-8">
-            Every hour spent on repetitive admin is an hour not spent on clients, strategy, or growth. Automation isn't about replacing people. It's about freeing them up to do the work that actually matters.
-          </p>
-        </div>
-      </div>
-
-      <!-- Educational value cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
-        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">10+</div>
-          <h3 class="heading-md text-navy text-base mb-2">Hours saved per week</h3>
-          <p class="body-text text-sm">The average small business loses over 10 hours a week to tasks that could run automatically. That's a full working day, every week.</p>
-        </div>
-
-        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">3 in 4</div>
-          <h3 class="heading-md text-navy text-base mb-2">Businesses are increasing automation spend</h3>
-          <p class="body-text text-sm">The majority of businesses are actively investing in automation to stay competitive. The question isn't if, it's when.</p>
-        </div>
-
-        <div class="bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="heading-xl text-accent mb-3" style="font-size: clamp(2rem, 4vw, 3rem);">5min</div>
-          <h3 class="heading-md text-navy text-base mb-2">Lead response vs. 5 hours</h3>
-          <p class="body-text text-sm">Studies show responding to a lead within 5 minutes makes you 21x more likely to convert them. Automated follow-ups mean you never miss that window.</p>
-        </div>
-      </div>
-
-      <!-- The cost of NOT automating -->
-      <div class="bg-navy rounded-2xl p-10 md:p-14 reveal-up">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <h3 class="heading-lg text-cream mb-4" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">The real cost of "we'll do it manually"</h3>
-            <p class="text-warm text-sm mb-6" style="line-height: 1.8;">Every manual process has a hidden price tag. It's not just the time. It's the leads that go cold, the errors from copy-pasting, the bottlenecks when someone's on leave, and the ceiling it puts on your growth.</p>
-            <p class="text-warm text-sm" style="line-height: 1.8;">Automation removes the ceiling. Your workflows run 24/7, don't make typos, and scale without hiring.</p>
-          </div>
-          <div class="space-y-4">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
-              </div>
-              <div>
-                <h4 class="text-cream font-display font-semibold text-sm mb-1">Leads go cold in hours</h4>
-                <p class="text-warm text-xs" style="line-height: 1.6;">By the time you manually sort and respond, they've already spoken to your competitor</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
-              </div>
-              <div>
-                <h4 class="text-cream font-display font-semibold text-sm mb-1">Human error creeps in</h4>
-                <p class="text-warm text-xs" style="line-height: 1.6;">Copy-pasting data between tools leads to mismatches, duplicates, and missed follow-ups</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <i data-lucide="x" class="w-5 h-5 text-red-400"></i>
-              </div>
-              <div>
-                <h4 class="text-cream font-display font-semibold text-sm mb-1">You can't scale what depends on you</h4>
-                <p class="text-warm text-xs" style="line-height: 1.6;">If every task needs a person, growth means hiring. Automation means the same team does more</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- HOW IT WORKS -->
-  <!-- ============================== -->
-  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-24">
-        <span class="tech-label text-warm font-medium reveal-up block mb-6">03 Process</span>
-        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">How It Works</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 max-w-4xl mx-auto">
-        <!-- Step 1 -->
-        <div class="text-center reveal-up">
-          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">1</div>
-          <h3 class="heading-md text-navy text-xl mb-3">Audit</h3>
-          <p class="body-text text-sm">We map your current workflows and find where time is being wasted. No guesswork. We identify the biggest wins first.</p>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="text-center reveal-up">
-          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">2</div>
-          <h3 class="heading-md text-navy text-xl mb-3">Build</h3>
-          <p class="body-text text-sm">We design and build custom automations tailored to your tools and team. You see it working before it goes live.</p>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="text-center reveal-up">
-          <div class="heading-xl text-accent mb-4" style="font-size: clamp(3rem, 5vw, 4.5rem);">3</div>
-          <h3 class="heading-md text-navy text-xl mb-3">Launch & Support</h3>
-          <p class="body-text text-sm">We deploy, monitor, and refine. Every project includes ongoing support to keep things running and evolving as your business grows.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- SEE IT IN ACTION -->
-  <!-- ============================== -->
-  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-surface">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-12 md:mb-16">
-        <span class="tech-label text-warm font-medium reveal-up block mb-6">See It In Action</span>
-        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Watch An Automation Run</h2>
-        <p class="body-text max-w-xl mx-auto mt-4 reveal-up">A real n8n workflow analysing 100 audits, scoring results, and delivering a summary. No clicks needed.</p>
-      </div>
-      <div class="max-w-4xl mx-auto reveal-up">
-        <div class="rounded-xl overflow-hidden border border-divider shadow-lg">
-          <video
-            src="videos/automation-demo.mp4"
-            controls
-            playsinline
-            preload="metadata"
-            poster="videos/automation-demo-poster.jpg"
-            class="w-full"
-            style="aspect-ratio: 16/9; background: #1B2838;"
-          ></video>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHAT WE BUILD -->
-  <!-- ============================== -->
-  <section class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-24">
-        <span class="tech-label text-warm font-medium reveal-up block mb-6">04 Examples</span>
-        <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">What We Build</h2>
-        <p class="body-text text-warm max-w-xl mx-auto mt-4 reveal-up">Real automation examples we deliver for clients. Every workflow is tailored to your tools and team.</p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        <!-- Lead Classification Pipeline -->
-        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
-            <i data-lucide="git-branch" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Lead Classification Pipeline</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">New leads are automatically pulled from your CRM, classified by AI, scored, and routed to the right team member via Slack. No manual sorting.</p>
-          <div class="flex flex-wrap gap-2 mt-5">
-            <span class="tag-pill">CRM</span>
-            <span class="tag-pill">AI</span>
-            <span class="tag-pill">Slack</span>
-          </div>
-        </div>
-
-        <!-- Approval Workflows -->
-        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
-            <i data-lucide="check-square" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Approval Workflows</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Draft responses are prepared automatically. Your team approves or rejects via Slack. Approved replies are sent, logged in your CRM, and confirmed. All hands-free.</p>
-          <div class="flex flex-wrap gap-2 mt-5">
-            <span class="tag-pill">Slack</span>
-            <span class="tag-pill">CRM</span>
-            <span class="tag-pill">n8n</span>
-          </div>
-        </div>
-
-        <!-- Email Automation -->
-        <div class="example-card rounded-xl p-8 border border-white/10 bg-white/[0.04] reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/15 flex items-center justify-center mb-6">
-            <i data-lucide="mail-check" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Email Automation</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Welcome sequences, follow-ups, and nurture campaigns that run themselves. Personalised based on lead behaviour and engagement.</p>
-          <div class="flex flex-wrap gap-2 mt-5">
-            <span class="tag-pill">Email</span>
-            <span class="tag-pill">CRM</span>
-            <span class="tag-pill">AI</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- TOOLS & INTEGRATIONS -->
+  <!-- WHY PROMPT-ONLY AI FAILS -->
   <!-- ============================== -->
   <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
     <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-14 md:mb-20">
-        <span class="tech-label text-warm font-medium reveal-up block mb-6">05 Integrations</span>
-        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Tools We Work With</h2>
-        <p class="body-text max-w-xl mx-auto mt-4 reveal-up">We integrate with the platforms your team already uses. No rip-and-replace.</p>
+      <div class="w-full h-px bg-divider mb-16 md:mb-24"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-warm font-medium reveal-up">01 Why a framework</span>
+          <h2 class="heading-lg text-navy mt-6 reveal-up" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">
+            Prompt-only AI is a black box.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up mb-5">
+            Most teams pay for ChatGPT and hope for the best. One prompt, no memory, no audit trail. It drifts, hallucinates, and six months in nobody trusts its output. The fix isn't a better prompt. It's a better architecture.
+          </p>
+          <p class="text-navy text-base md:text-lg max-w-2xl reveal-up" style="font-weight: 500;">
+            Four layers. Each one is inspectable. Each one is fixable. Each one stays the same when you swap models, vendors, or interfaces.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- LAYER 01 — CONTEXT -->
+  <!-- ============================== -->
+  <section id="layer-1" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
+        <div>
+          <span class="tech-label text-accent font-medium mb-3 block">Layer 01 / the brain</span>
+          <h2 class="heading-xl text-navy" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Context.</h2>
+        </div>
+        <div class="layer-stamp hidden md:block">01<span class="layer-stamp__slash">/</span></div>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto reveal-up">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <!-- Left: explainer -->
+        <div class="lg:col-span-6 reveal-up">
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">
+            Your business, written down. Structured markdown in a Git repo you own. Human-editable. AI-readable. Version-controlled forever.
+          </p>
+          <p class="body-text text-sm md:text-base mb-8">
+            It's the stable ground the rest of the stack stands on. Positioning, clients, pipeline, SOPs, tone of voice, team roster, pricing logic, competitor battlecards. Everything your team already "just knows", made explicit and queryable.
+          </p>
+          <div class="space-y-3 border-t border-divider pt-6">
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Humans write, AI reads.</strong> The brain is only edited through a review step. Never mutated by the model at runtime.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Correct a fact once.</strong> Every brief, draft, and summary from that day forward is right.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Portable forever.</strong> Swap Claude for a different model tomorrow, the brain doesn't change.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: artefact mock -->
+        <div class="lg:col-span-6 reveal-up">
+          <div class="artefact">
+            <div class="artefact__bar">
+              <span class="artefact__dot"></span>
+              <span class="artefact__dot"></span>
+              <span class="artefact__dot"></span>
+              <span class="artefact__file">brain / company-brief.md</span>
+            </div>
+            <div class="artefact__body">
+<pre><span class="c-cm">---</span>
+<span class="c-key">name:</span> <span class="c-str">Company brief</span>
+<span class="c-key">updated:</span> <span class="c-str">2026-04-21</span>
+<span class="c-cm">---</span>
+
+<span class="c-h1"># Who we are</span>
+We build AI operating systems for small business.
+One brain, many surfaces. Layers over prompts.
+
+<span class="c-h1"># Who we serve</span>
+<span class="c-h2">## Primary</span>
+- Professional services firms (legal, accounting, consulting)
+- Trades &amp; field services (plumbing, electrical, building)
+- B2B sales teams (agencies, SaaS)
+
+<span class="c-h1"># Tone of voice</span>
+Professional, warm, never salesy. Peer-to-peer.
+No em dashes. Short sentences. Direct.
+
+<span class="c-h1"># Non-negotiables</span>
+- Human review before any AI-written commit
+- Every output cites the brain file it came from
+- Brief beats fluff. Always.</pre>
+            </div>
+          </div>
+          <p class="text-warm text-xs mt-3" style="line-height: 1.6;">Sample. Real deployments run 20-60 files across `clients/`, `pipeline/`, `skills/`, `tone-of-voice/`, and more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- LAYER 02 — SKILLS -->
+  <!-- ============================== -->
+  <section id="layer-2" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
+        <div>
+          <span class="tech-label text-accent font-medium mb-3 block">Layer 02 / the how</span>
+          <h2 class="heading-xl text-navy" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Skills.</h2>
+        </div>
+        <div class="layer-stamp hidden md:block">02<span class="layer-stamp__slash">/</span></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <!-- Left: artefact mock -->
+        <div class="lg:col-span-6 order-2 lg:order-1 reveal-up">
+          <div class="artefact">
+            <div class="artefact__bar">
+              <span class="artefact__dot"></span>
+              <span class="artefact__dot"></span>
+              <span class="artefact__dot"></span>
+              <span class="artefact__file">skills / proposal-writer.md</span>
+            </div>
+            <div class="artefact__body">
+<pre><span class="c-cm">---</span>
+<span class="c-key">name:</span> <span class="c-str">proposal-writer</span>
+<span class="c-key">reads:</span>
+  <span class="c-cm">-</span> <span class="c-str">clients/&#123;client&#125;.md</span>
+  <span class="c-cm">-</span> <span class="c-str">pricing.md</span>
+  <span class="c-cm">-</span> <span class="c-str">tone-of-voice.md</span>
+<span class="c-key">output:</span> <span class="c-str">docx</span>
+<span class="c-cm">---</span>
+
+<span class="c-h1"># When to use</span>
+A client has asked for a proposal. You want a
+first draft ready for review in 60 seconds.
+
+<span class="c-h1"># The prompt</span>
+Draft a proposal for &#123;&#123; client &#125;&#125; covering
+&#123;&#123; scope &#125;&#125;. Use the firm's standard format.
+Pull pricing from pricing.md. Match tone from
+tone-of-voice.md. End with a clear next step.</pre>
+            </div>
+          </div>
+          <p class="text-warm text-xs mt-3" style="line-height: 1.6;">Sample. A typical deploy has 5-15 skills, each 30-100 lines, each knowing exactly which parts of the brain to open.</p>
+        </div>
+
+        <!-- Right: explainer -->
+        <div class="lg:col-span-6 order-1 lg:order-2 reveal-up">
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">
+            Reusable recipes for the jobs your team does every week. Drafting a proposal. Prepping for a meeting. Triaging an inbox. Writing a follow-up. Each skill is a short, named file.
+          </p>
+          <p class="body-text text-sm md:text-base mb-8">
+            Think of them as saved searches crossed with templates crossed with standard operating procedures. Each one declares what it reads from Layer 1 and what it produces. That means outputs are consistent, reviewable, and portable across whoever is using them.
+          </p>
+          <div class="space-y-3 border-t border-divider pt-6">
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Named and versioned.</strong> `proposal-writer-v2` is a Git commit away. Never lose a prompt that worked.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Composable.</strong> A `follow-up` skill can call a `client-update` skill, which calls `tone-of-voice`. Layers all the way down.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
+              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Your voice, not the model's.</strong> Skills pin the output format so drafts sound like you, not ChatGPT.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- LAYER 03 — AUTOMATION (n8n) -->
+  <!-- ============================== -->
+  <section id="layer-3" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
+        <div>
+          <span class="tech-label text-accent font-medium mb-3 block">Layer 03 / the triggers</span>
+          <h2 class="heading-xl text-cream" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Automation.</h2>
+        </div>
+        <div class="layer-stamp layer-stamp-dark hidden md:block">03<span class="layer-stamp__slash">/</span></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-12 md:mb-16">
+        <div class="lg:col-span-6 reveal-up">
+          <p class="text-cream text-base md:text-lg mb-6" style="line-height: 1.7;">
+            Scheduled and event-driven workflows that tie Context and Skills to the rest of your stack. <strong class="text-accent">n8n</strong> runs the wiring.
+          </p>
+          <p class="text-warm text-sm md:text-base mb-8" style="line-height: 1.75;">
+            Cron jobs that fire at 8:30am. Webhooks that catch a new lead the instant it lands. API calls that pull a Fireflies transcript and drop a draft meeting note in your inbox. Conditional branches, retries, error alerts. All visual. All inspectable. All yours to edit after we hand it over.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-pill">cron: daily 08:30</span>
+            <span class="tag-pill">webhook: new-lead</span>
+            <span class="tag-pill">trigger: transcript-ready</span>
+            <span class="tag-pill">retry: 3x exponential</span>
+          </div>
+        </div>
+        <div class="lg:col-span-6 reveal-up">
+          <div class="rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+            <video
+              src="videos/automation-demo.mp4"
+              controls
+              playsinline
+              preload="metadata"
+              poster="videos/automation-demo-poster.jpg"
+              class="w-full"
+              style="aspect-ratio: 16/9; background: #0f1a24;"
+            ></video>
+          </div>
+          <p class="text-warm/70 text-xs mt-3" style="line-height: 1.6;">A real n8n workflow analysing 100 audits, scoring results, delivering a summary. No clicks.</p>
+        </div>
+      </div>
+
+      <!-- Three example triggers -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 reveal-up">
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="clock" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">Daily brief at 8:30am</div>
+          <p class="surface-card__desc">Cron pulls today's matters, deadlines, and inbound. Claude drafts the brief. Slack delivers it. One fewer 6am scramble.</p>
+        </div>
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="git-branch" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">New lead triage</div>
+          <p class="surface-card__desc">Webhook fires on form submit. Classify by ICP, enrich with competitor context, write to HubSpot, ping Slack. 3 seconds end-to-end.</p>
+        </div>
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="mail-check" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">Approval flow</div>
+          <p class="surface-card__desc">Draft reply to a client. Post to Slack with approve/reject buttons. On approve: send via Outlook, log to CRM, confirm in thread.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- LAYER 04 — AGENT -->
+  <!-- ============================== -->
+  <section id="layer-4" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy border-t border-white/10">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
+        <div>
+          <span class="tech-label text-accent font-medium mb-3 block">Layer 04 / the face</span>
+          <h2 class="heading-xl text-cream" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Agent.</h2>
+        </div>
+        <div class="layer-stamp layer-stamp-dark hidden md:block">04<span class="layer-stamp__slash">/</span></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-12">
+        <div class="lg:col-span-7 reveal-up">
+          <p class="text-cream text-base md:text-lg" style="line-height: 1.7;">
+            How your team talks to the system and how the system talks back. Slack, SMS, voice, dashboards, email, whatever fits where the team already works.
+          </p>
+          <p class="text-warm text-sm md:text-base mt-4" style="line-height: 1.75;">
+            One brain, many surfaces. The operator in the field gets SMS. The partner gets a daily email. The rep uses Slack. The CEO asks by voice while driving. Same underlying system, different face depending on who's asking and what they need.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 reveal-up">
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="message-square" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">Slack</div>
+          <p class="surface-card__desc">DM a Slack bot "what's the status on Acme?" Get a 3-second synthesis with links to every source file.</p>
+        </div>
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">SMS</div>
+          <p class="surface-card__desc">Crew gets the day's schedule at 6am. A missed invoice fires a follow-up sequence. No app to download.</p>
+        </div>
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="mic" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">Voice (ElevenLabs + Twilio)</div>
+          <p class="surface-card__desc">Call a number, ask a question, get a synthesised voice answer. Missed calls get triaged and logged.</p>
+        </div>
+        <div class="surface-card">
+          <div class="surface-card__icon"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
+          <div class="surface-card__title">Dashboard</div>
+          <p class="surface-card__desc">Custom web interface for the office. Open pipeline, job queue, team utilisation, rendered live from the brain.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- WORKED EXAMPLES (DEEP INDUSTRY TABS) -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-16">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">05 Worked examples</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
+            Same stack.<br>Three businesses.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            Below is the same 4-layer framework, deployed three ways. Pick the industry closest to yours. Each tab shows the brain files, the skills, the n8n triggers, and the surfaces that actually get used.
+          </p>
+        </div>
+      </div>
+
+      <div class="industry-tabs reveal-up" role="tablist" aria-label="Worked examples by industry">
+        <button class="industry-tab is-active" role="tab" aria-selected="true" data-panel="services">Professional services firm</button>
+        <button class="industry-tab" role="tab" aria-selected="false" data-panel="trades">Trades &amp; field services</button>
+        <button class="industry-tab" role="tab" aria-selected="false" data-panel="sales">B2B sales team</button>
+      </div>
+
+      <div class="industry-panels reveal-up">
+
+        <!-- Panel: Services -->
+        <div class="industry-panel is-active grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="services">
+          <div class="industry-col">
+            <span class="industry-col__label">01 / Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Client histories &amp; matter files</li>
+              <li>Proposal templates</li>
+              <li>Billing rates &amp; scope rules</li>
+              <li>Conflict-of-interest register</li>
+              <li>Partner bios &amp; tone</li>
+            </ul>
+            <div class="industry-col__group">Repo shape</div>
+            <ul class="industry-col__list space-y-1">
+              <li><code>clients/</code></li>
+              <li><code>proposals/</code></li>
+              <li><code>pricing.md</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 / Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>proposal-writer</code></li>
+              <li><code>meeting-prep</code></li>
+              <li><code>client-update</code></li>
+              <li><code>scope-change-memo</code></li>
+              <li><code>matter-summary</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 / Automation (n8n)</span>
+            <ul class="industry-col__list space-y-1">
+              <li>8:30am: today's matters brief &rarr; Slack</li>
+              <li>Fireflies transcript ready &rarr; draft meeting note</li>
+              <li>Inbound RFP email &rarr; proposal scaffold in Slack</li>
+              <li>Friday 5pm: weekly partner pipeline summary</li>
+              <li>Deadline approaching (72h) &rarr; DM + calendar block</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 / Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Slack <code>@ops</code> for anything</li>
+              <li>Daily brief in DM</li>
+              <li>Voice call (driving / between meetings)</li>
+              <li>Partner dashboard (web)</li>
+              <li>Weekly email digest</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Panel: Trades -->
+        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="trades">
+          <div class="industry-col">
+            <span class="industry-col__label">01 / Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Supplier pricelists</li>
+              <li>Crew schedules &amp; skills matrix</li>
+              <li>Job templates by trade</li>
+              <li>Site safety &amp; SWMS rules</li>
+              <li>Recurring customer notes</li>
+            </ul>
+            <div class="industry-col__group">Repo shape</div>
+            <ul class="industry-col__list space-y-1">
+              <li><code>suppliers/</code></li>
+              <li><code>crews/</code></li>
+              <li><code>job-templates/</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 / Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>quote-builder</code></li>
+              <li><code>job-wrap-up-note</code></li>
+              <li><code>supplier-reorder</code></li>
+              <li><code>overdue-chaser</code></li>
+              <li><code>review-request</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 / Automation (n8n)</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Quote request form &rarr; draft quote in owner's inbox</li>
+              <li>Invoice 7 days overdue &rarr; SMS follow-up sequence</li>
+              <li>Job marked complete &rarr; review request SMS</li>
+              <li>6am daily: crew schedule &rarr; SMS per person</li>
+              <li>Stock low in job sheet &rarr; supplier reorder email</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 / Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>SMS-first for crew</li>
+              <li>Office dashboard (simple web)</li>
+              <li>Voice intake for missed calls</li>
+              <li>Owner daily email at 6pm</li>
+              <li>Customer SMS for quotes &amp; confirmations</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Panel: Sales -->
+        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="sales">
+          <div class="industry-col">
+            <span class="industry-col__label">01 / Context</span>
+            <ul class="industry-col__list space-y-1">
+              <li>ICP definitions</li>
+              <li>Pipeline stages &amp; exit criteria</li>
+              <li>Competitor battlecards</li>
+              <li>Objection-handling library</li>
+              <li>Pricing logic &amp; discount rules</li>
+            </ul>
+            <div class="industry-col__group">Repo shape</div>
+            <ul class="industry-col__list space-y-1">
+              <li><code>icp.md</code></li>
+              <li><code>competitors/</code></li>
+              <li><code>battlecards/</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">02 / Skills</span>
+            <ul class="industry-col__list space-y-1">
+              <li><code>lead-qualifier</code></li>
+              <li><code>discovery-summary</code></li>
+              <li><code>pipeline-movement</code></li>
+              <li><code>deal-risk-flag</code></li>
+              <li><code>proposal-draft</code></li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">03 / Automation (n8n)</span>
+            <ul class="industry-col__list space-y-1">
+              <li>New lead webhook &rarr; classify, enrich, HubSpot, Slack</li>
+              <li>Deal no activity 14 days &rarr; risk memo &rarr; owner DM</li>
+              <li>Monday 7am: weekly pipeline brief</li>
+              <li>Discovery call ends &rarr; logged next steps in HubSpot</li>
+              <li>Deal stage changes &rarr; battlecard refresh in DM</li>
+            </ul>
+          </div>
+          <div class="industry-col">
+            <span class="industry-col__label">04 / Agent</span>
+            <ul class="industry-col__list space-y-1">
+              <li>Team Slack channel</li>
+              <li>Inline HubSpot notes</li>
+              <li>Daily email brief at 7am</li>
+              <li>Rep asks <code>@ops</code> anything in Slack</li>
+              <li>Sales-leader dashboard (web)</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- HOW WE BUILD IT -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-12 md:mb-16">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">06 How we build it</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.5vw, 2.75rem);">
+            Five steps. No mystery.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            Most engagements run 4-8 weeks to initial deployment. We stay on as a retainer to grow the brain, add skills, and wire up new surfaces as your team uses them.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
+        <div class="lg:col-span-3"></div>
+        <div class="lg:col-span-9">
+          <div class="build-step reveal-up" data-step="STEP 01">
+            <h3>Workflow audit</h3>
+            <p>We sit with your team for a day or two. Map what everyone actually does each week. Find the five repeatable jobs worth automating first.</p>
+          </div>
+          <div class="build-step reveal-up" data-step="STEP 02">
+            <h3>Brain seed (Layer 1)</h3>
+            <p>We set up the Git repo, write the first 15-25 context files with you, get the structure right. You own the repo from day one.</p>
+          </div>
+          <div class="build-step reveal-up" data-step="STEP 03">
+            <h3>Skills authoring (Layer 2)</h3>
+            <p>We build 3-5 skills to cover the priority jobs. Version them. Test each one against real inputs before shipping.</p>
+          </div>
+          <div class="build-step reveal-up" data-step="STEP 04">
+            <h3>n8n workflows (Layer 3)</h3>
+            <p>Wire the skills to triggers. Schedules, webhooks, APIs, approvals. Everything visible in n8n so you can edit it yourself later.</p>
+          </div>
+          <div class="build-step reveal-up" data-step="STEP 05">
+            <h3>Agent surfaces (Layer 4)</h3>
+            <p>Slack bot, SMS sender, voice endpoint, or custom dashboard. We ship the one that fits where your team already works.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- TOOLBOX -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14">
+        <div class="lg:col-span-4">
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 Toolbox</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">
+            What we build with.
+          </h2>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            We integrate with the platforms your team already uses. No rip-and-replace. <strong class="text-navy">n8n</strong> is the orchestration layer for every build. Everything else is a node on the graph.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3 reveal-up">
         <div class="tool-badge"><i data-lucide="workflow" class="w-4 h-4 text-accent"></i> n8n</div>
-        <div class="tool-badge"><i data-lucide="database" class="w-4 h-4 text-accent"></i> HubSpot</div>
+        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> Claude (Anthropic)</div>
+        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> OpenAI</div>
         <div class="tool-badge"><i data-lucide="message-square" class="w-4 h-4 text-accent"></i> Slack</div>
+        <div class="tool-badge"><i data-lucide="database" class="w-4 h-4 text-accent"></i> HubSpot</div>
         <div class="tool-badge"><i data-lucide="cloud" class="w-4 h-4 text-accent"></i> Google Workspace</div>
         <div class="tool-badge"><i data-lucide="mail" class="w-4 h-4 text-accent"></i> Outlook</div>
-        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> OpenAI</div>
+        <div class="tool-badge"><i data-lucide="mic" class="w-4 h-4 text-accent"></i> ElevenLabs</div>
+        <div class="tool-badge"><i data-lucide="phone" class="w-4 h-4 text-accent"></i> Twilio</div>
+        <div class="tool-badge"><i data-lucide="server" class="w-4 h-4 text-accent"></i> Supabase</div>
+        <div class="tool-badge"><i data-lucide="file-text" class="w-4 h-4 text-accent"></i> Notion</div>
+        <div class="tool-badge"><i data-lucide="table" class="w-4 h-4 text-accent"></i> Airtable / Sheets</div>
         <div class="tool-badge"><i data-lucide="zap" class="w-4 h-4 text-accent"></i> Zapier</div>
         <div class="tool-badge"><i data-lucide="settings" class="w-4 h-4 text-accent"></i> Make</div>
+        <div class="tool-badge"><i data-lucide="github" class="w-4 h-4 text-accent"></i> GitHub</div>
       </div>
+      <p class="text-warm text-xs mt-6 reveal-up" style="line-height: 1.6;">Don't see yours? n8n has 500+ native integrations and an HTTP node for everything else. If it has an API, we can wire it.</p>
     </div>
   </section>
 
@@ -997,62 +1537,68 @@
   <!-- PRICING -->
   <!-- ============================== -->
   <section id="pricing" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[900px] mx-auto">
+    <div class="max-w-[1000px] mx-auto">
       <div class="text-center mb-14 md:mb-20">
-        <span class="tech-label text-warm font-medium reveal-up block mb-6">06 Pricing</span>
-        <h2 class="heading-lg text-cream mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Custom Automation Project</h2>
-        <p class="text-warm text-sm md:text-base reveal-up max-w-2xl mx-auto">Every project is scoped and quoted based on your needs. The build is a one-time cost, and every project includes an ongoing monthly retainer to keep things running, monitored, and evolving.</p>
+        <span class="tech-label text-accent font-medium reveal-up block mb-6">08 Pricing</span>
+        <h2 class="heading-lg text-cream mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Build once. Grow forever.</h2>
+        <p class="text-warm text-sm md:text-base reveal-up max-w-2xl mx-auto">Two phases, one engagement. The initial deploy gets all four layers live. The retainer grows the brain and adds skills as your team uses it.</p>
       </div>
 
       <div class="pricing-card featured bg-white/[0.04] rounded-2xl p-10 md:p-14 relative reveal-up">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
-          <!-- Build Phase -->
+          <!-- Build -->
           <div>
             <div class="flex items-center gap-3 mb-6">
               <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
                 <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
               </div>
-              <h3 class="font-display font-semibold text-cream text-lg">The Build</h3>
+              <div>
+                <h3 class="font-display font-semibold text-cream text-lg">Initial 4-layer deploy</h3>
+                <p class="text-warm text-xs mt-0.5">One-time. 4-8 weeks.</p>
+              </div>
             </div>
-            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">One-time project fee. We audit your workflows, design the automation, build it, test it, and deploy it.</p>
-            <ul class="space-y-3">
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Workflow audit & mapping</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Custom automation build</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Testing & deployment</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Documentation & training</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Tool & integration setup</li>
+            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">We take you from nothing to a working operating system with all four layers live. At the end you own the repo, the n8n workflows, and the surface.</p>
+            <ul class="space-y-2.5">
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 01 brain seed</strong>: Git repo + 15-25 context files written with you</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 02 skills</strong>: 3-5 skills authored, versioned, tested</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 03 automations</strong>: 2-4 n8n workflows (cron + event-driven)</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 04 surface</strong>: one interface (Slack / SMS / voice / dashboard)</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Training, handover docs, admin access to everything</span></li>
             </ul>
           </div>
 
-          <!-- Ongoing Retainer -->
+          <!-- Retainer -->
           <div>
             <div class="flex items-center gap-3 mb-6">
               <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
                 <i data-lucide="refresh-cw" class="w-5 h-5 text-accent"></i>
               </div>
-              <h3 class="font-display font-semibold text-cream text-lg">Ongoing Retainer</h3>
+              <div>
+                <h3 class="font-display font-semibold text-cream text-lg">Brain + skills growth</h3>
+                <p class="text-warm text-xs mt-0.5">Monthly. Ongoing.</p>
+              </div>
             </div>
-            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">Monthly fee included with every project. We monitor your automations, fix issues, and build new workflows as your business grows.</p>
-            <ul class="space-y-3">
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>24/7 monitoring & alerts</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Bug fixes & optimisation</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Priority support</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>New automations each month</li>
-              <li class="flex items-center gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0"></i>Monthly performance report</li>
+            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">Included with every build. We grow the brain as your business changes, add skills when your team asks for them, and wire up new surfaces as use cases surface.</p>
+            <ul class="space-y-2.5">
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Monitoring, alerts, error recovery on every workflow</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>New skills authored each month (2-3 typical)</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Brain grooming sessions: we sit with you and extend Layer 01</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>New automations as priorities shift</span></li>
+              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Slack channel for questions, same-day response</span></li>
             </ul>
           </div>
         </div>
 
         <div class="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <p class="heading-lg text-accent" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Custom Quote</p>
-            <p class="text-warm text-xs mt-1">Scoped to your business. No hidden fees.</p>
+            <p class="heading-lg text-accent" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Custom quote</p>
+            <p class="text-warm text-xs mt-1">Scoped after the initial audit. No surprise invoices.</p>
           </div>
           <a href="#contact" class="cta-btn">
             <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
             <div class="shimmer-backdrop"></div>
             <div class="shimmer-highlight"></div>
-            <span>Get a Quote</span>
+            <span>Scope a build</span>
             <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
@@ -1071,12 +1617,12 @@
 
     <div class="max-w-[1440px] mx-auto relative z-10">
       <div class="text-center mb-14">
-        <span class="tech-label text-warm font-medium reveal-up block mb-8">07 Contact</span>
+        <span class="tech-label text-accent font-medium reveal-up block mb-8">09 Contact</span>
         <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
-          Ready to automate<span class="text-accent cursor-blink">?</span>
+          What would your<br>operating system do?<span class="text-accent cursor-blink">_</span>
         </h2>
         <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          Tell us about the tasks eating up your time. We'll show you what's possible.
+          30-minute call. We'll map the first layer for free and send you back a one-pager of what the build would look like.
         </p>
       </div>
 
@@ -1104,10 +1650,11 @@
             <div>
               <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
               <select name="service" id="service" class="form-input form-select">
-                <option value="automation" selected>Automation & Workflows</option>
-                <option value="website">Website Design</option>
-                <option value="both">Both — Automation + Website</option>
-                <option value="not-sure">Not sure yet</option>
+                <option value="operating-system" selected>Full 4-layer operating system</option>
+                <option value="automation">A specific workflow / automation</option>
+                <option value="agent">An AI agent (Slack, voice, SMS)</option>
+                <option value="website">Website / interface work</option>
+                <option value="not-sure">Not sure yet, want to talk it through</option>
               </select>
             </div>
           </div>
@@ -1137,8 +1684,8 @@
           </div>
 
           <div>
-            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Tell us about your workflows</label>
-            <textarea name="message" id="message" rows="4" placeholder="What tasks are eating up your time? What tools do you currently use?" class="form-input" style="resize: vertical;"></textarea>
+            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">What would you have it do?</label>
+            <textarea name="message" id="message" rows="4" placeholder="The jobs your team does every week that you wish ran themselves. Tools you currently use. What "done" looks like." class="form-input" style="resize: vertical;"></textarea>
           </div>
 
           <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
@@ -1184,7 +1731,7 @@
         <div class="md:col-span-4">
           <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-lg object-cover mb-6">
           <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            Beautiful digital products. Websites, tools, and workflows built to perform.
+            AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
           </p>
         </div>
 
@@ -1193,8 +1740,9 @@
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
           <div class="flex flex-col gap-3">
             <a href="/" class="footer-link">Home</a>
-            <a href="/automations.html" class="footer-link">Automations</a>
+            <a href="/automations.html" class="footer-link">Automation</a>
             <a href="/websites.html" class="footer-link">Websites</a>
+            <a href="/#layers" class="footer-link">The 4 layers</a>
             <a href="#contact" class="footer-link">Contact</a>
           </div>
         </div>
@@ -1327,6 +1875,23 @@
         opacity: 1,
         duration: 0.9,
         ease: 'power3.out',
+      });
+    });
+
+    // === Industry Tabs ===
+    const tabs = document.querySelectorAll('.industry-tab');
+    const panels = document.querySelectorAll('.industry-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.panel;
+        tabs.forEach(t => {
+          const active = t === tab;
+          t.classList.toggle('is-active', active);
+          t.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach(p => {
+          p.classList.toggle('is-active', p.dataset.panel === target);
+        });
       });
     });
 

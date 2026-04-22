@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OG Image | Digital Artifacts</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #1B2838;
+      font-family: 'General Sans', sans-serif;
+      color: #F7F6F3;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      width: 1200px;
+      height: 630px;
+      padding: 72px 88px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 900px 600px at 100% 100%, rgba(0,200,83,0.12) 0%, rgba(0,200,83,0) 60%),
+        radial-gradient(ellipse 700px 500px at 0% 0%, rgba(0,200,83,0.04) 0%, rgba(0,200,83,0) 60%),
+        #1B2838;
+    }
+
+    /* Subtle grid overlay */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 200, 83, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 83, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      letter-spacing: -0.015em;
+      color: #F7F6F3;
+    }
+
+    .brand__dot {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #00C853;
+      color: #1B2838;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+    }
+
+    .brand .dot-accent { color: #00C853; }
+
+    .eyebrow {
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 16px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #00C853;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 56px;
+      align-items: start;
+      position: relative;
+    }
+
+    .title {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 68px;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      color: #F7F6F3;
+      margin-bottom: 24px;
+      white-space: nowrap;
+    }
+
+    .title em {
+      font-style: normal;
+      color: #00C853;
+    }
+
+    .sub {
+      font-family: 'General Sans', sans-serif;
+      font-weight: 400;
+      font-size: 19px;
+      line-height: 1.5;
+      color: rgba(247, 246, 243, 0.72);
+      max-width: 540px;
+      letter-spacing: -0.005em;
+    }
+
+    /* Mini stack diagram on the right */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .stack::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 18px;
+      bottom: 18px;
+      width: 1.5px;
+      background: linear-gradient(to bottom, rgba(0,200,83,0) 0%, rgba(0,200,83,0.55) 15%, rgba(0,200,83,0.55) 85%, rgba(0,200,83,0) 100%);
+    }
+
+    .band {
+      position: relative;
+      padding: 16px 20px 16px 66px;
+      background: rgba(247, 246, 243, 0.04);
+      border: 1px solid rgba(247, 246, 243, 0.06);
+      border-left: 2px solid #00C853;
+      border-radius: 10px;
+    }
+
+    .band__num {
+      position: absolute;
+      left: 16px;
+      top: 15px;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      color: #00C853;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .band__name {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: #F7F6F3;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+    }
+
+    .band__name span {
+      color: rgba(247, 246, 243, 0.45);
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 6px;
+    }
+
+    .footer-row {
+      position: absolute;
+      left: 88px;
+      right: 88px;
+      bottom: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .footer-row__label {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      color: rgba(247, 246, 243, 0.6);
+    }
+
+    .footer-row__url {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      color: #00C853;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 6px;
+      height: 0.85em;
+      background: #00C853;
+      margin-left: 6px;
+      position: relative;
+      top: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top">
+      <div class="brand">
+        <div class="brand__dot">D</div>
+        <span>Digital Artifacts<span class="dot-accent">.</span></span>
+      </div>
+      <span class="eyebrow">AI operating systems</span>
+    </div>
+
+    <div class="content">
+      <div>
+        <h1 class="title">
+          We build the brain<br>
+          your business<br>
+          <em>runs on.</em>
+        </h1>
+        <p class="sub">
+          A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.
+        </p>
+      </div>
+
+      <div class="stack">
+        <div class="band">
+          <div class="band__num">01</div>
+          <div class="band__name">Context <span>/ the brain</span></div>
+        </div>
+        <div class="band">
+          <div class="band__num">02</div>
+          <div class="band__name">Skills <span>/ the how</span></div>
+        </div>
+        <div class="band">
+          <div class="band__num">03</div>
+          <div class="band__name">Automation <span>/ the triggers</span></div>
+        </div>
+        <div class="band">
+          <div class="band__num">04</div>
+          <div class="band__name">Agent <span>/ the face</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <span class="footer-row__label">Humans write. AI reads.</span>
+      <span class="footer-row__url">digitalartifacts.com.au</span>
+    </div>
+
+  </div>
+</body>
+</html>
