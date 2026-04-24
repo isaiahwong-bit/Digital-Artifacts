@@ -1,0 +1,163 @@
+{
+  "name": "DA - Unsubscribe (One-Click)",
+  "description": null,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "da-unsubscribe",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-unsub",
+      "name": "Webhook - Unsubscribe",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "e747edc4-5ccc-4301-bba3-816440895d89"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst leadId = (input.query && input.query.lead_id) || (input.params && input.params.lead_id) || '';\nif (!leadId) throw new Error('Missing lead_id');\nreturn [{ json: { lead_id: leadId, status: 'unsubscribed' }}];"
+      },
+      "id": "parse-unsub",
+      "name": "Parse lead_id",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "status": "unsubscribed"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-unsub",
+      "name": "Sheet: Mark Unsubscribed",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        680,
+        300
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Unsubscribed</title><style>body{font-family:-apple-system,system-ui,sans-serif;background:#F7F6F3;color:#1B2838;display:grid;place-items:center;min-height:100vh;margin:0;padding:2rem}.c{max-width:420px;text-align:center;background:#fff;padding:3rem 2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}h1{font-size:1.5rem;margin:0 0 1rem}p{color:#8A8A80;line-height:1.6;margin:0}a{color:#00C853;text-decoration:none}</style></head><body><div class=\"c\"><h1>You are unsubscribed</h1><p>No more follow up emails. Thanks for your time. If you ever want back in, <a href=\"https://digitalartifacts.com.au/#contact\">reach out</a>.</p></div></body></html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-unsub",
+      "name": "Respond HTML",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Unsubscribe": {
+      "main": [
+        [
+          {
+            "node": "Parse lead_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse lead_id": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Unsubscribed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Mark Unsubscribed": {
+      "main": [
+        [
+          {
+            "node": "Respond HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "activeVersion": null
+}

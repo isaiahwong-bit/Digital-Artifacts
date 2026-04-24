@@ -1,0 +1,260 @@
+{
+  "name": "DA - Engagement (Calendar Book \u2192 Status Engaged)",
+  "description": null,
+  "nodes": [
+    {
+      "parameters": {
+        "triggerOn": "eventCreated",
+        "calendarId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "hello@digitalartifacts.com.au"
+        },
+        "options": {}
+      },
+      "id": "cal-trigger",
+      "name": "Calendar: New Event",
+      "type": "n8n-nodes-base.googleCalendarTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "notes": "SETUP: create a googleCalendarOAuth2Api credential in n8n (Settings \u2192 Credentials \u2192 + \u2192 Google Calendar OAuth2), sign in as hello@digitalartifacts.com.au, then map it to this node. Polls every minute."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract attendee emails (excluding the organiser) from the Calendar event payload.\nconst event = $input.first().json;\nconst organiserEmail = (event.organizer && event.organizer.email || '').toLowerCase();\nconst attendees = Array.isArray(event.attendees) ? event.attendees : [];\n\nconst items = [];\nfor (const a of attendees) {\n  const email = (a.email || '').toLowerCase();\n  if (!email || email === organiserEmail) continue;\n  items.push({ json: { email, event_id: event.id, event_summary: event.summary || '', event_start: event.start && event.start.dateTime || '' } });\n}\n\nreturn items.length ? items : [{ json: { email: '', skip: true } }];"
+      },
+      "id": "extract-attendees",
+      "name": "Extract Attendees",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-attendee",
+      "name": "Has Attendee?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "email",
+              "lookupValue": "={{ $json.email }}"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": false
+        }
+      },
+      "id": "sheet-lookup",
+      "name": "Sheet: Lookup by Email",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        900,
+        220
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "status": "engaged"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-engage",
+      "name": "Sheet: Mark Engaged",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1120,
+        220
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "8711637937",
+        "text": "=\ud83d\udcc5 Booked: {{ $('Extract Attendees').item.json.email }}\\nLead {{ $json.lead_id }} flipped to ENGAGED. Nurture drops off."
+      },
+      "id": "tg-notify",
+      "name": "Telegram: Booking FYI",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        1340,
+        220
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      },
+      "webhookId": "12e05809-e054-4467-b36a-dc141cf3cfea"
+    }
+  ],
+  "connections": {
+    "Calendar: New Event": {
+      "main": [
+        [
+          {
+            "node": "Extract Attendees",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Attendees": {
+      "main": [
+        [
+          {
+            "node": "Has Attendee?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Attendee?": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Lookup by Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Sheet: Lookup by Email": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Engaged",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Mark Engaged": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Booking FYI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "activeVersion": null
+}
