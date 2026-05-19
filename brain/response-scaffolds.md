@@ -112,6 +112,26 @@ Isaiah
 
 ---
 
+# Scaffold G: 4-Layer Blueprint download (lead magnet)
+
+Use this when `source` is `lead_magnet`. They did not send a message, they downloaded the Blueprint PDF. Never say "your message was empty" or "not sure what prompted you to reach out." They opted in to learn, that is the signal. Warm by default, no hard sell.
+
+**Subject:** The Blueprint, and the part most people miss
+
+{FirstName},
+
+You just grabbed the 4-Layer Blueprint. Hope the framework is useful on its own.
+
+One thing the PDF cannot do on a page: show you which layer to build first for your specific business. That order matters more than people expect, and it is different for a services firm than a trades operator or a sales team.
+
+If you want, reply with one line about what your business does and the task that is eating the most time right now. I will sketch back which layer to start with, no charge, no pitch. Or if you would rather talk it through: {BOOKING_LINK}
+
+No rush. The Blueprint stands on its own. This is here if you want the next step.
+
+Isaiah
+
+---
+
 # Variables the skill fills
 
 - `{FirstName}` — from form submission
