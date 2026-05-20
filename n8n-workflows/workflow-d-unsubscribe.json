@@ -1,6 +1,5 @@
 {
   "name": "DA - Unsubscribe (One-Click)",
-  "description": null,
   "nodes": [
     {
       "parameters": {
@@ -21,7 +20,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const input = $input.first().json;\nconst leadId = (input.query && input.query.lead_id) || (input.params && input.params.lead_id) || '';\nif (!leadId) throw new Error('Missing lead_id');\nreturn [{ json: { lead_id: leadId, status: 'unsubscribed' }}];"
+        "jsCode": "\nconst input = $input.first().json;\nconst q = input.query || {};\nconst list = String(q.list || 'inbound').trim().toLowerCase();\nconst recId = String(q.id || q.lead_id || (input.params && input.params.lead_id) || '').trim();\nif (!recId) throw new Error('Missing id');\nreturn [{ json: {\n  list: list,\n  lead_id: list === 'outbound' ? '' : recId,\n  prospect_id: list === 'outbound' ? recId : '',\n  status: 'unsubscribed',\n} }];\n"
       },
       "id": "parse-unsub",
       "name": "Parse lead_id",
@@ -117,6 +116,93 @@
         900,
         300
       ]
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 2,
+        "output": "={{ $json.list === 'outbound' ? 1 : 0 }}"
+      },
+      "id": "switch-list",
+      "name": "Switch: List",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        620,
+        300
+      ],
+      "notes": "Output 0 inbound (leads sheet), 1 outbound (prospects sheet)."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "schema": [
+            {
+              "id": "prospect_id",
+              "displayName": "prospect_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_touch",
+              "displayName": "last_touch",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "prospect_id": "={{ $json.prospect_id }}",
+            "status": "unsubscribed",
+            "last_touch": "={{ $now.toISO() }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheet-unsub-outbound",
+      "name": "Sheet: Mark Prospect Unsubscribed",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        840,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
     }
   ],
   "connections": {
@@ -135,7 +221,7 @@
       "main": [
         [
           {
-            "node": "Sheet: Mark Unsubscribed",
+            "node": "Switch: List",
             "type": "main",
             "index": 0
           }
@@ -152,12 +238,38 @@
           }
         ]
       ]
+    },
+    "Switch: List": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Unsubscribed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheet: Mark Prospect Unsubscribed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Mark Prospect Unsubscribed": {
+      "main": [
+        [
+          {
+            "node": "Respond HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
-  },
-  "activeVersionId": null,
-  "versionCounter": 1,
-  "activeVersion": null
+  }
 }
