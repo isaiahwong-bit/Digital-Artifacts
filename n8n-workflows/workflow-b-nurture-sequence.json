@@ -1,5 +1,6 @@
 {
   "name": "DA - Nurture Sequence (Daily 9AM AEST)",
+  "description": null,
   "nodes": [
     {
       "parameters": {
@@ -17,14 +18,13 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        250,
-        300
+        256,
+        544
       ],
       "notes": "SETUP: Make sure your n8n instance timezone is set to Australia/Sydney (AEST)"
     },
     {
       "parameters": {
-        "operation": "read",
         "documentId": {
           "__rl": true,
           "mode": "id",
@@ -33,7 +33,9 @@
         "sheetName": {
           "__rl": true,
           "mode": "list",
-          "value": "Sheet1"
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
         },
         "options": {}
       },
@@ -42,22 +44,28 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        470,
-        300
+        480,
+        544
       ],
-      "notes": "SETUP REQUIRED: Select the same 'Digital Artifacts Leads' Google Sheet from Workflow A"
+      "notes": "SETUP REQUIRED: Select the same 'Digital Artifacts Leads' Google Sheet from Workflow A",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "// Filter leads that are due for their next nurture email today\nconst leads = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of leads) {\n  const lead = item.json;\n  \n  // Skip if status is engaged, closed, or unsubscribed\n  if (['engaged', 'closed', 'unsubscribed', 'nurture_complete'].includes(lead.status)) {\n    continue;\n  }\n  \n  // Skip contact form leads — they're handled manually\n  if (lead.source === 'contact_form') {\n    continue;\n  }\n  \n  const stage = parseInt(lead.nurture_stage) || 0;\n  const submittedAt = new Date(lead.submitted_at);\n  const daysSinceSubmission = Math.floor((now - submittedAt) / (1000 * 60 * 60 * 24));\n  \n  // Nurture schedule: stage \u2192 day threshold\n  const schedule = {\n    0: 2,   // Stage 1 email on day 2\n    1: 5,   // Stage 2 email on day 5\n    2: 9,   // Stage 3 email on day 9\n    3: 14,  // Stage 4 email on day 14\n    4: 21,  // Stage 5 email on day 21\n    5: 30   // Stage 6 email on day 30 (cool leads only)\n  };\n  \n  const nextDay = schedule[stage];\n  \n  // No more stages\n  if (nextDay === undefined) continue;\n  \n  // Stage 6 is only for cool leads\n  if (stage === 5 && lead.tier !== 'cool') continue;\n  \n  // Check if today is the day (or past due)\n  if (daysSinceSubmission >= nextDay) {\n    // Check we haven't already sent today\n    const lastSent = lead.last_email_sent ? new Date(lead.last_email_sent) : null;\n    if (lastSent && lastSent.toDateString() === now.toDateString()) {\n      continue; // Already sent today\n    }\n    \n    results.push({\n      json: {\n        ...lead,\n        next_stage: stage + 1,\n        days_since_submission: daysSinceSubmission\n      }\n    });\n  }\n}\n\nif (results.length === 0) {\n  // Return empty to stop the workflow\n  return [];\n}\n\nreturn results;"
+        "jsCode": "const leads = $input.all();\nconst now = new Date();\nconst results = [];\n\nconst CADENCE = {\n  hot:     [2, 4],\n  warm:    [2, 5, 9, 14, 21],\n  cool:    [3, 7, 14, 21, 30],\n  not_fit: []\n};\n\nconst STOP_STATUSES = ['engaged','closed','unsubscribed','nurture_complete','rejected','editing_manual'];\n\nfor (const item of leads) {\n  const lead = item.json;\n  const status = (lead.status || '').toLowerCase();\n  if (STOP_STATUSES.includes(status)) continue;\n\n  const tier = (lead.icp_class || 'warm').toLowerCase();\n  const cadence = CADENCE[tier];\n  if (!cadence || cadence.length === 0) continue;\n\n  const stage = parseInt(lead.nurture_stage) || 0;\n  const nextDay = cadence[stage];\n  if (nextDay === undefined || nextDay === null) continue;\n\n  const submittedAt = new Date(lead.submitted_at || lead.timestamp);\n  if (isNaN(submittedAt.getTime())) continue;\n  const daysSinceSubmission = Math.floor((now - submittedAt) / (1000 * 60 * 60 * 24));\n  if (daysSinceSubmission < nextDay) continue;\n\n  const lastSent = lead.last_email_sent ? new Date(lead.last_email_sent) : null;\n  if (lastSent && !isNaN(lastSent.getTime()) && lastSent.toDateString() === now.toDateString()) continue;\n\n  if (stage === 5 && tier !== 'cool') continue;\n\n  const unsubLink = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe?lead_id=' + encodeURIComponent(lead.lead_id);\n  const firstName = lead.first_name || (lead.name || '').split(' ')[0] || 'there';\n\n  results.push({ json: {\n    ...lead,\n    next_stage: stage + 1,\n    stage_to_send: String(stage),\n    unsub_link: unsubLink,\n    first_name: firstName,\n    days_since_submission: daysSinceSubmission\n  }});\n}\n\nreturn results;"
       },
       "id": "filter-due-leads",
       "name": "Filter Leads Due Today",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        690,
-        300
+        704,
+        544
       ]
     },
     {
@@ -68,12 +76,11 @@
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "0",
                     "operator": {
                       "type": "string",
@@ -82,19 +89,17 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 0
+              }
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "1",
                     "operator": {
                       "type": "string",
@@ -103,19 +108,17 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 1
+              }
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "2",
                     "operator": {
                       "type": "string",
@@ -124,19 +127,17 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 2
+              }
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "3",
                     "operator": {
                       "type": "string",
@@ -145,19 +146,17 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 3
+              }
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "4",
                     "operator": {
                       "type": "string",
@@ -166,19 +165,17 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 4
+              }
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
-                  "leftValue": "",
                   "typeValidation": "strict"
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.nurture_stage }}",
+                    "leftValue": "={{ $json.stage_to_send }}",
                     "rightValue": "5",
                     "operator": {
                       "type": "string",
@@ -187,8 +184,7 @@
                   }
                 ],
                 "combinator": "and"
-              },
-              "outputIndex": 5
+              }
             }
           ]
         },
@@ -199,16 +195,16 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        910,
-        300
+        928,
+        480
       ]
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "Most small biz websites make these 3 mistakes",
+        "subject": "The one question",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nI've been building websites for small businesses for a while now, and I keep seeing the same three things holding sites back:\n\n1. Slow load times. If your site takes more than 3 seconds to load, most visitors leave before they even see what you offer. A quick fix? Compress your images and make sure your hosting isn't dragging you down.\n\n2. Not mobile-friendly. Over 60% of web traffic in Australia comes from phones. If your site doesn't look great on mobile, you're losing more than half your audience.\n\n3. No clear call-to-action. Every page should make it obvious what you want visitors to do next. \"Get a Quote\", \"Book Now\", \"Call Us\". Don't make people guess.\n\nWhich one of these resonates most with your business?\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
+        "message": "={{ $json.first_name }},\n\nIsaiah here from Digital Artifacts. Thanks for reaching out.\n\nQuick way to figure out if an AI operating system is worth your time: what's one task your team does every week that's currently eating the most hours? If it's repeatable (same inputs, same outputs, just done weekly), it's a candidate for the 4-layer stack we build.\n\nReply with the task and I'll tell you honestly whether it's worth automating or whether it's a human-judgement job.\n\nOr book 15 minutes if you'd rather talk: https://calendar.app.google/PLACEHOLDER\n\nIsaiah\nhello@digitalartifacts.com.au\n\nUnsubscribe: {{ $json.unsub_link }}",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -218,16 +214,23 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        60
-      ]
+        1152,
+        64
+      ],
+      "webhookId": "966545d4-770c-426b-b4ce-45ada72cc230",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "How a graphic designer went from no website to fully booked",
+        "subject": "Why AI that works is different",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nWanted to share a quick story.\n\nA graphic designer came to me last year with no online presence. She was relying entirely on word of mouth and Instagram DMs. Great work, but no way for new clients to find her or see her full portfolio.\n\nWe built her a clean, professional site with a portfolio showcase, contact form, and proper SEO. Within a few weeks she was getting enquiries through Google from people she'd never met.\n\nThe site loads fast, looks great on mobile, and she can update her portfolio whenever she wants. She told me it was the best investment she'd made for her business.\n\nIf you're curious what that looks like, here's her site: https://cee-essdesigns.com.au\n\nEvery business is different, but the pattern is the same. A solid website turns \"word of mouth\" into \"found on Google\".\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "message": "={{ $json.first_name }},\n\nQuick follow up. The single reason most AI deployments stall at small businesses: the AI has no memory of who you are.\n\nEvery conversation starts from scratch. It forgets clients, positioning, pricing logic. It hallucinates because it is guessing, not reading.\n\nWhat we build is different. Layer 1 (Context) is your business written down as markdown files. Positioning, clients, pricing, tone, SOPs. The AI reads it at runtime but never writes to it. Correct a fact once, every future output is right. We call this rule \"humans write, AI reads\" and it is what separates a neat demo from something you trust.\n\nWorth a conversation?\nhttps://calendar.app.google/PLACEHOLDER\n\nIsaiah\n\nUnsubscribe: {{ $json.unsub_link }}",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -237,16 +240,23 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        200
-      ]
+        1152,
+        256
+      ],
+      "webhookId": "180ca8e5-f707-4076-90cf-67447c5c01ec",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "The hidden cost of a cheap website",
+        "subject": "The four layers, concretely",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nI get it. DIY website builders like Wix and Squarespace seem like a bargain. $20 a month, drag and drop, done.\n\nBut here's what most people don't realise until later:\n\n- You spend hours fiddling with templates that never quite look right\n- Your site loads slowly because the builder adds bloated code\n- You rank poorly on Google because the SEO options are limited\n- When something breaks, you're on your own\n- After 12 months of the subscription, you've spent more than a custom site would have cost. And you still don't love it.\n\nA custom-built site costs more upfront, but you get something that's fast, looks professional, ranks well, and actually works for your business from day one.\n\nNot saying DIY is always wrong. For some people it works great. But if your website is a key part of how customers find you, it's worth doing properly.\n\nJust something to think about.\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "message": "={{ $json.first_name }},\n\nOne more note on how this actually works day to day.\n\nTake a professional services firm. Their 4-layer stack:\nLayer 1 (Context): client histories, matter files, proposal templates, billing rates.\nLayer 2 (Skills): reusable prompt recipes. proposal-writer, meeting-prep, client-update.\nLayer 3 (Automation): 8:30am Slack brief with today's matters. RFP inbound triggers a proposal scaffold. Meeting transcript auto-drafts into structured notes.\nLayer 4 (Agent): Slack for everything. Dashboard for partners.\n\nSame framework, different deployment for a trades operator, or a sales team, or a logistics business.\n\nIf this pattern fits something on your plate, 15 minutes is enough to scope it: https://calendar.app.google/PLACEHOLDER\n\nIsaiah\n\nUnsubscribe: {{ $json.unsub_link }}",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -256,16 +266,23 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        340
-      ]
+        1152,
+        448
+      ],
+      "webhookId": "280b9b0d-bca0-4d88-a138-e82a7d3a5f8c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "Quick question about your website plans",
+        "subject": "Still thinking about it?",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nJust wanted to check in. Are you still thinking about getting your business online (or upgrading what you've got)?\n\nI've got a few spots opening up this month and would be happy to jump on a quick 15-minute call to see if I can help. No pressure at all. Just a chat to understand what you need and whether it makes sense to work together.\n\nIf you're keen, just reply to this email and we'll find a time.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
+        "message": "={{ $json.first_name }},\n\nNo rush at all, just checking in. Still considering scoping a 4-layer build, or is the timing off right now?\n\nIf it is off, reply anything and I will drop you from follow-ups. If you want a 15-minute call to sketch what this could look like for your business, here: https://calendar.app.google/PLACEHOLDER\n\nIsaiah\n\nUnsubscribe: {{ $json.unsub_link }}",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -275,16 +292,23 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        480
-      ]
+        1152,
+        640
+      ],
+      "webhookId": "d7f27547-0a43-49e5-b1ef-1ff763e3e198",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "Your website roadmap (free)",
+        "subject": "A free 4-layer sketch",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nI wanted to offer you something I usually only do for paying clients.\n\nIf you're thinking about a website (new or redesign), I'll map out exactly what pages and features your site needs, what it would cost, and how long it'd take. For free.\n\nEven if you don't end up going with me, you'll walk away with a clear plan you can take to anyone.\n\nNo strings attached. I just enjoy helping businesses figure out their online presence.\n\nInterested? Just reply and I'll set it up.\n\nCheers,\nIsaiah\nDigital Artifacts\nhttps://digitalartifacts.com.au",
+        "message": "={{ $json.first_name }},\n\nOne offer I do not make publicly: book a 30-minute call and I will map your business's Layer 1 brain (what to put in it), three Layer 2 skills (which tasks to automate first), two Layer 3 workflows (what triggers them), and one Layer 4 surface (where your team talks to it). Free, no obligation.\n\nEven if you do not build it with me, you walk away with a clear architecture you can hand to anyone.\n\nhttps://calendar.app.google/PLACEHOLDER\n\nIsaiah\n\nUnsubscribe: {{ $json.unsub_link }}",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -294,16 +318,23 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        620
-      ]
+        1152,
+        832
+      ],
+      "webhookId": "233eac44-b99f-4a0a-9974-232fff4ed6cc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
         "sendTo": "={{ $json.email }}",
-        "subject": "Still on your radar?",
+        "subject": "Off the list?",
         "emailType": "text",
-        "message": "=Hey {{ $json.name }},\n\nNo rush on this. I just wanted to make sure a website doesn't fall off your list if it's something you're still thinking about.\n\nWhenever you're ready, I'm here. Happy to answer any questions, even if it's just \"where do I start?\"\n\nIn the meantime, feel free to check out some of my recent work: https://digitalartifacts.com.au/#portfolio\n\nCheers,\nIsaiah\nDigital Artifacts",
+        "message": "={{ $json.first_name }},\n\nLast email in this sequence. If AI operating systems are relevant someday but not now, no problem. I will take you off the list so your inbox stays clean.\n\nIf you want to stay in my orbit (I send a short monthly note with new patterns and worked examples), do nothing and I will keep you in. Otherwise click below and you are off:\n\n{{ $json.unsub_link }}\n\nEither way, good luck with whatever you are building.\n\nIsaiah",
         "options": {
           "replyTo": "hello@digitalartifacts.com.au"
         }
@@ -313,21 +344,28 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        760
-      ]
+        1152,
+        1024
+      ],
+      "webhookId": "6ca3051d-36d5-4e37-8e3d-fc65e58557e5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "// Prepare the update data for Google Sheets\nconst lead = $input.first().json;\nconst now = new Date().toISOString();\n\nreturn [{\n  json: {\n    lead_id: lead.lead_id,\n    nurture_stage: lead.next_stage,\n    last_email_sent: now,\n    status: lead.next_stage >= 6 ? 'nurture_complete' : lead.status\n  }\n}];"
+        "jsCode": "const lead = $input.first().json;\nconst now = new Date().toISOString();\nconst maxStage = {hot: 2, warm: 5, cool: 6, not_fit: 0}[(lead.icp_class || 'warm').toLowerCase()] || 5;\n\nreturn [{ json: {\n  lead_id: lead.lead_id,\n  nurture_stage: lead.next_stage,\n  last_email_sent: now,\n  status: lead.next_stage >= maxStage ? 'nurture_complete' : (lead.status || 'new')\n}}];"
       },
       "id": "prepare-update",
       "name": "Prepare Sheet Update",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1450,
-        300
+        1376,
+        544
       ]
     },
     {
@@ -341,14 +379,59 @@
         "sheetName": {
           "__rl": true,
           "mode": "list",
-          "value": "Sheet1"
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
         },
         "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
+          "mappingMode": "defineBelow",
           "matchingColumns": [
             "lead_id"
-          ]
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "nurture_stage",
+              "displayName": "nurture_stage",
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_email_sent",
+              "displayName": "last_email_sent",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "lead_id": "={{ $json.lead_id }}",
+            "nurture_stage": "={{ $json.nurture_stage }}",
+            "last_email_sent": "={{ $json.last_email_sent }}",
+            "status": "={{ $json.status }}"
+          }
         },
         "options": {}
       },
@@ -357,10 +440,16 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        1670,
-        300
+        1600,
+        544
       ],
-      "notes": "SETUP REQUIRED: Select the same Google Sheet. Set 'lead_id' as the matching column for updates."
+      "notes": "SETUP REQUIRED: Select the same Google Sheet. Set 'lead_id' as the matching column for updates.",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
     }
   ],
   "connections": {
@@ -523,6 +612,11 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "timezone": "Australia/Sydney"
-  }
+    "timezone": "Australia/Sydney",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "activeVersion": null
 }

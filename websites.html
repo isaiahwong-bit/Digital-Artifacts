@@ -3,9 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FGKKW3ERQ5');
+  </script>
+
   <title>Websites | The interface your operating system needs | Digital Artifacts</title>
-  <link rel="icon" type="image/jpeg" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
-  <link rel="apple-touch-icon" href="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg">
+  <link rel="icon" type="image/png" href="/brand/da-mark-tile.png">
+  <link rel="apple-touch-icon" href="/brand/da-mark-tile.png">
   <meta name="description" content="Marketing sites, client portals, internal dashboards, job-tracking tools. The front-end surface of the 4-layer AI operating systems we build for small business in Australia.">
 
   <!-- Open Graph -->
@@ -614,7 +625,7 @@
   <nav class="nav-fixed" id="mainNav">
     <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
       <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
-        <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-10 w-10 rounded-lg object-cover">
+        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-10 w-10">
         <span id="navBrandText" class="font-display font-semibold text-cream text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
       </a>
 
@@ -1377,8 +1388,10 @@
           <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
             <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
           </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Thanks! We've got your message.</h3>
-          <p class="text-warm text-sm">We'll be in touch within 24 hours.</p>
+          <h3 class="heading-md text-cream text-xl mb-3">Got it. A draft reply is already on the way.</h3>
+          <p class="text-warm text-sm max-w-md mx-auto" style="line-height: 1.7;">
+            Even a website enquiry runs through the 4-layer stack: Claude classified the ask, drafted a personalised reply, and pinged Isaiah on Telegram. Approval hits your inbox from hello@digitalartifacts.com.au shortly. Outside business hours, a holding note goes out automatically.
+          </p>
         </div>
         <div id="formError" class="hidden text-center py-6">
           <p class="text-red-400 text-sm flex items-center justify-center gap-2">
@@ -1399,7 +1412,7 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
         <!-- Logo + Tagline -->
         <div class="md:col-span-4">
-          <img src="Logo/9762b89e-a2b7-44f7-9c76-88094dd90854.jpg" alt="Digital Artifacts" class="h-12 w-12 rounded-lg object-cover mb-6">
+          <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-12 w-12 mb-6">
           <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
             AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
           </p>
@@ -1596,6 +1609,7 @@
       data.lead_magnet = isLeadMagnet;
       data.submitted_at = new Date().toISOString();
       data.source_page = 'websites';
+      data.source_url = window.location.href;
 
       const promises = [];
 

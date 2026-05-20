@@ -47,6 +47,7 @@ Name: {{ form.name }}
 Email: {{ form.email }}
 Service requested: {{ form.service }}
 Budget: {{ form.budget }}
+Source: {{ form.source }}
 Message:
 {{ form.message }}
 </submission>
@@ -65,11 +66,23 @@ Pick the right scaffold, fill in the blanks, and return strictly this JSON, noth
 {
   "subject": "email subject line, no greeting",
   "body_plain": "full email body, plain text, line-broken at sentence boundaries",
-  "scaffold_used": "A" | "B" | "C" | "D" | "E" | "F",
+  "scaffold_used": "A" | "B" | "C" | "D" | "E" | "F" | "G",
   "confidence": "high" | "medium" | "low",
   "notes_for_isaiah": "one short sentence on anything Isaiah should know before approving"
 }
 ```
+
+# Lead magnet branch (strict)
+
+This rule fires ONLY when `source` is exactly `lead_magnet`. In every other case (contact form enquiries) ignore this section entirely and use the existing A-F behaviour exactly as before, including for `out_of_hours`.
+
+When `source` is `lead_magnet`:
+- Use Scaffold G. Do not use A-F.
+- They downloaded the 4-Layer Blueprint PDF. They did NOT send an enquiry. An empty message field is expected and normal.
+- NEVER write "your message was empty", "not sure what prompted you to reach out", or anything implying they sent an enquiry. That is the failure this branch exists to prevent.
+- Tone: warm, low pressure, value-first. They are self-educating, not buying yet.
+- `out_of_hours` does NOT override to Scaffold D for lead magnet downloads. Scaffold G is gentle enough to send any time. Still use G.
+- Set `scaffold_used: "G"`, `confidence: "high"` (the empty message is not a confidence problem here).
 
 # Hard rules
 

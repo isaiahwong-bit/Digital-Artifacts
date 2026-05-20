@@ -30,6 +30,7 @@ Phone: {{ form.phone }}
 Service requested: {{ form.service }}
 Budget: {{ form.budget }}
 How they heard: {{ form.how-heard }}
+Source: {{ form.source }}
 Message:
 {{ form.message }}
 </submission>
@@ -41,7 +42,7 @@ Classify against the ICP and return strictly this JSON, nothing else:
   "icp_class": "hot" | "warm" | "cool" | "not_fit",
   "priority": 1 | 2 | 3,
   "industry_archetype": "services" | "trades" | "sales" | "other",
-  "scaffold": "A" | "B" | "C" | "D" | "E" | "F",
+  "scaffold": "A" | "B" | "C" | "D" | "E" | "F" | "G",
   "summary": "one short sentence describing the ask",
   "their_topic": "3-6 word topic for email subject lines",
   "signals": ["short", "list", "of", "qualification signals"],
@@ -60,6 +61,7 @@ Classify against the ICP and return strictly this JSON, nothing else:
 
 ## Scaffold selection cheatsheet
 
+- `source` is `lead_magnet` = G (always, overrides everything below; they downloaded the Blueprint, not a cold enquiry)
 - Clear ask + business hours + budget signal + industry fit = A
 - Vague interest + any industry signal = B
 - Solo / wrong industry / hostile-sounding / competitor / tiny budget = C
@@ -70,6 +72,7 @@ Classify against the ICP and return strictly this JSON, nothing else:
 # Hard rules
 
 - Never make up signals that aren't in the message.
-- If the message is too short to classify confidently, set `priority: 2` and `scaffold: B`.
+- **If `source` is `lead_magnet`: this is a Blueprint download, not a cold enquiry.** Set `icp_class: warm`, `priority: 2`, `scaffold: G`. An empty message is EXPECTED here (the lead magnet form only collects name + email), it is not a low-confidence signal. Put `summary: "Downloaded the 4-Layer Blueprint"`, `their_topic: "the 4-Layer Blueprint"`, `signals: ["lead_magnet_download", "self_educating", "opted_in"]`. Never treat the empty message as confusing.
+- If the message is too short to classify confidently AND source is not lead_magnet, set `priority: 2` and `scaffold: B`.
 - If the message looks like spam, set `icp_class: not_fit`.
 - Always return valid JSON. No prose, no markdown fences.
