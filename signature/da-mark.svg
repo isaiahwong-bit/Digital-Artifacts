@@ -1,0 +1,15 @@
+<svg width="276" height="276" viewBox="7 4 92 92" xmlns="http://www.w3.org/2000/svg">
+  <!-- Digital Artifacts mark: a D sliced into four bands. The logo and the
+       4-layer framework in one shape. Green on transparent.
+       viewBox frames the D as a centred square with even padding. -->
+  <defs>
+    <mask id="layers">
+      <rect x="7" y="4" width="92" height="92" fill="#ffffff"/>
+      <rect x="7" y="32" width="92" height="3.6" fill="#000000"/>
+      <rect x="7" y="48" width="92" height="3.6" fill="#000000"/>
+      <rect x="7" y="64" width="92" height="3.6" fill="#000000"/>
+    </mask>
+  </defs>
+  <path d="M24,18 H52 A30,32 0 0 1 52,82 H24 Z M38,34 H50 A16,16 0 0 1 50,66 H38 Z"
+        fill="#00C853" fill-rule="evenodd" mask="url(#layers)"/>
+</svg>
