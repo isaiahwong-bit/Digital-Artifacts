@@ -1,0 +1,712 @@
+{
+  "name": "DA - Outbound Reply Handler (workflow-h)",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": true,
+        "filters": {
+          "q": "to:isaiah@digitalartifacts.com.au -from:isaiah@digitalartifacts.com.au"
+        },
+        "options": {}
+      },
+      "id": "wh-trigger",
+      "name": "Gmail Trigger: Replies to isaiah@",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        420
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      },
+      "notes": "Polls the connected mailbox for replies addressed to the isaiah@ alias."
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Pull the reply down to clean fields. Handles n8n Gmail trigger output shapes.\nreturn $input.all().map(function (it) {\n  const m = it.json;\n  const fromRaw = String(m.from || m.From || m.sender || '');\n  const br = fromRaw.match(/<([^>]+)>/);\n  const from_email = (br ? br[1] : fromRaw).trim().toLowerCase();\n  return { json: {\n    from_email: from_email,\n    reply_subject: String(m.subject || m.Subject || ''),\n    reply_body: String(m.text || m.textPlain || m.textHtml || m.body || m.snippet || '').slice(0, 6000),\n    reply_message_id: m.id || '',\n    reply_thread_id: m.threadId || '',\n  } };\n});\n"
+      },
+      "id": "wh-extract",
+      "name": "Extract Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "email",
+              "lookupValue": "={{ $json.from_email }}"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": false
+        }
+      },
+      "id": "wh-lookup",
+      "name": "Lookup Prospect by Email",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        680,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Gate: only process replies from a prospect we are mid-conversation with.\n// Then fetch Layer 1 brain and build the reply-classifier request.\nconst rows = $input.all();\nif (rows.length === 0) return [];\nconst row = rows[0].json;\nconst reply = $('Extract Reply').first().json;\n\nconst status = String(row.status || '').trim().toLowerCase();\nconst active = ['opener_sent', 'teardown_sent', 'nudged'];\nif (!row.prospect_id || active.indexOf(status) === -1) return [];\nconst stage = status === 'teardown_sent' ? 'after_teardown' : 'after_opener';\n\nconst repo = 'https://raw.githubusercontent.com/isaiahwong-bit/Digital-Artifacts';\nconst refs = ['main', 'feat/sales-ops-automation'];\nconst files = ['outbound-offer', 'company-brief', 'pricing', 'tone-of-voice'];\nconst brain = {};\nfor (const f of files) {\n  let got = null;\n  for (const ref of refs) {\n    try {\n      got = await this.helpers.httpRequest({ method: 'GET', url: repo + '/' + ref + '/brain/' + f + '.md', encoding: 'text', json: false });\n      break;\n    } catch (e) { got = null; }\n  }\n  if (got === null) throw new Error('Brain file unreachable on any branch: ' + f);\n  brain[f] = got;\n}\n\nconst classifierSystem = 'You are the Digital Artifacts reply-classifier (Layer 2 skill). You classify a reply to a Digital Artifacts outbound email. Be conservative: when unsure between proceeding and stopping, stop. Any opt-out always wins over any other reading. Return strictly the JSON schema, nothing else, no prose, no markdown fences.';\nconst classSchema = '{\"intent\":\"interested|question|not_now|not_interested|unsubscribe|auto_reply|unclear\",\"task_description\":\"if they gave a task to tear down, the task in one clean sentence, else empty\",\"wants_second_freebie\":true|false,\"sentiment\":\"warm|neutral|negative\",\"recommended_action\":\"send_teardown|answer_question|route_to_booking|suppress|human_review|ignore\",\"reason\":\"one sentence\"}';\nconst content = '<offer>\\n' + brain['outbound-offer'] + '\\n</offer>\\n\\n'\n  + '<context>\\nStage: ' + stage + '\\nProspect: ' + (row.contact_name || row.business_name || '') + ' at ' + (row.business_name || '') + '\\n</context>\\n\\n'\n  + '<reply>\\n' + (reply.reply_subject || '') + '\\n' + (reply.reply_body || '') + '\\n</reply>\\n\\n'\n  + 'Return strictly this JSON, nothing else:\\n' + classSchema;\nconst classifier_body = { model: 'claude-sonnet-4-6', max_tokens: 500, system: classifierSystem, messages: [{ role: 'user', content: content }] };\n\nreturn [{ json: { ...row, ...reply, stage: stage, brain: brain, classifier_body: classifier_body } }];\n"
+      },
+      "id": "wh-gate",
+      "name": "Gate + Classify Prep",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.classifier_body) }}",
+        "options": {}
+      },
+      "id": "wh-claude-class",
+      "name": "Claude: Reply Classifier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        420
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Parse the classifier verdict, set the route, prebuild the teardown request + Telegram texts.\nconst prev = $('Gate + Classify Prep').first().json;\nconst raw = ($json && $json.content && $json.content[0] && $json.content[0].text) || '';\nlet c;\ntry { const s = raw.indexOf('{'); const e = raw.lastIndexOf('}'); c = JSON.parse(raw.slice(s, e + 1)); }\ncatch (err) {\n  c = { intent: 'unclear', task_description: '', wants_second_freebie: false, sentiment: 'neutral', recommended_action: 'human_review', reason: 'Classifier response could not be parsed.' };\n}\n\nconst ra = c.recommended_action || 'human_review';\nlet route;\nif (ra === 'send_teardown' && c.task_description) route = 'teardown';\nelse if (ra === 'suppress') route = 'suppress';\nelse if (ra === 'ignore') route = 'ignore';\nelse route = 'flag';\n\nconst b = prev.brain || {};\nconst teardownSystem = 'You are writing a free, personalised automation teardown from Isaiah at Digital Artifacts (Layer 2 skill: teardown-writer). It earns trust by being genuinely good and genuinely honest. If the task is not worth automating, say so plainly and stop there with goodwill. HARD RULES: no em dashes ever, plain language, no invented clients or statistics, sign off Isaiah only, max around 350 words in body_plain excluding the footer. One soft next step near the end: invite them to reply to set up 15 minutes to scope it, no booking link, no urgency. End body_plain with the token {{ SENDER_FOOTER }} on its own final line. Return JSON only, no prose, no markdown fences.';\nconst tdSchema = '{\"subject\":\"references their task, not our framework\",\"body_plain\":\"the one-page teardown, plain text, ends with {{ SENDER_FOOTER }} on its own final line\",\"verdict\":\"worth_automating|partially|not_worth_it\",\"honest_caveat\":\"the single most important thing that could make this not work\",\"confidence\":\"high|medium|low\",\"notes_for_isaiah\":\"one sentence on the call you made and why\"}';\nconst tdContent = '<offer>\\n' + (b['outbound-offer'] || '') + '\\n</offer>\\n\\n'\n  + '<company>\\n' + (b['company-brief'] || '') + '\\n</company>\\n\\n'\n  + '<pricing>\\n' + (b['pricing'] || '') + '\\n</pricing>\\n\\n'\n  + '<tone>\\n' + (b['tone-of-voice'] || '') + '\\n</tone>\\n\\n'\n  + '<prospect>\\nBusiness: ' + (prev.business_name || '') + '\\nContact: ' + (prev.contact_name || '') + ' (' + (prev.contact_role || '') + ')\\nArchetype: ' + (prev.archetype || '') + '\\n</prospect>\\n\\n'\n  + '<their_task>\\n' + (c.task_description || prev.reply_body || '') + '\\n</their_task>\\n\\n'\n  + 'Write the teardown. Return strictly this JSON, nothing else:\\n' + tdSchema;\nconst teardown_body = { model: 'claude-sonnet-4-6', max_tokens: 1200, system: teardownSystem, messages: [{ role: 'user', content: tdContent }] };\n\nconst replyShort = String(prev.reply_body || '').slice(0, 1500);\nconst flag_text = ('REPLY NEEDS YOU - ' + (prev.business_name || '') + '\\n\\n'\n  + 'Intent: ' + (c.intent || '') + ' / ' + ra + '\\n'\n  + 'Why: ' + (c.reason || '') + '\\n\\n'\n  + 'From: ' + (prev.email || prev.from_email || '') + '\\n'\n  + 'Subject: ' + (prev.reply_subject || '') + '\\n\\n'\n  + replyShort).slice(0, 3900);\nconst supp_text = ('OPT-OUT - ' + (prev.business_name || '') + ' (' + (prev.email || prev.from_email || '') + ')\\n'\n  + 'Reply read as: ' + (c.intent || '') + '. Added to suppression, will not be contacted again.').slice(0, 3900);\nconst supp_status = c.intent === 'unsubscribe' ? 'unsubscribed' : 'suppressed';\n\nreturn [{ json: { ...prev, classification: c, route: route, teardown_body: teardown_body, flag_text: flag_text, supp_text: supp_text, supp_status: supp_status } }];\n"
+      },
+      "id": "wh-parse-class",
+      "name": "Parse Classification + Teardown Prep",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 4,
+        "output": "={{ $json.route === 'teardown' ? 0 : ($json.route === 'suppress' ? 1 : ($json.route === 'flag' ? 2 : 3)) }}"
+      },
+      "id": "wh-switch",
+      "name": "Switch: Reply Route",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1560,
+        420
+      ],
+      "notes": "Output 0 teardown, 1 suppress, 2 flag to Isaiah, 3 ignore (auto-replies and bounces, unconnected)."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.teardown_body) }}",
+        "options": {}
+      },
+      "id": "wh-claude-td",
+      "name": "Claude: Teardown Writer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        240
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Parse the teardown, inject the compliance footer, build the sheet row + Telegram brief.\nconst prev = $('Parse Classification + Teardown Prep').first().json;\nconst raw = ($json && $json.content && $json.content[0] && $json.content[0].text) || '';\nlet td;\ntry { const s = raw.indexOf('{'); const e = raw.lastIndexOf('}'); td = JSON.parse(raw.slice(s, e + 1)); }\ncatch (err) {\n  td = { subject: '', body_plain: '', verdict: '', honest_caveat: '', confidence: 'low', notes_for_isaiah: 'Teardown response could not be parsed. Do not approve, regenerate this one.' };\n}\n\nconst unsubUrl = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe?id=' + encodeURIComponent(prev.prospect_id || '') + '&list=outbound';\nconst footer = ',\\n,\\nDigital Artifacts, Sydney NSW, Australia. Sent by Isaiah Wong, isaiah@digitalartifacts.com.au\\n'\n  + 'Not interested? Reply with the word unsubscribe, or use this link: ' + unsubUrl + '. You will be removed straight away.';\nlet body = String(td.body_plain || '');\nif (body.indexOf('{{ SENDER_FOOTER }}') !== -1) body = body.split('{{ SENDER_FOOTER }}').join(footer);\nelse if (body.indexOf('{{SENDER_FOOTER}}') !== -1) body = body.split('{{SENDER_FOOTER}}').join(footer);\nelse body = body.replace(/\\s*$/, '') + '\\n' + footer;\nbody = body.replace(/—|–/g, ',');\ntd.body_plain = body;\n\nconst now = new Date().toISOString();\nconst business = prev.business_name || '';\nconst tg_text = ('TEARDOWN READY for approval - ' + business + '\\n\\n'\n  + 'Verdict: ' + (td.verdict || '') + ' (' + (td.confidence || '') + ' confidence)\\n\\n'\n  + 'Subject: ' + (td.subject || '') + '\\n\\n'\n  + String(td.body_plain || '').slice(0, 2600) + '\\n\\n-------\\n'\n  + (td.notes_for_isaiah || 'No notes.')).slice(0, 3900);\n\nreturn [{ json: {\n  prospect_id: prev.prospect_id,\n  business_name: business,\n  email: prev.email || prev.from_email || '',\n  teardown_subject: td.subject || '',\n  teardown_body: td.body_plain || '',\n  reply_task: (prev.classification && prev.classification.task_description) || '',\n  now: now,\n  tg_text: tg_text,\n} }];\n"
+      },
+      "id": "wh-parse-td",
+      "name": "Parse Teardown + Footer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "schema": [
+            {
+              "id": "prospect_id",
+              "displayName": "prospect_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "teardown_subject",
+              "displayName": "teardown_subject",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "teardown_body",
+              "displayName": "teardown_body",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "reply_task",
+              "displayName": "reply_task",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_touch",
+              "displayName": "last_touch",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "prospect_id": "={{ $json.prospect_id }}",
+            "teardown_subject": "={{ $json.teardown_subject }}",
+            "teardown_body": "={{ $json.teardown_body }}",
+            "reply_task": "={{ $json.reply_task }}",
+            "status": "teardown_drafted",
+            "last_touch": "={{ $json.now }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "wh-sheet-td",
+      "name": "Sheet: Save Teardown Draft",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2220,
+        240
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $json.tg_text }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        },
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Approve & Send",
+                    "additionalFields": {
+                      "callback_data": "=td_approve:{{ $json.prospect_id }}"
+                    }
+                  },
+                  {
+                    "text": "❌ Reject",
+                    "additionalFields": {
+                      "callback_data": "=td_reject:{{ $json.prospect_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "wh-tg-td",
+      "name": "Telegram: Teardown Approval",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        2440,
+        240
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "schema": [
+            {
+              "id": "prospect_id",
+              "displayName": "prospect_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_touch",
+              "displayName": "last_touch",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "prospect_id": "={{ $('Parse Classification + Teardown Prep').first().json.prospect_id }}",
+            "status": "={{ $('Parse Classification + Teardown Prep').first().json.supp_status }}",
+            "last_touch": "={{ $now.toISO() }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "wh-sheet-supp",
+      "name": "Sheet: Mark Prospect Suppressed",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1780,
+        460
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $('Parse Classification + Teardown Prep').first().json.supp_text }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "wh-tg-supp",
+      "name": "Telegram: Opt-out FYI",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        460
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "schema": [
+            {
+              "id": "prospect_id",
+              "displayName": "prospect_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_touch",
+              "displayName": "last_touch",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "prospect_id": "={{ $('Parse Classification + Teardown Prep').first().json.prospect_id }}",
+            "status": "replied_review",
+            "last_touch": "={{ $now.toISO() }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "wh-sheet-flag",
+      "name": "Sheet: Mark Reply Flagged",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1780,
+        660
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $('Parse Classification + Teardown Prep').first().json.flag_text }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "wh-tg-flag",
+      "name": "Telegram: Reply Needs You",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        660
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger: Replies to isaiah@": {
+      "main": [
+        [
+          {
+            "node": "Extract Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Reply": {
+      "main": [
+        [
+          {
+            "node": "Lookup Prospect by Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Prospect by Email": {
+      "main": [
+        [
+          {
+            "node": "Gate + Classify Prep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gate + Classify Prep": {
+      "main": [
+        [
+          {
+            "node": "Claude: Reply Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Reply Classifier": {
+      "main": [
+        [
+          {
+            "node": "Parse Classification + Teardown Prep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Classification + Teardown Prep": {
+      "main": [
+        [
+          {
+            "node": "Switch: Reply Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch: Reply Route": {
+      "main": [
+        [
+          {
+            "node": "Claude: Teardown Writer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheet: Mark Prospect Suppressed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheet: Mark Reply Flagged",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Mark Reply Flagged": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Reply Needs You",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Teardown Writer": {
+      "main": [
+        [
+          {
+            "node": "Parse Teardown + Footer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Teardown + Footer": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Save Teardown Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Save Teardown Draft": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Teardown Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet: Mark Prospect Suppressed": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Opt-out FYI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

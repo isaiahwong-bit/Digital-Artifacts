@@ -1,0 +1,603 @@
+{
+  "name": "DA - Outbound Cold Opener (workflow-f)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule: Weekday 9am AEST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        384
+      ],
+      "notes": "Runs weekdays 9am. Set the workflow timezone to Australia/Sydney in workflow settings. You can also run it manually with Execute Workflow."
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "options": {}
+      },
+      "id": "read-prospects",
+      "name": "Read Prospects Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "Replace 126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg with the real DA - Outbound Prospects sheet id. Prospects must be the first tab (gid=0)."
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Daily cap + balance across archetypes. Rows with status blank or 'queued' qualify.\nconst MAX_PER_RUN = 6;\nconst rows = $input.all().map(function (i) { return i.json; });\n\nconst queued = rows.filter(function (r) {\n  const status = String(r.status || '').trim().toLowerCase();\n  const email = String(r.email || '').trim();\n  return (status === '' || status === 'queued') && email.indexOf('@') !== -1;\n});\n\nconst buckets = { services: [], trades: [], sales: [], other: [] };\nfor (const r of queued) {\n  const a = String(r.archetype || 'other').trim().toLowerCase();\n  (buckets[a] || buckets.other).push(r);\n}\n\nconst order = ['services', 'trades', 'sales', 'other'];\nconst interleaved = [];\nlet added = true;\nwhile (added) {\n  added = false;\n  for (const a of order) {\n    if (buckets[a].length) { interleaved.push(buckets[a].shift()); added = true; }\n  }\n}\n\nreturn interleaved.slice(0, MAX_PER_RUN).map(function (r) { return { json: r }; });\n"
+      },
+      "id": "queue-filter",
+      "name": "Queue Filter + Daily Cap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Fetch Layer 1 brain once, build a prospect-qualifier request per prospect.\nconst repo = 'https://raw.githubusercontent.com/isaiahwong-bit/Digital-Artifacts';\nconst refs = ['main', 'feat/sales-ops-automation'];\nconst files = ['icp', 'outbound-icp', 'outbound-offer', 'tone-of-voice', 'company-brief'];\n\nconst brain = {};\nfor (const f of files) {\n  let got = null;\n  for (const ref of refs) {\n    try {\n      got = await this.helpers.httpRequest({\n        method: 'GET',\n        url: repo + '/' + ref + '/brain/' + f + '.md',\n        encoding: 'text',\n        json: false,\n      });\n      break;\n    } catch (e) { got = null; }\n  }\n  if (got === null) throw new Error('Brain file unreachable on any branch: ' + f);\n  brain[f] = got;\n}\n\nconst qualifierSystem = 'You are the Digital Artifacts outbound prospect-qualifier (Layer 2 skill). Decide if this business and contact are a defensible cold-outreach target under Australian Spam Act inferred-consent rules. Be strict: a smaller list of real fits beats a big list of forced ones. Never invent a pain that is not supportable from the prospect notes. Return strictly the JSON schema, nothing else, no prose, no markdown fences.';\n\nconst schemaLine = '{\"fit\":\"strong|plausible|weak|not_fit\",\"archetype\":\"services|trades|sales|other\",\"role_relevant\":true|false,\"address_conspicuous\":true|false,\"likely_pain\":\"one specific repetitive weekly task this role almost certainly deals with, or empty if none can be named honestly\",\"pain_evidenced\":true|false,\"disqualifiers\":[],\"first_name\":\"contact first name only\",\"reason\":\"one sentence on why this grade\",\"recommended_action\":\"draft_opener|manual_review|drop\"}';\n\nconst items = $input.all();\n\nreturn items.map(function (it, idx) {\n  const p = it.json;\n  const content = '<outbound_icp>\\n' + brain['outbound-icp'] + '\\n</outbound_icp>\\n\\n'\n    + '<inbound_icp>\\n' + brain['icp'] + '\\n</inbound_icp>\\n\\n'\n    + '<prospect>\\n'\n    + 'Business name: ' + (p.business_name || '') + '\\n'\n    + 'Industry / description: ' + (p.industry || p.archetype || '') + '\\n'\n    + 'Approx size: ' + (p.size || '') + '\\n'\n    + 'Country / location: ' + (p.location || '') + '\\n'\n    + 'Contact name: ' + (p.contact_name || '') + '\\n'\n    + 'Contact role: ' + (p.contact_role || '') + '\\n'\n    + 'Email: ' + (p.email || '') + '\\n'\n    + 'Where the email was published: ' + (p.email_source || '') + '\\n'\n    + 'Public footprint notes: ' + (p.notes || '') + '\\n'\n    + '</prospect>\\n\\n'\n    + 'Return strictly this JSON, nothing else:\\n' + schemaLine;\n  const qualifier_body = {\n    model: 'claude-sonnet-4-6',\n    max_tokens: 600,\n    system: qualifierSystem,\n    messages: [{ role: 'user', content: content }],\n  };\n  return { json: { ...p, brain: brain, qualifier_body: qualifier_body }, pairedItem: { item: idx } };\n});\n"
+      },
+      "id": "prep-brain",
+      "name": "Prep Brain + Qualifier Bodies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.qualifier_body) }}",
+        "options": {}
+      },
+      "id": "claude-qualify",
+      "name": "Claude: Prospect Qualifier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1072,
+        384
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Parse the qualifier verdict, set the route, build the cold-opener request.\nconst prev = $('Prep Brain + Qualifier Bodies').item.json;\nconst raw = ($json && $json.content && $json.content[0] && $json.content[0].text) || '';\n\nlet q;\ntry {\n  const s = raw.indexOf('{');\n  const e = raw.lastIndexOf('}');\n  q = JSON.parse(raw.slice(s, e + 1));\n} catch (err) {\n  q = {\n    fit: 'not_fit', archetype: prev.archetype || 'other',\n    role_relevant: false, address_conspicuous: false,\n    likely_pain: '', pain_evidenced: false,\n    disqualifiers: ['qualifier_parse_failed'],\n    first_name: String(prev.contact_name || '').split(' ')[0],\n    reason: 'Qualifier response could not be parsed. Dropped for safety.',\n    recommended_action: 'drop',\n  };\n}\n\nconst route = (q.recommended_action === 'draft_opener' || q.recommended_action === 'manual_review')\n  ? q.recommended_action : 'drop';\n\nconst openerSystem = 'You are drafting a cold opening email from Isaiah at Digital Artifacts. This is the salt in a salty-pretzel approach: it offers something genuinely useful nearly free and does NOT pitch. HARD RULES: no em dashes ever, use a comma or period or colon or parenthesis instead. Open with the first name then a comma then go straight in, no greeting line, no introduction of who we are. body_plain is under 90 words excluding the footer. Exactly one call to action: reply with the one task eating the most time. No booking link, no description of the 4 layers, no pricing. Never claim a result, client or statistic that is not in the company brief. Sign off Isaiah only. End body_plain with the token {{ SENDER_FOOTER }} on its own final line. Return JSON only, no prose, no markdown fences.';\n\nconst b = prev.brain || {};\nconst openerSchema = '{\"subject\":\"short, lowercase-feeling, not salesy, references their world not ours\",\"body_plain\":\"the email as plain text, short, ends with {{ SENDER_FOOTER }} on its own final line\",\"names_specific_pain\":true|false,\"word_count\":0,\"confidence\":\"high|medium|low\",\"notes_for_isaiah\":\"one sentence: what pain it leans on and why this prospect\"}';\n\nconst content = '<offer>\\n' + (b['outbound-offer'] || '') + '\\n</offer>\\n\\n'\n  + '<tone>\\n' + (b['tone-of-voice'] || '') + '\\n</tone>\\n\\n'\n  + '<company>\\n' + (b['company-brief'] || '') + '\\n</company>\\n\\n'\n  + '<prospect>\\n'\n  + 'Business: ' + (prev.business_name || '') + '\\n'\n  + 'Contact: ' + (q.first_name || '') + ' (' + (prev.contact_role || '') + ')\\n'\n  + 'Archetype: ' + (q.archetype || '') + '\\n'\n  + 'Likely pain: ' + (q.likely_pain || '') + '\\n'\n  + 'Public footprint notes: ' + (prev.notes || '') + '\\n'\n  + '</prospect>\\n\\n'\n  + 'Write the opener. Return strictly this JSON, nothing else:\\n' + openerSchema;\n\nconst opener_body = {\n  model: 'claude-sonnet-4-6',\n  max_tokens: 700,\n  system: openerSystem,\n  messages: [{ role: 'user', content: content }],\n};\n\nreturn { json: { ...prev, qualification: q, route: route, opener_body: opener_body } };\n"
+      },
+      "id": "parse-qualify",
+      "name": "Parse Qualification + Opener Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 3,
+        "output": "={{ $json.route === 'draft_opener' ? 0 : ($json.route === 'manual_review' ? 1 : 2) }}"
+      },
+      "id": "route-fit",
+      "name": "Route by Fit",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1488,
+        384
+      ],
+      "notes": "Output 0 draft_opener, 1 manual_review, 2 drop."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.opener_body) }}",
+        "options": {}
+      },
+      "id": "claude-opener",
+      "name": "Claude: Cold Opener Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1696,
+        224
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Parse the opener, inject the Spam Act compliance footer, build the sheet row.\nconst prev = $('Parse Qualification + Opener Body').item.json;\nconst raw = ($json && $json.content && $json.content[0] && $json.content[0].text) || '';\n\nlet opener;\ntry {\n  const s = raw.indexOf('{');\n  const e = raw.lastIndexOf('}');\n  opener = JSON.parse(raw.slice(s, e + 1));\n} catch (err) {\n  opener = {\n    subject: '', body_plain: '', names_specific_pain: false,\n    word_count: 0, confidence: 'low',\n    notes_for_isaiah: 'Opener response could not be parsed. Do not approve, regenerate this one.',\n  };\n}\n\nconst q = prev.qualification || {};\n\nconst unsubUrl = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe?id='\n  + encodeURIComponent(prev.prospect_id || '') + '&list=outbound';\nconst roleBit = prev.contact_role\n  ? (prev.contact_role + ' is the publicly listed contact for ' + (prev.business_name || 'your business'))\n  : ('this address is publicly listed for ' + (prev.business_name || 'your business'));\nconst footer = ',\\n,\\nDigital Artifacts, Sydney NSW, Australia. Sent by Isaiah Wong, isaiah@digitalartifacts.com.au\\n'\n  + 'You received this one message because ' + roleBit + ', and it relates to that role. '\n  + 'Not interested? Reply with the word unsubscribe, or use this link: ' + unsubUrl + '. '\n  + 'You will be removed straight away and never contacted again.';\n\nlet body = String(opener.body_plain || '');\nif (body.indexOf('{{ SENDER_FOOTER }}') !== -1) {\n  body = body.split('{{ SENDER_FOOTER }}').join(footer);\n} else if (body.indexOf('{{SENDER_FOOTER}}') !== -1) {\n  body = body.split('{{SENDER_FOOTER}}').join(footer);\n} else {\n  body = body.replace(/\\s*$/, '') + '\\n' + footer;\n}\nbody = body.replace(/—|–/g, ',');\nopener.body_plain = body;\n\nconst nowIso = new Date().toISOString();\n\nconst sheet_row = {\n  prospect_id: prev.prospect_id || '',\n  status: 'awaiting_approval',\n  fit: q.fit || '',\n  role_relevant: q.role_relevant === true ? 'yes' : 'no',\n  likely_pain: q.likely_pain || '',\n  opener_subject: opener.subject || '',\n  opener_body: opener.body_plain || '',\n  opener_confidence: opener.confidence || '',\n  opener_word_count: opener.word_count || '',\n  notes_for_isaiah: opener.notes_for_isaiah || '',\n  qualified_at: nowIso,\n};\n\nreturn { json: {\n  prospect_id: prev.prospect_id || '',\n  business_name: prev.business_name || '',\n  contact_name: prev.contact_name || '',\n  contact_role: prev.contact_role || '',\n  email: prev.email || '',\n  archetype: q.archetype || prev.archetype || '',\n  qualification: q,\n  opener: opener,\n  sheet_row: sheet_row,\n} };\n"
+      },
+      "id": "parse-opener",
+      "name": "Parse Opener + Compliance Footer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Flatten to just the sheet columns for the Google Sheets update node.\nreturn { json: $json.sheet_row };\n"
+      },
+      "id": "shape-awaiting",
+      "name": "Shape Row (Awaiting Approval)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "value": {},
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sheet-awaiting",
+      "name": "Update Sheet: Awaiting Approval",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2320,
+        144
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "Matches on prospect_id, sets status awaiting_approval and writes the qualifier + opener fields."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Build the Telegram approval brief for one drafted cold opener.\nconst d = $json;\nconst q = d.qualification || {};\nconst o = d.opener || {};\nconst fitIcon = q.fit === 'strong' ? '🟢' : (q.fit === 'plausible' ? '🟡' : '⚪');\nconst arche = String(q.archetype || d.archetype || 'other').toUpperCase();\n\nconst text = '📤 COLD OPENER  ' + fitIcon + ' ' + String(q.fit || '').toUpperCase() + ' - ' + arche + '\\n\\n'\n  + (d.business_name || '') + '\\n'\n  + (d.contact_name || 'no name') + ' - ' + (d.contact_role || 'no role') + '\\n'\n  + (d.email || '') + '\\n\\n'\n  + 'LIKELY PAIN\\n' + (q.likely_pain || 'none named') + '\\n\\n'\n  + '-------\\n'\n  + 'DRAFT (' + (o.word_count || '?') + ' words, ' + (o.confidence || '?') + ' confidence)\\n\\n'\n  + 'Subject: ' + (o.subject || '') + '\\n\\n'\n  + (o.body_plain || '') + '\\n\\n'\n  + '-------\\n'\n  + (o.notes_for_isaiah || 'No notes.');\n\nreturn { json: { prospect_id: d.prospect_id, telegram_text: text.slice(0, 3900) } };\n"
+      },
+      "id": "render-tg",
+      "name": "Render Opener Brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $json.telegram_text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Approve & Send",
+                    "additionalFields": {
+                      "callback_data": "=op_approve:{{ $json.prospect_id }}"
+                    }
+                  },
+                  {
+                    "text": "✏️ Edit",
+                    "additionalFields": {
+                      "callback_data": "=op_edit:{{ $json.prospect_id }}"
+                    }
+                  },
+                  {
+                    "text": "❌ Reject",
+                    "additionalFields": {
+                      "callback_data": "=op_reject:{{ $json.prospect_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "tg-opener",
+      "name": "Telegram: Opener + Approve Buttons",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        2320,
+        304
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      },
+      "notes": "Buttons are inert until workflow-c is extended to handle the op_ callback prefix (Phase 2)."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Weak fit: park it in the sheet for a human look, never auto-draft.\nconst d = $json;\nconst q = d.qualification || {};\nreturn { json: {\n  prospect_id: d.prospect_id || '',\n  status: 'manual_review',\n  fit: q.fit || '',\n  role_relevant: q.role_relevant === true ? 'yes' : 'no',\n  likely_pain: q.likely_pain || '',\n  notes_for_isaiah: q.reason || 'Weak fit, needs a human look.',\n  qualified_at: new Date().toISOString(),\n} };\n"
+      },
+      "id": "mark-review",
+      "name": "Mark Manual Review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "value": {},
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sheet-review",
+      "name": "Update Sheet: Manual Review",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1904,
+        464
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "Weak fits: status manual_review, no opener drafted."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Not a fit, or qualifier failed: log the reason and drop.\nconst d = $json;\nconst q = d.qualification || {};\nconst reason = q.reason || (Array.isArray(q.disqualifiers) ? q.disqualifiers.join('; ') : '');\nreturn { json: {\n  prospect_id: d.prospect_id || '',\n  status: 'not_fit',\n  fit: q.fit || 'not_fit',\n  notes_for_isaiah: reason || 'Did not pass the qualifier.',\n  qualified_at: new Date().toISOString(),\n} };\n"
+      },
+      "id": "mark-drop",
+      "name": "Mark Not Fit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "value": {},
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sheet-drop",
+      "name": "Update Sheet: Not Fit",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1904,
+        624
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "not_fit or qualifier failure: status not_fit, dropped."
+    }
+  ],
+  "connections": {
+    "Schedule: Weekday 9am AEST": {
+      "main": [
+        [
+          {
+            "node": "Read Prospects Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Prospects Sheet": {
+      "main": [
+        [
+          {
+            "node": "Queue Filter + Daily Cap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue Filter + Daily Cap": {
+      "main": [
+        [
+          {
+            "node": "Prep Brain + Qualifier Bodies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep Brain + Qualifier Bodies": {
+      "main": [
+        [
+          {
+            "node": "Claude: Prospect Qualifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Prospect Qualifier": {
+      "main": [
+        [
+          {
+            "node": "Parse Qualification + Opener Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Qualification + Opener Body": {
+      "main": [
+        [
+          {
+            "node": "Route by Fit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Fit": {
+      "main": [
+        [
+          {
+            "node": "Claude: Cold Opener Draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Manual Review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Not Fit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Cold Opener Draft": {
+      "main": [
+        [
+          {
+            "node": "Parse Opener + Compliance Footer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Opener + Compliance Footer": {
+      "main": [
+        [
+          {
+            "node": "Shape Row (Awaiting Approval)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Render Opener Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Row (Awaiting Approval)": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet: Awaiting Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render Opener Brief": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Opener + Approve Buttons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Manual Review": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet: Manual Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Not Fit": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet: Not Fit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  }
+}

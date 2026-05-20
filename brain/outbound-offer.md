@@ -25,7 +25,7 @@ When they reply with a task, we send back a one-page sketch of how a 4-layer sys
 
 # The upsell (earned, not cold)
 
-The teardown ends with one soft next step: a 15-minute call to scope the build, booking link only. No urgency, no discount, no follow-up pressure in the same email. Value has been delivered, so the ask is allowed to be light.
+The teardown ends with one soft next step: a 15-minute call to scope the build, set up by replying to the email. No urgency, no discount, no follow-up pressure in the same email. Value has been delivered, so the ask is allowed to be light.
 
 # What stays free vs paid
 

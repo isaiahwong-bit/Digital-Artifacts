@@ -1,0 +1,360 @@
+{
+  "name": "DA - Outbound Follow-up Nudge (workflow-g)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "nudge-schedule",
+      "name": "Schedule: Weekday 9:30am AEST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        384
+      ],
+      "notes": "Runs after workflow-f. Set the workflow timezone to Australia/Sydney."
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "options": {}
+      },
+      "id": "nudge-read",
+      "name": "Read Prospects Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Due for a nudge: opener sent 5+ days ago, no reply yet, never nudged before.\nconst NUDGE_AFTER_DAYS = 5;\nconst MAX = 10;\nconst cutoff = Date.now() - NUDGE_AFTER_DAYS * 86400 * 1000;\nconst rows = $input.all().map(function (i) { return i.json; });\nconst due = rows.filter(function (r) {\n  const status = String(r.status || '').trim().toLowerCase();\n  const nextAction = String(r.next_action || '').trim().toLowerCase();\n  if (status !== 'opener_sent') return false;\n  if (nextAction === 'nudged') return false;\n  const lt = Date.parse(r.last_touch || '');\n  if (isNaN(lt)) return false;\n  return lt < cutoff;\n});\nreturn due.slice(0, MAX).map(function (r) { return { json: r }; });\n"
+      },
+      "id": "nudge-filter",
+      "name": "Filter Due for Nudge",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Fetch Layer 1 brain once, build a nudge-draft request per prospect.\nconst repo = 'https://raw.githubusercontent.com/isaiahwong-bit/Digital-Artifacts';\nconst refs = ['main', 'feat/sales-ops-automation'];\nconst files = ['outbound-offer', 'tone-of-voice', 'company-brief'];\nconst brain = {};\nfor (const f of files) {\n  let got = null;\n  for (const ref of refs) {\n    try {\n      got = await this.helpers.httpRequest({ method: 'GET', url: repo + '/' + ref + '/brain/' + f + '.md', encoding: 'text', json: false });\n      break;\n    } catch (e) { got = null; }\n  }\n  if (got === null) throw new Error('Brain file unreachable on any branch: ' + f);\n  brain[f] = got;\n}\n\nconst nudgeSystem = 'You write a brief follow-up nudge email from Isaiah at Digital Artifacts to a prospect who received a cold opener several days ago and has not replied. HARD RULES: no em dashes ever, use a comma or period instead. One short paragraph, warm and genuinely low pressure, never pushy. Lightly acknowledge you reached out before, do not repeat the original email. Re-state the single ask: reply with the one task eating the most time and you will send back a free one-page teardown. Under 60 words in body_plain excluding the footer. Sign off Isaiah only. End body_plain with the token {{ SENDER_FOOTER }} on its own final line. Return JSON only, no prose, no markdown fences.';\nconst schema = '{\"subject\":\"short, can follow on from the original\",\"body_plain\":\"the nudge as plain text, ends with {{ SENDER_FOOTER }} on its own final line\",\"confidence\":\"high|medium|low\",\"notes_for_isaiah\":\"one sentence\"}';\n\nconst items = $input.all();\nreturn items.map(function (it, idx) {\n  const p = it.json;\n  const firstName = String(p.contact_name || '').split(' ')[0] || 'there';\n  const content = '<offer>\\n' + brain['outbound-offer'] + '\\n</offer>\\n\\n'\n    + '<tone>\\n' + brain['tone-of-voice'] + '\\n</tone>\\n\\n'\n    + '<company>\\n' + brain['company-brief'] + '\\n</company>\\n\\n'\n    + '<prospect>\\nBusiness: ' + (p.business_name || '') + '\\nContact first name: ' + firstName + '\\nLikely pain: ' + (p.likely_pain || '') + '\\n</prospect>\\n\\n'\n    + '<original_opener>\\n' + (p.opener_body || '') + '\\n</original_opener>\\n\\n'\n    + 'Write the follow-up nudge. Return strictly this JSON, nothing else:\\n' + schema;\n  const nudge_request = { model: 'claude-sonnet-4-6', max_tokens: 500, system: nudgeSystem, messages: [{ role: 'user', content: content }] };\n  return { json: { ...p, nudge_request: nudge_request }, pairedItem: { item: idx } };\n});\n"
+      },
+      "id": "nudge-prep",
+      "name": "Prep Brain + Nudge Bodies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.nudge_request) }}",
+        "options": {}
+      },
+      "id": "nudge-claude",
+      "name": "Claude: Draft Nudge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1072,
+        384
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\n// Parse the nudge, inject the compliance footer, build the sheet row + Telegram brief.\nconst prev = $('Prep Brain + Nudge Bodies').item.json;\nconst raw = ($json && $json.content && $json.content[0] && $json.content[0].text) || '';\nlet n;\ntry { const s = raw.indexOf('{'); const e = raw.lastIndexOf('}'); n = JSON.parse(raw.slice(s, e + 1)); }\ncatch (err) { n = { subject: '', body_plain: '', confidence: 'low', notes_for_isaiah: 'Nudge response could not be parsed. Do not approve, regenerate this one.' }; }\n\nconst unsubUrl = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe?id=' + encodeURIComponent(prev.prospect_id || '') + '&list=outbound';\nconst footer = ',\\n,\\nDigital Artifacts, Sydney NSW, Australia. Sent by Isaiah Wong, isaiah@digitalartifacts.com.au\\n'\n  + 'Not interested? Reply with the word unsubscribe, or use this link: ' + unsubUrl + '. You will be removed straight away.';\nlet body = String(n.body_plain || '');\nif (body.indexOf('{{ SENDER_FOOTER }}') !== -1) body = body.split('{{ SENDER_FOOTER }}').join(footer);\nelse if (body.indexOf('{{SENDER_FOOTER}}') !== -1) body = body.split('{{SENDER_FOOTER}}').join(footer);\nelse body = body.replace(/\\s*$/, '') + '\\n' + footer;\nbody = body.replace(/—|–/g, ',');\n\nconst subject = n.subject || ('Following up - ' + (prev.business_name || ''));\nconst now = new Date().toISOString();\nconst tg_text = ('FOLLOW-UP NUDGE for approval - ' + (prev.business_name || '') + '\\n\\n'\n  + 'To: ' + (prev.contact_name || 'no name') + ' (' + (prev.email || '') + ')\\n\\n'\n  + 'Subject: ' + subject + '\\n\\n'\n  + body + '\\n\\n-------\\n'\n  + (n.notes_for_isaiah || 'No notes.')).slice(0, 3900);\n\nreturn { json: {\n  prospect_id: prev.prospect_id || '',\n  business_name: prev.business_name || '',\n  contact_name: prev.contact_name || '',\n  email: prev.email || '',\n  nudge_subject: subject,\n  nudge_body: body,\n  now: now,\n  tg_text: tg_text,\n} };\n"
+      },
+      "id": "nudge-parse",
+      "name": "Parse Nudge + Compliance Footer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=1570910709",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "prospect_id"
+          ],
+          "schema": [
+            {
+              "id": "prospect_id",
+              "displayName": "prospect_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "opener_subject",
+              "displayName": "opener_subject",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "opener_body",
+              "displayName": "opener_body",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "next_action",
+              "displayName": "next_action",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "last_touch",
+              "displayName": "last_touch",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
+          "value": {
+            "prospect_id": "={{ $json.prospect_id }}",
+            "opener_subject": "={{ $json.nudge_subject }}",
+            "opener_body": "={{ $json.nudge_body }}",
+            "status": "awaiting_approval",
+            "next_action": "nudged",
+            "last_touch": "={{ $json.now }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "nudge-sheet",
+      "name": "Sheet: Save Nudge as Pending Opener",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1500,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true,
+      "notes": "Overwrites opener_subject/opener_body with the nudge so the existing op_ approval path sends it. next_action=nudged prevents a second nudge."
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $json.tg_text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": [
+                {
+                  "text": "✅ Approve & Send",
+                  "additionalFields": {
+                    "callback_data": "=op_approve:{{ $json.prospect_id }}"
+                  }
+                },
+                {
+                  "text": "❌ Reject",
+                  "additionalFields": {
+                    "callback_data": "=op_reject:{{ $json.prospect_id }}"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "nudge-tg",
+      "name": "Telegram: Nudge Approval",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [
+        1500,
+        460
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Weekday 9:30am AEST": {
+      "main": [
+        [
+          {
+            "node": "Read Prospects Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Prospects Sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter Due for Nudge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Due for Nudge": {
+      "main": [
+        [
+          {
+            "node": "Prep Brain + Nudge Bodies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep Brain + Nudge Bodies": {
+      "main": [
+        [
+          {
+            "node": "Claude: Draft Nudge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Draft Nudge": {
+      "main": [
+        [
+          {
+            "node": "Parse Nudge + Compliance Footer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Nudge + Compliance Footer": {
+      "main": [
+        [
+          {
+            "node": "Sheet: Save Nudge as Pending Opener",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram: Nudge Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  }
+}

@@ -63,7 +63,7 @@ Write the teardown. Return strictly this JSON, nothing else:
 3. If it is worth it: walk the task through the layers in plain language. Which layer holds what, what triggers it, where they would see the output. Name the specific tools they likely already use where you can infer them.
 4. A rough order-of-magnitude on effort and on what it saves them per week. Ranges, not false precision. Anchor cost to `pricing.md` only loosely, this is not a quote.
 5. The one honest caveat: the thing that could make this not work for their specific situation.
-6. One soft next step: 15 minutes to scope it properly, booking link placeholder `{{ BOOKING_LINK }}` only. No urgency, no discount.
+6. One soft next step: invite them to reply to set up 15 minutes to scope it properly. No booking link, no urgency, no discount.
 7. End with `{{ SENDER_FOOTER }}` on its own line for the compliance footer.
 
 # Hard rules
@@ -72,7 +72,7 @@ Write the teardown. Return strictly this JSON, nothing else:
 - Honesty over polish. A `not_worth_it` verdict delivered well builds more trust than a forced `worth_automating`. The brand depends on this.
 - No invented clients, results, or statistics. Nothing that is not supportable from the brain.
 - Plain language. They do not have to learn the framework to read this. The layers are how we think, not a glossary they must digest.
-- One booking link, once, near the end. The teardown is the value, not a wrapper around a CTA.
+- One soft next step, once, near the end: a reply to set up a call. The teardown is the value, not a wrapper around a CTA.
 - Sign off `Isaiah` only.
 - Max around 350 words in `body_plain` excluding footer. A page, not an essay.
 - Always return valid JSON. No prose, no markdown fences.

@@ -23,7 +23,7 @@ Inferred consent under the Spam Act only holds if the message is relevant to tha
 - Trades: owner-operator, office manager
 - Sales: head of sales, founder, RevOps lead
 
-Generic `info@`, `admin@`, `accounts@`, `reception@` are weak. Only use them if no role address is published AND the business is otherwise a strong fit. A named role address always beats a catch-all.
+A named role address is always preferred and grades higher. But at a genuinely small, owner-run business (a few staff, no corporate gatekeeper) a published catch-all like `info@` or `admin@` is in practice the owner's own inbox, so it is fair to contact. Treat a published catch-all at a small business as usable. Only treat a catch-all as weak when the business is large enough to have a reception or procurement layer between that inbox and the decision-maker.
 
 # The address must be conspicuously published
 
@@ -43,8 +43,8 @@ Only email an address that the business has published themselves on their own we
 # Fit grading (qualifier returns this)
 
 - **strong**: clear archetype match, named role contact, conspicuous address, an obvious repetitive-ops pain you can name from their public footprint
-- **plausible**: archetype match, role contact, but the specific pain is inferred not evidenced
-- **weak**: archetype match but only a catch-all address, or the pain is generic
+- **plausible**: archetype match with a usable conspicuous address (a role address, or a catch-all at a genuinely small owner-run business), but the specific pain is inferred not evidenced
+- **weak**: a catch-all address at a business large enough to have a reception or procurement gatekeeper, or the pain is too generic to name honestly
 - **not_fit**: any disqualifier above
 
 Only `strong` and `plausible` proceed to a drafted opener. `weak` is logged for manual review, never auto-drafted. `not_fit` is logged and dropped.
