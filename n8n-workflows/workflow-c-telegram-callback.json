@@ -1,23 +1,27 @@
 {
   "name": "DA - Telegram Callback (Approve / Edit / Reject)",
-  "meta": {
-    "description": "Handles inline-keyboard callbacks from workflow-a's approval message. approve → send Gmail; reject → log + acknowledge; edit → send Isaiah the draft as text to copy. Sheet row for the lead is updated in all three cases."
-  },
+  "description": null,
   "nodes": [
     {
       "parameters": {
-        "updates": ["callback_query"],
+        "updates": [
+          "callback_query"
+        ],
         "additionalFields": {}
       },
       "id": "tg-trigger",
       "name": "Telegram Trigger - Callback",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.1,
-      "position": [240, 320],
+      "position": [
+        240,
+        320
+      ],
+      "webhookId": "bd6775da-3a63-4e8c-8c6e-b5960b9f335a",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
@@ -29,47 +33,133 @@
       "name": "Parse Callback",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 320]
+      "position": [
+        464,
+        320
+      ]
     },
     {
       "parameters": {
-        "operation": "lookup",
+        "operation": "read",
         "documentId": {
           "__rl": true,
           "mode": "id",
           "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
-        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
         "filtersUI": {
           "values": [
-            { "lookupColumn": "lead_id", "lookupValue": "={{ $json.lead_id }}" }
+            {
+              "lookupColumn": "lead_id",
+              "lookupValue": "={{ $json.lead_id }}"
+            }
           ]
         },
-        "options": {}
+        "options": {
+          "returnAllMatches": false
+        }
       },
       "id": "sheet-lookup",
       "name": "Sheet: Lookup Lead Row",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [680, 320]
+      "position": [
+        688,
+        320
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "// Merge callback metadata back onto the sheet row so downstream nodes have everything.\nconst cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nreturn [{ json: { ...row, ...cb } }];"
+        "jsCode": "const cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nconst merged = { ...row, ...cb };\n\nconst SIGNATURE_HTML = '<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;margin-top:10px;\">'\n  + '<tr>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 26px 0 0;\"><img src=\"https://digitalartifacts.com.au/brand/da-mark-tile.png\" alt=\"Digital Artifacts\" width=\"84\" height=\"84\" style=\"display:block;width:84px;height:84px;border:0;\"></td>'\n  + '<td style=\"width:1px;padding:0;background:#E8E6E1;font-size:0;line-height:0;\">&nbsp;</td>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 0 0 26px;\">'\n  + '<div style=\"font-size:19px;font-weight:700;color:#1B2838;letter-spacing:-0.015em;line-height:1.1;\">Isaiah Wong</div>'\n  + '<div style=\"font-size:10.5px;color:#8A8A80;margin-top:8px;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;\">Founder &nbsp;&middot;&nbsp; Digital Artifacts</div>'\n  + '<div style=\"font-size:13px;color:#1B2838;margin-top:16px;line-height:1.5;\">AI operating systems that buy back your week.</div>'\n  + '<div style=\"font-size:12px;margin-top:16px;line-height:1.9;\"><a href=\"mailto:isaiah@digitalartifacts.com.au\" style=\"color:#1B2838;text-decoration:none;font-weight:500;\">isaiah@digitalartifacts.com.au</a><br><a href=\"https://digitalartifacts.com.au\" style=\"color:#00C853;text-decoration:none;font-weight:700;\">digitalartifacts.com.au</a></div>'\n  + '</td></tr></table>';\n\nfunction bodyToHtml(text) {\n  const esc = (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n  const linked = esc.replace(/(https?:\\/\\/[^\\s<]+)/g, '<a href=\"$1\" style=\"color:#00C853;\">$1</a>');\n  const body = linked.replace(/\\n/g, '<br>');\n  return '<div style=\"font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#1B2838;\">' + body + '</div>' + '<br><br>' + SIGNATURE_HTML;\n}\n\nmerged.draft_body_html = bodyToHtml(merged.draft_body || '');\n\nreturn [{ json: merged }];"
       },
       "id": "merge-lookup",
       "name": "Merge Row + Callback",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [900, 320]
+      "position": [
+        912,
+        320
+      ]
     },
     {
       "parameters": {
         "rules": {
           "values": [
-            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "approve", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "approve" },
-            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "reject", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "reject" },
-            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "conditions": [{ "leftValue": "={{ $json.action }}", "rightValue": "edit", "operator": { "type": "string", "operation": "equals" } }], "combinator": "and" }, "renameOutput": true, "outputKey": "edit" }
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "approve"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reject"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "edit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "edit"
+            }
           ]
         },
         "options": {}
@@ -78,21 +168,36 @@
       "name": "Switch: Action",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [1120, 320]
+      "position": [
+        1120,
+        320
+      ]
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.email }}",
-        "subject": "={{ $json.draft_subject }}",
-        "emailType": "text",
-        "message": "={{ $json.draft_body }}",
-        "options": { "replyTo": "hello@digitalartifacts.com.au" }
+        "sendTo": "={{ $('Merge Row + Callback').item.json.email }}",
+        "subject": "={{ $('Merge Row + Callback').item.json.draft_subject }}",
+        "emailType": "html",
+        "message": "={{ $('Merge Row + Callback').item.json.draft_body_html }}",
+        "options": {
+          "replyTo": "hello@digitalartifacts.com.au"
+        }
       },
       "id": "gmail-approve",
       "name": "Gmail: Send Approved Draft",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [1360, 180]
+      "position": [
+        1360,
+        192
+      ],
+      "webhookId": "16796c4a-1efe-4913-8fb7-8d906c2ffe33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bMWObGun24xoeJyN",
+          "name": "Gmail account"
+        }
+      }
     },
     {
       "parameters": {
@@ -102,12 +207,40 @@
           "mode": "id",
           "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
-        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
         "columns": {
           "mappingMode": "defineBelow",
-          "matchingColumns": ["lead_id"],
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
           "value": {
-            "lead_id": "={{ $json.lead_id }}",
+            "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
             "status": "sent_approved"
           }
         },
@@ -117,46 +250,65 @@
       "name": "Sheet: Mark Approved",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [1580, 180]
+      "position": [
+        1584,
+        192
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
     },
     {
       "parameters": {
         "resource": "callback",
-        "operation": "answerQuery",
         "queryId": "={{ $json.callback_id }}",
-        "results": "Sent.",
-        "additionalFields": {}
+        "additionalFields": {},
+        "operation": "answerQuery"
       },
       "id": "ack-approve",
       "name": "TG: Ack Approve",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1800, 180],
+      "position": [
+        1808,
+        192
+      ],
+      "webhookId": "deeb21cc-2df3-4b08-8b96-a129ab573e3e",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
     {
       "parameters": {
-        "resource": "message",
         "operation": "editMessageText",
-        "chatId": "={{ $json.chat_id }}",
-        "messageId": "={{ $json.message_id }}",
-        "text": "=✅ SENT to {{ $json.email }}\\n\\n{{ $json.draft_subject }}\\n\\n{{ $json.draft_body }}",
-        "additionalFields": { "disable_web_page_preview": true }
+        "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+        "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
+        "text": "=\u2705 SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        },
+        "resource": "message"
       },
       "id": "edit-msg-approve",
       "name": "TG: Update Message (Sent)",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [2020, 180],
+      "position": [
+        2032,
+        192
+      ],
+      "webhookId": "1c41a56f-a542-4e07-930d-183550dc81a5",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
@@ -168,12 +320,40 @@
           "mode": "id",
           "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
-        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
         "columns": {
           "mappingMode": "defineBelow",
-          "matchingColumns": ["lead_id"],
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
           "value": {
-            "lead_id": "={{ $json.lead_id }}",
+            "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
             "status": "rejected"
           }
         },
@@ -183,86 +363,116 @@
       "name": "Sheet: Mark Rejected",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [1360, 320]
+      "position": [
+        1360,
+        320
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
     },
     {
       "parameters": {
         "resource": "callback",
-        "operation": "answerQuery",
         "queryId": "={{ $json.callback_id }}",
-        "results": "Rejected, no reply sent.",
-        "additionalFields": {}
+        "additionalFields": {},
+        "operation": "answerQuery"
       },
       "id": "ack-reject",
       "name": "TG: Ack Reject",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1580, 320],
+      "position": [
+        1584,
+        320
+      ],
+      "webhookId": "1465606c-6724-4046-b68a-fd157199f792",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
     {
       "parameters": {
-        "resource": "message",
         "operation": "editMessageText",
-        "chatId": "={{ $json.chat_id }}",
-        "messageId": "={{ $json.message_id }}",
-        "text": "=❌ REJECTED · {{ $json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
-        "additionalFields": { "disable_web_page_preview": true }
+        "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+        "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
+        "text": "=\u274c REJECTED \u00b7 {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        },
+        "resource": "message"
       },
       "id": "edit-msg-reject",
       "name": "TG: Update Message (Rejected)",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1800, 320],
+      "position": [
+        1808,
+        320
+      ],
+      "webhookId": "4d804c52-494b-4dbd-8130-d25b29d68836",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
     {
       "parameters": {
         "resource": "callback",
-        "operation": "answerQuery",
         "queryId": "={{ $json.callback_id }}",
-        "results": "Draft saved in sheet. Edit + send manually.",
-        "additionalFields": { "show_alert": true }
+        "additionalFields": {
+          "show_alert": true
+        },
+        "operation": "answerQuery"
       },
       "id": "ack-edit",
       "name": "TG: Ack Edit",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1360, 460],
+      "position": [
+        1360,
+        464
+      ],
+      "webhookId": "dbde8cfe-14bf-4bc4-a80f-6a3726d076ea",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
     {
       "parameters": {
+        "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+        "text": "=\u270f\ufe0f EDIT MODE \u00b7 {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        },
         "resource": "message",
-        "operation": "sendMessage",
-        "chatId": "={{ $json.chat_id }}",
-        "text": "=✏️ EDIT MODE · {{ $json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $json.draft_subject }}",
-        "additionalFields": { "disable_web_page_preview": true }
+        "operation": "sendMessage"
       },
       "id": "tg-edit-guide",
       "name": "TG: Edit Guidance",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [1580, 460],
+      "position": [
+        1584,
+        464
+      ],
+      "webhookId": "a043198d-fc47-4d49-9810-536cac2c85af",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_telegram_credential_id",
-          "name": "telegramApi.daAdminbot"
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
         }
       }
     },
@@ -274,12 +484,40 @@
           "mode": "id",
           "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
         },
-        "sheetName": { "__rl": true, "mode": "list", "value": "Sheet1" },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
         "columns": {
           "mappingMode": "defineBelow",
-          "matchingColumns": ["lead_id"],
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "required": false,
+              "defaultMatch": false,
+              "display": true
+            }
+          ],
           "value": {
-            "lead_id": "={{ $json.lead_id }}",
+            "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
             "status": "editing_manual"
           }
         },
@@ -289,52 +527,888 @@
       "name": "Sheet: Mark Editing",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [1800, 460]
+      "position": [
+        1808,
+        464
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "alwaysOutputData": true
     }
   ],
   "connections": {
     "Telegram Trigger - Callback": {
-      "main": [[{ "node": "Parse Callback", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse Callback": {
-      "main": [[{ "node": "Sheet: Lookup Lead Row", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Sheet: Lookup Lead Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Sheet: Lookup Lead Row": {
-      "main": [[{ "node": "Merge Row + Callback", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Merge Row + Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Merge Row + Callback": {
-      "main": [[{ "node": "Switch: Action", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Switch: Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Switch: Action": {
       "main": [
-        [{ "node": "Gmail: Send Approved Draft", "type": "main", "index": 0 }],
-        [{ "node": "Sheet: Mark Rejected", "type": "main", "index": 0 }],
-        [{ "node": "TG: Ack Edit", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "TG: Ack Approve",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "TG: Ack Reject",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "TG: Ack Edit",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Gmail: Send Approved Draft": {
-      "main": [[{ "node": "Sheet: Mark Approved", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Sheet: Mark Approved": {
-      "main": [[{ "node": "TG: Ack Approve", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "TG: Update Message (Sent)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "TG: Ack Approve": {
-      "main": [[{ "node": "TG: Update Message (Sent)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Approved Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Sheet: Mark Rejected": {
-      "main": [[{ "node": "TG: Ack Reject", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "TG: Update Message (Rejected)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "TG: Ack Reject": {
-      "main": [[{ "node": "TG: Update Message (Rejected)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "TG: Ack Edit": {
-      "main": [[{ "node": "TG: Edit Guidance", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "TG: Edit Guidance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "TG: Edit Guidance": {
-      "main": [[{ "node": "Sheet: Mark Editing", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Sheet: Mark Editing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "binaryMode": "separate"
+  },
+  "activeVersionId": "204b478a-6112-4d84-99e3-b2b50b2340ff",
+  "versionCounter": 41,
+  "activeVersion": {
+    "updatedAt": "2026-05-20T02:36:41.227Z",
+    "createdAt": "2026-05-20T02:36:41.227Z",
+    "versionId": "204b478a-6112-4d84-99e3-b2b50b2340ff",
+    "workflowId": "iuBvWGC11ZQed8eZ",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "callback_query"
+          ],
+          "additionalFields": {}
+        },
+        "id": "tg-trigger",
+        "name": "Telegram Trigger - Callback",
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          240,
+          320
+        ],
+        "webhookId": "bd6775da-3a63-4e8c-8c6e-b5960b9f335a",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const cb = $input.first().json.callback_query || $input.first().json;\nconst data = cb.data || '';\nconst [action, leadId] = data.split(':');\nconst chatId = cb.message?.chat?.id;\nconst messageId = cb.message?.message_id;\nconst callbackId = cb.id;\n\nif (!['approve', 'edit', 'reject'].includes(action)) {\n  throw new Error('Unknown callback action: ' + action);\n}\n\nreturn [{ json: { action, lead_id: leadId, chat_id: chatId, message_id: messageId, callback_id: callbackId }}];"
+        },
+        "id": "parse-callback",
+        "name": "Parse Callback",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "read",
+          "documentId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+          },
+          "sheetName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gid=0",
+            "cachedResultUrl": "",
+            "cachedResultName": ""
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "lead_id",
+                "lookupValue": "={{ $json.lead_id }}"
+              }
+            ]
+          },
+          "options": {
+            "returnAllMatches": false
+          }
+        },
+        "id": "sheet-lookup",
+        "name": "Sheet: Lookup Lead Row",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          688,
+          320
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "xyvnpCe0Is7f0c73",
+            "name": "Google Sheets account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nconst merged = { ...row, ...cb };\n\nconst SIGNATURE_HTML = '<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;margin-top:10px;\">'\n  + '<tr>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 26px 0 0;\"><img src=\"https://digitalartifacts.com.au/brand/da-mark-tile.png\" alt=\"Digital Artifacts\" width=\"84\" height=\"84\" style=\"display:block;width:84px;height:84px;border:0;\"></td>'\n  + '<td style=\"width:1px;padding:0;background:#E8E6E1;font-size:0;line-height:0;\">&nbsp;</td>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 0 0 26px;\">'\n  + '<div style=\"font-size:19px;font-weight:700;color:#1B2838;letter-spacing:-0.015em;line-height:1.1;\">Isaiah Wong</div>'\n  + '<div style=\"font-size:10.5px;color:#8A8A80;margin-top:8px;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;\">Founder &nbsp;&middot;&nbsp; Digital Artifacts</div>'\n  + '<div style=\"font-size:13px;color:#1B2838;margin-top:16px;line-height:1.5;\">AI operating systems that buy back your week.</div>'\n  + '<div style=\"font-size:12px;margin-top:16px;line-height:1.9;\"><a href=\"mailto:isaiah@digitalartifacts.com.au\" style=\"color:#1B2838;text-decoration:none;font-weight:500;\">isaiah@digitalartifacts.com.au</a><br><a href=\"https://digitalartifacts.com.au\" style=\"color:#00C853;text-decoration:none;font-weight:700;\">digitalartifacts.com.au</a></div>'\n  + '</td></tr></table>';\n\nfunction bodyToHtml(text) {\n  const esc = (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n  const linked = esc.replace(/(https?:\\/\\/[^\\s<]+)/g, '<a href=\"$1\" style=\"color:#00C853;\">$1</a>');\n  const body = linked.replace(/\\n/g, '<br>');\n  return '<div style=\"font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#1B2838;\">' + body + '</div>' + '<br><br>' + SIGNATURE_HTML;\n}\n\nmerged.draft_body_html = bodyToHtml(merged.draft_body || '');\n\nreturn [{ json: merged }];"
+        },
+        "id": "merge-lookup",
+        "name": "Merge Row + Callback",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          912,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "approve",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "approve"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "reject",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "reject"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "edit",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "edit"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "switch-action",
+        "name": "Switch: Action",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          1120,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ $('Merge Row + Callback').item.json.email }}",
+          "subject": "={{ $('Merge Row + Callback').item.json.draft_subject }}",
+          "emailType": "html",
+          "message": "={{ $('Merge Row + Callback').item.json.draft_body_html }}",
+          "options": {
+            "replyTo": "hello@digitalartifacts.com.au"
+          }
+        },
+        "id": "gmail-approve",
+        "name": "Gmail: Send Approved Draft",
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.1,
+        "position": [
+          1360,
+          192
+        ],
+        "webhookId": "16796c4a-1efe-4913-8fb7-8d906c2ffe33",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "bMWObGun24xoeJyN",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+          },
+          "sheetName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gid=0",
+            "cachedResultUrl": "",
+            "cachedResultName": ""
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "matchingColumns": [
+              "lead_id"
+            ],
+            "schema": [
+              {
+                "id": "lead_id",
+                "displayName": "lead_id",
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              }
+            ],
+            "value": {
+              "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
+              "status": "sent_approved"
+            }
+          },
+          "options": {}
+        },
+        "id": "sheet-approve",
+        "name": "Sheet: Mark Approved",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1584,
+          192
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "xyvnpCe0Is7f0c73",
+            "name": "Google Sheets account 3"
+          }
+        },
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "resource": "callback",
+          "queryId": "={{ $json.callback_id }}",
+          "additionalFields": {},
+          "operation": "answerQuery"
+        },
+        "id": "ack-approve",
+        "name": "TG: Ack Approve",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1808,
+          192
+        ],
+        "webhookId": "deeb21cc-2df3-4b08-8b96-a129ab573e3e",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "editMessageText",
+          "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+          "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
+          "text": "=\u2705 SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
+          "additionalFields": {
+            "disable_web_page_preview": true
+          },
+          "resource": "message"
+        },
+        "id": "edit-msg-approve",
+        "name": "TG: Update Message (Sent)",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          2032,
+          192
+        ],
+        "webhookId": "1c41a56f-a542-4e07-930d-183550dc81a5",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+          },
+          "sheetName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gid=0",
+            "cachedResultUrl": "",
+            "cachedResultName": ""
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "matchingColumns": [
+              "lead_id"
+            ],
+            "schema": [
+              {
+                "id": "lead_id",
+                "displayName": "lead_id",
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              }
+            ],
+            "value": {
+              "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
+              "status": "rejected"
+            }
+          },
+          "options": {}
+        },
+        "id": "sheet-reject",
+        "name": "Sheet: Mark Rejected",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1360,
+          320
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "xyvnpCe0Is7f0c73",
+            "name": "Google Sheets account 3"
+          }
+        },
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "resource": "callback",
+          "queryId": "={{ $json.callback_id }}",
+          "additionalFields": {},
+          "operation": "answerQuery"
+        },
+        "id": "ack-reject",
+        "name": "TG: Ack Reject",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1584,
+          320
+        ],
+        "webhookId": "1465606c-6724-4046-b68a-fd157199f792",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "editMessageText",
+          "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+          "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
+          "text": "=\u274c REJECTED \u00b7 {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
+          "additionalFields": {
+            "disable_web_page_preview": true
+          },
+          "resource": "message"
+        },
+        "id": "edit-msg-reject",
+        "name": "TG: Update Message (Rejected)",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1808,
+          320
+        ],
+        "webhookId": "4d804c52-494b-4dbd-8130-d25b29d68836",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "callback",
+          "queryId": "={{ $json.callback_id }}",
+          "additionalFields": {
+            "show_alert": true
+          },
+          "operation": "answerQuery"
+        },
+        "id": "ack-edit",
+        "name": "TG: Ack Edit",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1360,
+          464
+        ],
+        "webhookId": "dbde8cfe-14bf-4bc4-a80f-6a3726d076ea",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
+          "text": "=\u270f\ufe0f EDIT MODE \u00b7 {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
+          "additionalFields": {
+            "disable_web_page_preview": true
+          },
+          "resource": "message",
+          "operation": "sendMessage"
+        },
+        "id": "tg-edit-guide",
+        "name": "TG: Edit Guidance",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1584,
+          464
+        ],
+        "webhookId": "a043198d-fc47-4d49-9810-536cac2c85af",
+        "credentials": {
+          "telegramApi": {
+            "id": "WqZONzynV5mpkH1f",
+            "name": "tgApi.daAdmin.fresh"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1XWUc-kCP3mDln2LO_witusIwXy736fYar3k3clkLDZM"
+          },
+          "sheetName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gid=0",
+            "cachedResultUrl": "",
+            "cachedResultName": ""
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "matchingColumns": [
+              "lead_id"
+            ],
+            "schema": [
+              {
+                "id": "lead_id",
+                "displayName": "lead_id",
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "type": "string",
+                "canBeUsedToMatch": false,
+                "required": false,
+                "defaultMatch": false,
+                "display": true
+              }
+            ],
+            "value": {
+              "lead_id": "={{ $('Merge Row + Callback').item.json.lead_id }}",
+              "status": "editing_manual"
+            }
+          },
+          "options": {}
+        },
+        "id": "sheet-edit",
+        "name": "Sheet: Mark Editing",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1808,
+          464
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "xyvnpCe0Is7f0c73",
+            "name": "Google Sheets account 3"
+          }
+        },
+        "alwaysOutputData": true
+      }
+    ],
+    "connections": {
+      "Telegram Trigger - Callback": {
+        "main": [
+          [
+            {
+              "node": "Parse Callback",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Callback": {
+        "main": [
+          [
+            {
+              "node": "Sheet: Lookup Lead Row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sheet: Lookup Lead Row": {
+        "main": [
+          [
+            {
+              "node": "Merge Row + Callback",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge Row + Callback": {
+        "main": [
+          [
+            {
+              "node": "Switch: Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch: Action": {
+        "main": [
+          [
+            {
+              "node": "TG: Ack Approve",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "TG: Ack Reject",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "TG: Ack Edit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gmail: Send Approved Draft": {
+        "main": [
+          [
+            {
+              "node": "Sheet: Mark Approved",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sheet: Mark Approved": {
+        "main": [
+          [
+            {
+              "node": "TG: Update Message (Sent)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TG: Ack Approve": {
+        "main": [
+          [
+            {
+              "node": "Gmail: Send Approved Draft",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sheet: Mark Rejected": {
+        "main": [
+          [
+            {
+              "node": "TG: Update Message (Rejected)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TG: Ack Reject": {
+        "main": [
+          [
+            {
+              "node": "Sheet: Mark Rejected",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TG: Ack Edit": {
+        "main": [
+          [
+            {
+              "node": "TG: Edit Guidance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TG: Edit Guidance": {
+        "main": [
+          [
+            {
+              "node": "Sheet: Mark Editing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Isaiah  ",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-05-20T02:36:41.718Z",
+        "id": 235,
+        "workflowId": "iuBvWGC11ZQed8eZ",
+        "versionId": "204b478a-6112-4d84-99e3-b2b50b2340ff",
+        "event": "activated",
+        "userId": "1b4f3847-46d4-4f50-a122-f58bcb20f2c7"
+      },
+      {
+        "createdAt": "2026-05-20T02:36:41.508Z",
+        "id": 234,
+        "workflowId": "iuBvWGC11ZQed8eZ",
+        "versionId": "204b478a-6112-4d84-99e3-b2b50b2340ff",
+        "event": "deactivated",
+        "userId": "1b4f3847-46d4-4f50-a122-f58bcb20f2c7"
+      }
+    ]
   }
 }
