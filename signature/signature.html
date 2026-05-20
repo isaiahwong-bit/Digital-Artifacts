@@ -8,44 +8,42 @@
   Digital Artifacts email signature.
   Table layout + inline styles only, for email-client compatibility.
   The mark is the D-from-4-layers logo, hosted as a PNG so it renders in
-  Gmail, Apple Mail and Outlook (inline SVG does not survive those clients).
-  Web-safe font stack only (Clash Display will not load in email clients).
+  Gmail, Apple Mail and Outlook. Web-safe font stack only.
 
   To use in Gmail: open this file in a browser, select the signature block
   between the START and END markers, copy, paste into Gmail Settings ->
-  Signature. Gmail keeps the inline styles and the hosted image.
+  Signature.
 
-  The mark URL goes live when the branch is deployed to Vercel. Until then
-  the image will not render in the pasted signature.
+  The mark URL goes live once the branch is deployed to production.
 -->
-<body style="margin:0; padding:32px; background:#F7F6F3;">
+<body style="margin:0; padding:36px; background:#F7F6F3;">
 
   <!-- ===== SIGNATURE START (select from here) ===== -->
   <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
     <tr>
 
-      <!-- D-from-4-layers mark -->
-      <td valign="top" style="vertical-align:top; padding:3px 24px 0 0;">
+      <!-- D-from-4-layers mark, vertically centred against the text block -->
+      <td valign="middle" style="vertical-align:middle; padding:0 26px 0 0;">
         <img src="https://digitalartifacts.com.au/brand/da-mark-green.png"
-             alt="Digital Artifacts" width="58" height="58"
-             style="display:block; width:58px; height:58px; border:0;">
+             alt="Digital Artifacts" width="92" height="92"
+             style="display:block; width:92px; height:92px; border:0;">
       </td>
 
       <!-- divider -->
       <td style="width:1px; padding:0; background:#E8E6E1; font-size:0; line-height:0;">&nbsp;</td>
 
       <!-- content -->
-      <td valign="top" style="vertical-align:top; padding:1px 0 0 24px;">
-        <div style="font-size:18px; font-weight:700; color:#1B2838; letter-spacing:-0.015em; line-height:1.1;">
+      <td valign="middle" style="vertical-align:middle; padding:0 0 0 26px;">
+        <div style="font-size:19px; font-weight:700; color:#1B2838; letter-spacing:-0.015em; line-height:1.1;">
           Isaiah Wong
         </div>
-        <div style="font-size:10.5px; color:#8A8A80; margin-top:7px; letter-spacing:0.13em; text-transform:uppercase; font-weight:700;">
+        <div style="font-size:10.5px; color:#8A8A80; margin-top:8px; letter-spacing:0.13em; text-transform:uppercase; font-weight:700;">
           Founder &nbsp;&middot;&nbsp; Digital Artifacts
         </div>
-        <div style="font-size:13px; color:#1B2838; margin-top:15px; line-height:1.5;">
+        <div style="font-size:13px; color:#1B2838; margin-top:16px; line-height:1.5;">
           AI operating systems that buy back your week.
         </div>
-        <div style="font-size:12px; margin-top:15px; line-height:1.85;">
+        <div style="font-size:12px; margin-top:16px; line-height:1.9;">
           <a href="mailto:isaiah@digitalartifacts.com.au" style="color:#1B2838; text-decoration:none; font-weight:500;">isaiah@digitalartifacts.com.au</a><br>
           <a href="https://digitalartifacts.com.au" style="color:#00C853; text-decoration:none; font-weight:700; letter-spacing:0.01em;">digitalartifacts.com.au</a>
         </div>
