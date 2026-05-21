@@ -15,11 +15,9 @@ AEST (UTC+10), Mon-Fri, 08:00-20:00. Used by the lead-capture workflow to branch
 - **Provider:** Google Workspace (Gmail)
 - **n8n credential:** Gmail OAuth2 (already configured in existing workflow-a)
 
-# Calendar
+# Calls
 
-- **Type:** Google Calendar appointment schedule
-- **Primary booking link:** (set in n8n environment; default placeholder `https://calendar.app.google/PLACEHOLDER` until Isaiah drops in the real URL)
-- **Typical slot length:** 15 minutes for intro calls; 30 minutes for follow-ups
+No self-service booking link is in use. Calls are arranged by reply: the inbound reply drafts and the outbound teardown invite the prospect to reply to set up a short call, and Isaiah books it manually. If a booking link is reinstated later, add it here and point the reply skills back at it.
 
 # Telegram
 

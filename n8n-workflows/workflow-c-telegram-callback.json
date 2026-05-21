@@ -289,7 +289,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
-        "text": "=✅ SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
+        "text": "=\u2705 SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -402,7 +402,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
-        "text": "=❌ REJECTED · {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
+        "text": "=\u274c REJECTED \u00b7 {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -452,7 +452,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
-        "text": "=✏️ EDIT MODE · {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
+        "text": "=\u270f\ufe0f EDIT MODE \u00b7 {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -857,7 +857,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Prospect + Callback').item.json.message_id }}",
-        "text": "=✅ SENT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} ({{ $('Merge Prospect + Callback').item.json.email }})",
+        "text": "=\u2705 SENT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} ({{ $('Merge Prospect + Callback').item.json.email }})",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -955,7 +955,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Prospect + Callback').item.json.message_id }}",
-        "text": "=❌ REJECTED - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - nothing sent",
+        "text": "=\u274c REJECTED - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - nothing sent",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -1051,7 +1051,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
-        "text": "=✏️ EDIT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - draft is in the prospects sheet, row {{ $('Merge Prospect + Callback').item.json.prospect_id }}",
+        "text": "=\u270f\ufe0f EDIT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - draft is in the prospects sheet, row {{ $('Merge Prospect + Callback').item.json.prospect_id }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -1257,13 +1257,7 @@
             "node": "TG: Ack Outbound",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "TG: Ack Outbound": {
-      "main": [
-        [
+          },
           {
             "node": "Switch: Outbound Action",
             "type": "main",
