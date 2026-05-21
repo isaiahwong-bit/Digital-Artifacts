@@ -87,7 +87,7 @@ All emails use the `hello@digitalartifacts.com.au` reply-to, include the booking
 
 ## Unsubscribe (workflow-d)
 
-Every nurture email carries a link like `https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe?lead_id=DA-XXX`. Clicking it:
+Every nurture email carries a link like `https://digitalartifacts.com.au/unsubscribe?lead_id=DA-XXX`. Clicking it:
 1. Looks up the lead by `lead_id` in the sheet
 2. Flips `status` to `unsubscribed`
 3. Shows a small HTML confirmation page
