@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/unsubscribe",
+      "destination": "https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe"
+    }
+  ]
+}
