@@ -289,7 +289,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
-        "text": "=\u2705 SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
+        "text": "=✅ SENT to {{ $('Merge Row + Callback').item.json.email }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_subject }}\\n\\n{{ $('Merge Row + Callback').item.json.draft_body }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -402,7 +402,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Row + Callback').item.json.message_id }}",
-        "text": "=\u274c REJECTED \u00b7 {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
+        "text": "=❌ REJECTED · {{ $('Merge Row + Callback').item.json.email }}\\n\\nNo auto-reply sent. Follow up manually if needed.",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -452,7 +452,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Merge Row + Callback').item.json.chat_id }}",
-        "text": "=\u270f\ufe0f EDIT MODE \u00b7 {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
+        "text": "=✏️ EDIT MODE · {{ $('Merge Row + Callback').item.json.lead_id }}\\n\\nThe draft is saved in the leads sheet (row for {{ $('Merge Row + Callback').item.json.email }}) under columns draft_subject and draft_body. Edit there, then reply manually from Gmail. Sheet status stays awaiting_approval until you mark it done.\\n\\nCurrent draft subject:\\n{{ $('Merge Row + Callback').item.json.draft_subject }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -640,7 +640,7 @@
     },
     {
       "parameters": {
-        "jsCode": "\nconst cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nconst action = cb.action || '';\nconst isTeardown = action.indexOf('td_') === 0;\nconst isApprove = action.indexOf('_approve') !== -1;\nconst isReject = action.indexOf('_reject') !== -1;\nconst oc_action = isApprove ? 'approve' : (isReject ? 'reject' : 'edit');\n\nconst toEmail = String(row.email || '').trim();\nconst subject = isTeardown ? (row.teardown_subject || '') : (row.opener_subject || '');\nconst bodyText = isTeardown ? (row.teardown_body || '') : (row.opener_body || '');\n\nlet new_status;\nif (isApprove) new_status = isTeardown ? 'teardown_sent' : 'opener_sent';\nelse if (isReject) new_status = isTeardown ? 'teardown_rejected' : 'rejected';\nelse new_status = 'editing';\n\nconst now = new Date().toISOString();\n\nconst b64body = Buffer.from(bodyText, 'utf8').toString('base64').replace(/(.{76})/g, '$1\\r\\n');\nconst mime = [\n  'From: Isaiah Wong <isaiah@digitalartifacts.com.au>',\n  'To: ' + toEmail,\n  'Subject: ' + subject,\n  'MIME-Version: 1.0',\n  'Content-Type: text/plain; charset=\"UTF-8\"',\n  'Content-Transfer-Encoding: base64',\n  '',\n  b64body,\n].join('\\r\\n');\nconst send_raw = Buffer.from(mime, 'utf8').toString('base64')\n  .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n\nreturn [{ json: {\n  prospect_id: cb.prospect_id,\n  chat_id: cb.chat_id,\n  message_id: cb.message_id,\n  callback_id: cb.callback_id,\n  business_name: row.business_name || '',\n  email: toEmail,\n  oc_action: oc_action,\n  is_teardown: isTeardown,\n  stage: isTeardown ? 'Teardown' : 'Cold opener',\n  new_status: new_status,\n  now: now,\n  send_subject: subject,\n  send_body: bodyText,\n  send_raw: send_raw,\n} }];\n"
+        "jsCode": "\nconst cb = $('Parse Callback').item.json;\nconst row = $input.first().json;\nconst action = cb.action || '';\nconst isTeardown = action.indexOf('td_') === 0;\nconst isApprove = action.indexOf('_approve') !== -1;\nconst isReject = action.indexOf('_reject') !== -1;\nconst oc_action = isApprove ? 'approve' : (isReject ? 'reject' : 'edit');\n\nconst toEmail = String(row.email || '').trim();\nconst subject = isTeardown ? (row.teardown_subject || '') : (row.opener_subject || '');\nconst bodyText = isTeardown ? (row.teardown_body || '') : (row.opener_body || '');\n\nlet new_status;\nif (isApprove) new_status = isTeardown ? 'teardown_sent' : 'opener_sent';\nelse if (isReject) new_status = isTeardown ? 'teardown_rejected' : 'rejected';\nelse new_status = 'editing';\n\nconst now = new Date().toISOString();\n\n// Brand signature, identical to the inbound auto-reply signature.\nconst SIGNATURE_HTML = '<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;margin-top:10px;\">'\n  + '<tr>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 26px 0 0;\"><img src=\"https://digitalartifacts.com.au/brand/da-mark-tile.png\" alt=\"Digital Artifacts\" width=\"84\" height=\"84\" style=\"display:block;width:84px;height:84px;border:0;\"></td>'\n  + '<td style=\"width:1px;padding:0;background:#E8E6E1;font-size:0;line-height:0;\">&nbsp;</td>'\n  + '<td valign=\"middle\" style=\"vertical-align:middle;padding:0 0 0 26px;\">'\n  + '<div style=\"font-size:19px;font-weight:700;color:#1B2838;letter-spacing:-0.015em;line-height:1.1;\">Isaiah Wong</div>'\n  + '<div style=\"font-size:10.5px;color:#8A8A80;margin-top:8px;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;\">Founder &nbsp;&middot;&nbsp; Digital Artifacts</div>'\n  + '<div style=\"font-size:13px;color:#1B2838;margin-top:16px;line-height:1.5;\">AI operating systems that buy back your week.</div>'\n  + '<div style=\"font-size:12px;margin-top:16px;line-height:1.9;\"><a href=\"mailto:isaiah@digitalartifacts.com.au\" style=\"color:#1B2838;text-decoration:none;font-weight:500;\">isaiah@digitalartifacts.com.au</a><br><a href=\"https://digitalartifacts.com.au\" style=\"color:#00C853;text-decoration:none;font-weight:700;\">digitalartifacts.com.au</a></div>'\n  + '</td></tr></table>';\n\nfunction esc(s) {\n  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nfunction paras(text) {\n  const linked = esc(text).replace(/(https?:\\/\\/[^\\s<]+)/g, '<a href=\"$1\" style=\"color:#00C853;\">$1</a>');\n  return linked.replace(/\\n/g, '<br>');\n}\n\n// Split the message from the Spam Act compliance footer so the brand\n// signature sits between the sign-off and the legal footer.\nlet messagePart = bodyText;\nlet footerPart = '';\nconst fIdx = bodyText.search(/\\n+Digital Artifacts, Sydney NSW/);\nif (fIdx !== -1) {\n  messagePart = bodyText.slice(0, fIdx);\n  footerPart = bodyText.slice(fIdx).replace(/^\\s+/, '');\n}\n\nconst msgHtml = '<div style=\"font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#1B2838;\">'\n  + paras(messagePart.replace(/\\s+$/, '')) + '</div>';\nconst footerHtml = footerPart\n  ? '<div style=\"font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:11px;line-height:1.6;color:#8A8A80;margin-top:24px;\">'\n    + paras(footerPart) + '</div>'\n  : '';\nconst bodyHtml = msgHtml + '<br><br>' + SIGNATURE_HTML + footerHtml;\n\n// multipart/alternative: plain-text fallback plus the branded HTML version.\nfunction b64(s) {\n  return Buffer.from(s, 'utf8').toString('base64').replace(/(.{76})/g, '$1\\r\\n');\n}\nconst boundary = 'da_bnd_' + Date.now();\nconst mime = [\n  'From: Isaiah Wong <isaiah@digitalartifacts.com.au>',\n  'To: ' + toEmail,\n  'Subject: ' + subject,\n  'MIME-Version: 1.0',\n  'Content-Type: multipart/alternative; boundary=\"' + boundary + '\"',\n  '',\n  '--' + boundary,\n  'Content-Type: text/plain; charset=\"UTF-8\"',\n  'Content-Transfer-Encoding: base64',\n  '',\n  b64(bodyText),\n  '--' + boundary,\n  'Content-Type: text/html; charset=\"UTF-8\"',\n  'Content-Transfer-Encoding: base64',\n  '',\n  b64(bodyHtml),\n  '--' + boundary + '--',\n  '',\n].join('\\r\\n');\nconst send_raw = Buffer.from(mime, 'utf8').toString('base64')\n  .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n\nreturn [{ json: {\n  prospect_id: cb.prospect_id,\n  chat_id: cb.chat_id,\n  message_id: cb.message_id,\n  callback_id: cb.callback_id,\n  business_name: row.business_name || '',\n  email: toEmail,\n  oc_action: oc_action,\n  is_teardown: isTeardown,\n  stage: isTeardown ? 'Teardown' : 'Cold opener',\n  new_status: new_status,\n  now: now,\n  send_subject: subject,\n  send_body: bodyText,\n  send_raw: send_raw,\n} }];\n"
       },
       "id": "oc-merge",
       "name": "Merge Prospect + Callback",
@@ -857,7 +857,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Prospect + Callback').item.json.message_id }}",
-        "text": "=\u2705 SENT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} ({{ $('Merge Prospect + Callback').item.json.email }})",
+        "text": "=✅ SENT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} ({{ $('Merge Prospect + Callback').item.json.email }})",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -955,7 +955,7 @@
         "operation": "editMessageText",
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
         "messageId": "={{ $('Merge Prospect + Callback').item.json.message_id }}",
-        "text": "=\u274c REJECTED - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - nothing sent",
+        "text": "=❌ REJECTED - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - nothing sent",
         "additionalFields": {
           "disable_web_page_preview": true
         },
@@ -1051,7 +1051,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Merge Prospect + Callback').item.json.chat_id }}",
-        "text": "=\u270f\ufe0f EDIT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - draft is in the prospects sheet, row {{ $('Merge Prospect + Callback').item.json.prospect_id }}",
+        "text": "=✏️ EDIT - {{ $('Merge Prospect + Callback').item.json.stage }} - {{ $('Merge Prospect + Callback').item.json.business_name }} - draft is in the prospects sheet, row {{ $('Merge Prospect + Callback').item.json.prospect_id }}",
         "additionalFields": {
           "disable_web_page_preview": true
         },
