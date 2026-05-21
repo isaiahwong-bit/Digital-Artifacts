@@ -89,8 +89,8 @@ When `source` is `lead_magnet`:
 - **No em dashes.** If you use one, the output is invalid. Replace with comma, period, colon, or parenthesis.
 - Open with the first name from the classification. No "Hi X,". Just `FirstName,`.
 - Reference at least one specific detail from the prospect's message (shows we read it).
-- End with one clear next step: usually the booking link.
+- End with one clear next step: invite them to reply to this email to set up a short call.
 - First-name sign-off only: `Isaiah`. Never `Isaiah Wong` or `Best regards`.
 - Maximum 4 short paragraphs in the body.
-- Use the booking link placeholder `{{ BOOKING_LINK }}` in the body; the workflow replaces it with the real URL from integrations.md.
+- Do not include a booking link or scheduling URL. The next step is always a reply to set up a call.
 - If `confidence: low`, explain why in `notes_for_isaiah` and keep the body extra generic.
