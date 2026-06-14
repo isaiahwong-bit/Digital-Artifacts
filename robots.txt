@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /storefront/
+Disallow: /downloads/
+
+Sitemap: https://digitalartifacts.com.au/sitemap.xml

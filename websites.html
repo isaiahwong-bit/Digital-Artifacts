@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
   <script>
@@ -121,6 +124,10 @@
       color: #8A8A80;
     }
 
+    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
+    .bg-navy [class*="text-warm"],
+    .bg-navy .body-text { color: #A8A89E; }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -199,8 +206,8 @@
       transform: translateY(20px);
     }
 
-    /* === Reveal Animations === */
-    .reveal-up {
+    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
+    html.js .reveal-up {
       opacity: 0;
       transform: translateY(60px);
     }
@@ -210,10 +217,24 @@
       overflow: hidden;
     }
 
-    .reveal-word-inner {
+    html.js .reveal-word-inner {
       display: inline-block;
       transform: translateY(100%);
       opacity: 0;
+    }
+
+    /* === Respect reduced-motion: reveal everything, stop animation === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-up, .reveal-word-inner {
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
     /* === Project Row === */
@@ -612,6 +633,24 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
   </style>
+  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Digital Artifacts",
+    "url": "https://digitalartifacts.com.au/",
+    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
+    "image": "https://digitalartifacts.com.au/og/og-image.png",
+    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
+    "email": "hello@digitalartifacts.com.au",
+    "founder": { "@type": "Person", "name": "Isaiah Wong" },
+    "areaServed": "AU",
+    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
+    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
+  }
+  </script>
 </head>
 
 <body class="bg-cream text-navy font-body overflow-x-hidden">
@@ -1459,8 +1498,10 @@
   <!-- SCRIPTS -->
   <!-- ============================== -->
   <script>
-    // === Initialize Lucide Icons ===
-    lucide.createIcons();
+    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
+    try { lucide.createIcons(); } catch (e) {}
+    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
+    if (!window.gsap) { document.documentElement.classList.remove('js'); }
 
     // === Mobile Menu ===
     const hamburger = document.getElementById('hamburgerBtn');
