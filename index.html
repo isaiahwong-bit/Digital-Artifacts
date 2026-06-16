@@ -128,6 +128,48 @@
     .bg-navy [class*="text-warm"],
     .bg-navy .body-text { color: #A8A89E; }
 
+    /* === Portfolio gallery (Selected work) === */
+    .pf-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .pf-filter {
+      padding: 0.45rem 1.1rem; border-radius: 9999px; border: 1px solid #E8E6E1;
+      background: transparent; color: #8A8A80; font-family: 'General Sans', sans-serif;
+      font-weight: 500; font-size: 0.8rem; cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .pf-filter:hover { color: #1B2838; border-color: #1B2838; }
+    .pf-filter.is-active { color: #F7F6F3; background: #1B2838; border-color: #1B2838; }
+    .pf-filter:focus-visible { outline: 2px solid #00C853; outline-offset: 2px; }
+
+    .pf-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
+    @media (min-width: 640px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .pf-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .pf-card {
+      display: block; border: 1px solid #E8E6E1; border-radius: 0.9rem; overflow: hidden;
+      background: #FFFFFF; text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .pf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(27, 40, 56, 0.12); border-color: rgba(0, 200, 83, 0.4); }
+    .pf-card.is-hidden { display: none; }
+    .pf-card__shot { aspect-ratio: 16 / 10; overflow: hidden; background: #F1EFE8; position: relative; }
+    .pf-card__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
+    .pf-card:hover .pf-card__shot img { transform: scale(1.03); }
+    .pf-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(0, 200, 83, 0.92); color: #0A1A12; padding: 0.2rem 0.55rem; border-radius: 9999px; }
+    .pf-card__meta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem; }
+    .pf-card__name { font-family: 'Clash Display', sans-serif; font-weight: 600; color: #1B2838; font-size: 0.95rem; display: block; line-height: 1.2; }
+    .pf-card__tag { color: #8A8A80; font-size: 0.74rem; }
+    .pf-card__icon { width: 1.1rem; height: 1.1rem; color: #8A8A80; margin-left: auto; flex-shrink: 0; transition: color 0.3s ease, transform 0.3s ease; }
+    .pf-card:hover .pf-card__icon { color: #00C853; transform: translate(2px, -2px); }
+
+    /* === Founder block === */
+    .founder-avatar {
+      width: clamp(7rem, 16vw, 11rem); height: clamp(7rem, 16vw, 11rem); border-radius: 1.25rem;
+      background: linear-gradient(145deg, rgba(0, 200, 83, 0.18), rgba(27, 40, 56, 0.06));
+      border: 1px solid rgba(0, 200, 83, 0.3); display: flex; align-items: center; justify-content: center;
+      font-family: 'Clash Display', sans-serif; font-weight: 600; color: #00C853; font-size: clamp(2rem, 5vw, 3.25rem);
+      flex-shrink: 0; letter-spacing: -0.02em;
+    }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -1584,50 +1626,98 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 reveal-up">
-        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i></div>
-          <div class="min-w-0">
-            <span class="font-display font-semibold text-navy block">Cee Ess Designs</span>
-            <span class="text-warm text-xs">Graphic design studio</span>
+      <!-- Filters -->
+      <div class="pf-filters reveal-up" role="group" aria-label="Filter work by industry">
+        <button type="button" class="pf-filter is-active" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="pf-filter" data-filter="design" aria-pressed="false">Design</button>
+        <button type="button" class="pf-filter" data-filter="trades" aria-pressed="false">Trades</button>
+        <button type="button" class="pf-filter" data-filter="services" aria-pressed="false">Services</button>
+      </div>
+
+      <!-- Gallery -->
+      <div class="pf-grid reveal-up" id="pfGrid">
+        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="design">
+          <div class="pf-card__shot"><img src="/assets/portfolio/cee-ess.jpg" alt="Cee Ess Designs website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Cee Ess Designs</span><span class="pf-card__tag">Design studio</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="design">
+          <div class="pf-card__shot"><img src="/assets/portfolio/jensen.jpg" alt="Jensen Design Service website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Jensen Design Service</span><span class="pf-card__tag">Design agency</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="#valley-arbor" class="pf-card" data-cat="trades">
+          <div class="pf-card__shot"><span class="pf-badge">Case study</span><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Valley Arbor</span><span class="pf-card__tag">Arborist, site + quote automation</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="trades">
+          <div class="pf-card__shot"><img src="/assets/portfolio/foliole.jpg" alt="Foliole Tree Management website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Foliole Tree Management</span><span class="pf-card__tag">Tree care, Melbourne</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
+          <div class="pf-card__shot"><img src="/assets/portfolio/fullcircle.jpg" alt="Full Circle Solutions website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Full Circle Solutions</span><span class="pf-card__tag">Business solutions</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
+          <div class="pf-card__shot"><img src="/assets/portfolio/baysolar.jpg" alt="BaySolar UK website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">BaySolar UK</span><span class="pf-card__tag">Solar energy, United Kingdom</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+      </div>
+
+      <div class="mt-10 reveal-up">
+        <a href="/websites.html#portfolio" class="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all">See all work and website packages <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- VALLEY ARBOR CASE STUDY -->
+  <!-- ============================== -->
+  <section id="valley-arbor" class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider" style="scroll-margin-top: 5rem;">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div class="lg:col-span-6 reveal-up">
+          <div class="rounded-2xl overflow-hidden border border-divider shadow-xl">
+            <img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website" class="w-full block" width="800" height="500" loading="lazy">
           </div>
-          <i data-lucide="arrow-up-right" class="w-4 h-4 text-warm group-hover:text-accent ml-auto flex-shrink-0 transition-colors"></i>
-        </a>
-        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><i data-lucide="pen-tool" class="w-5 h-5 text-accent"></i></div>
-          <div class="min-w-0">
-            <span class="font-display font-semibold text-navy block">Jensen Design Service</span>
-            <span class="text-warm text-xs">Design agency</span>
+        </div>
+        <div class="lg:col-span-6 reveal-up">
+          <span class="tech-label text-accent font-medium mb-4 block">Case study</span>
+          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">A website that answers, on a system that follows up.</h2>
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Matt runs Valley Arbor, a climbing arborist in Melbourne. Good reputation, real Google reviews, but enquiries arrived ad hoc and the follow-up was all manual.</p>
+          <div class="space-y-3 border-t border-divider pt-6">
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The build.</strong> A fast custom site in his brand with his real work photos, per-suburb pages for local search, and his live Google reviews wired straight in.</p></div>
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The system behind it.</strong> A quote form that drops every enquiry straight into his inbox through an automation, so nothing slips. Layer 4 (the site) sitting on Layer 3 (the follow-up).</p></div>
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The point.</strong> The same operating-system idea, scaled down to a sole trader. One brain, one surface, one less thing to chase.</p></div>
           </div>
-          <i data-lucide="arrow-up-right" class="w-4 h-4 text-warm group-hover:text-accent ml-auto flex-shrink-0 transition-colors"></i>
-        </a>
-        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><i data-lucide="settings" class="w-5 h-5 text-accent"></i></div>
-          <div class="min-w-0">
-            <span class="font-display font-semibold text-navy block">Full Circle Solutions</span>
-            <span class="text-warm text-xs">Business solutions</span>
+          <!-- TODO: add a real outcome line once Matt confirms numbers (quote requests per month, response time). -->
+          <p class="text-warm text-xs mt-6" style="line-height: 1.6;">Outcome numbers to follow as the new site beds in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- MEET THE FOUNDER -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div class="lg:col-span-4 flex justify-center lg:justify-start reveal-up">
+          <!-- Swap this monogram for a headshot any time: replace with <img src="..." class="founder-avatar" style="object-fit:cover"> -->
+          <div class="founder-avatar">IW</div>
+        </div>
+        <div class="lg:col-span-8 reveal-up">
+          <span class="tech-label text-accent font-medium mb-4 block">The studio</span>
+          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">One person. You always know who built it.</h2>
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Digital Artifacts is Isaiah Wong, working direct. No account managers, no handoffs, no junior doing the real work. You talk to the person who builds your system, you own every file and workflow, and the brain only changes through a human review step.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-pill">Single operator</span>
+            <span class="tag-pill">Direct work</span>
+            <span class="tag-pill">You own the stack</span>
+            <span class="tag-pill">Based in Australia</span>
           </div>
-          <i data-lucide="arrow-up-right" class="w-4 h-4 text-warm group-hover:text-accent ml-auto flex-shrink-0 transition-colors"></i>
-        </a>
-        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><i data-lucide="sun" class="w-5 h-5 text-accent"></i></div>
-          <div class="min-w-0">
-            <span class="font-display font-semibold text-navy block">BaySolar UK</span>
-            <span class="text-warm text-xs">Solar energy, United Kingdom</span>
-          </div>
-          <i data-lucide="arrow-up-right" class="w-4 h-4 text-warm group-hover:text-accent ml-auto flex-shrink-0 transition-colors"></i>
-        </a>
-        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><i data-lucide="trees" class="w-5 h-5 text-accent"></i></div>
-          <div class="min-w-0">
-            <span class="font-display font-semibold text-navy block">Foliole Tree Management</span>
-            <span class="text-warm text-xs">Tree and landscaping services</span>
-          </div>
-          <i data-lucide="arrow-up-right" class="w-4 h-4 text-warm group-hover:text-accent ml-auto flex-shrink-0 transition-colors"></i>
-        </a>
-        <a href="/websites.html#portfolio" class="group flex items-center justify-center gap-2 border border-dashed border-divider rounded-xl p-5 text-accent font-medium hover:border-accent/50 transition-colors">
-          See all work <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
-        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -2240,6 +2330,24 @@
         });
         panels.forEach(p => {
           p.classList.toggle('is-active', p.dataset.panel === target);
+        });
+      });
+    });
+
+    // === Portfolio filter (Selected work) ===
+    const pfFilters = document.querySelectorAll('.pf-filter');
+    const pfCards = document.querySelectorAll('#pfGrid .pf-card');
+    pfFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        pfFilters.forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        pfCards.forEach(card => {
+          const show = filter === 'all' || card.dataset.cat === filter;
+          card.classList.toggle('is-hidden', !show);
         });
       });
     });

@@ -128,6 +128,23 @@
     .bg-navy [class*="text-warm"],
     .bg-navy .body-text { color: #A8A89E; }
 
+    /* === FAQ (native details, works without JS) === */
+    .faq-item { border-bottom: 1px solid #E8E6E1; }
+    .faq-item summary {
+      list-style: none; cursor: pointer; padding: 1.4rem 0; display: flex; align-items: center;
+      justify-content: space-between; gap: 1.5rem;
+      font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 1.05rem; color: #1B2838;
+      letter-spacing: -0.01em;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '+'; font-family: 'General Sans', sans-serif; font-weight: 400; font-size: 1.5rem;
+      color: #00C853; flex-shrink: 0; transition: transform 0.3s ease; line-height: 1;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item summary:focus-visible { outline: 2px solid #00C853; outline-offset: 4px; border-radius: 4px; }
+    .faq-item__body { padding: 0 0 1.5rem; color: #8A8A80; font-size: 0.95rem; line-height: 1.7; max-width: 70ch; }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -1139,7 +1156,7 @@
       <div class="text-center mb-10 md:mb-14">
         <span class="tech-label text-accent font-medium mb-3 block reveal-up">03 Pricing</span>
         <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Website Packages</h2>
-        <p class="body-text text-sm md:text-base reveal-up">Simple, transparent pricing. 14-day turnaround, no surprises!</p>
+        <p class="body-text text-sm md:text-base reveal-up max-w-xl mx-auto">Transparent pricing, built on what a site actually needs, not a guess. 14-day turnaround, and you see the number before any money changes hands.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-16">
@@ -1322,6 +1339,45 @@
           <span>Ready to Start?</span>
           <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- FAQ -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[860px] mx-auto">
+      <div class="text-center mb-10 md:mb-14">
+        <span class="tech-label text-accent font-medium mb-3 block reveal-up">04 Questions</span>
+        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Before you ask.</h2>
+      </div>
+      <div class="reveal-up">
+        <details class="faq-item">
+          <summary>How long does a site take?</summary>
+          <div class="faq-item__body">Most sites go live in about 14 days from kickoff. Bigger builds with a CMS or booking run a little longer. You get a clear timeline before any money changes hands.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do you write the content?</summary>
+          <div class="faq-item__body">We shape and tighten what you have, and write the structure and the SEO copy. If you are starting from a blank page, we draft it together. You sign off on every word.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Will it rank on Google?</summary>
+          <div class="faq-item__body">Every site ships with the on-page basics done properly: titles, meta, structured data, a sitemap, and fast hosting. Ranking over time also depends on your reviews and fresh content, which we can help you keep up.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What if I need changes later?</summary>
+          <div class="faq-item__body">A care plan covers ongoing tweaks and updates, or you can edit the site yourself. Either way you are never stuck waiting.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Who owns the site?</summary>
+          <div class="faq-item__body">You do. The code, the domain, and the content are yours, with no lock-in. Hosting is on Vercel under your own account if you want it that way.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can you automate the back end too?</summary>
+          <div class="faq-item__body">Yes. A website is Layer 4 of a bigger system. We can wire the quote form, the follow-ups, the review requests, and more behind it. See the <a href="/automations.html" class="text-accent hover:underline">automation page</a>.</div>
+        </details>
       </div>
     </div>
   </section>
