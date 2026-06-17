@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
   <script>
@@ -121,6 +124,50 @@
       color: #8A8A80;
     }
 
+    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
+    .bg-navy [class*="text-warm"],
+    .bg-navy .body-text { color: #A8A89E; }
+
+    /* === FAQ (native details, works without JS) === */
+    .faq-item { border-bottom: 1px solid #E8E6E1; }
+    .faq-item summary {
+      list-style: none; cursor: pointer; padding: 1.4rem 0; display: flex; align-items: center;
+      justify-content: space-between; gap: 1.5rem;
+      font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 1.05rem; color: #1B2838;
+      letter-spacing: -0.01em;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '+'; font-family: 'General Sans', sans-serif; font-weight: 400; font-size: 1.5rem;
+      color: #00C853; flex-shrink: 0; transition: transform 0.3s ease; line-height: 1;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item summary:focus-visible { outline: 2px solid #00C853; outline-offset: 4px; border-radius: 4px; }
+    .faq-item__body { padding: 0 0 1.5rem; color: #8A8A80; font-size: 0.95rem; line-height: 1.7; max-width: 70ch; }
+
+    /* === Portfolio gallery === */
+    .pf-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .pf-filter { padding: 0.45rem 1.1rem; border-radius: 9999px; border: 1px solid #E8E6E1; background: transparent; color: #8A8A80; font-family: 'General Sans', sans-serif; font-weight: 500; font-size: 0.8rem; cursor: pointer; transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease; }
+    .pf-filter:hover { color: #1B2838; border-color: #1B2838; }
+    .pf-filter.is-active { color: #F7F6F3; background: #1B2838; border-color: #1B2838; }
+    .pf-filter:focus-visible { outline: 2px solid #00C853; outline-offset: 2px; }
+    .pf-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
+    @media (min-width: 640px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .pf-grid { grid-template-columns: repeat(3, 1fr); } }
+    .pf-card { display: block; border: 1px solid #E8E6E1; border-radius: 0.9rem; overflow: hidden; background: #FFFFFF; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+    .pf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(27, 40, 56, 0.12); border-color: rgba(0, 200, 83, 0.4); }
+    .pf-card.is-hidden { display: none; }
+    .pf-card__shot { aspect-ratio: 16 / 10; overflow: hidden; background: #F1EFE8; position: relative; }
+    .pf-card__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
+    .pf-card:hover .pf-card__shot img { transform: scale(1.03); }
+    .pf-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(0, 200, 83, 0.92); color: #0A1A12; padding: 0.2rem 0.55rem; border-radius: 9999px; }
+    .pf-badge--muted { background: rgba(138, 138, 128, 0.92); color: #F7F6F3; }
+    .pf-card__meta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem; }
+    .pf-card__name { font-family: 'Clash Display', sans-serif; font-weight: 600; color: #1B2838; font-size: 0.95rem; display: block; line-height: 1.2; }
+    .pf-card__tag { color: #8A8A80; font-size: 0.74rem; }
+    .pf-card__icon { width: 1.1rem; height: 1.1rem; color: #8A8A80; margin-left: auto; flex-shrink: 0; transition: color 0.3s ease, transform 0.3s ease; }
+    .pf-card:hover .pf-card__icon { color: #00C853; transform: translate(2px, -2px); }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -199,8 +246,8 @@
       transform: translateY(20px);
     }
 
-    /* === Reveal Animations === */
-    .reveal-up {
+    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
+    html.js .reveal-up {
       opacity: 0;
       transform: translateY(60px);
     }
@@ -210,10 +257,24 @@
       overflow: hidden;
     }
 
-    .reveal-word-inner {
+    html.js .reveal-word-inner {
       display: inline-block;
       transform: translateY(100%);
       opacity: 0;
+    }
+
+    /* === Respect reduced-motion: reveal everything, stop animation === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-up, .reveal-word-inner {
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
     /* === Project Row === */
@@ -612,6 +673,24 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
   </style>
+  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Digital Artifacts",
+    "url": "https://digitalartifacts.com.au/",
+    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
+    "image": "https://digitalartifacts.com.au/og/og-image.png",
+    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
+    "email": "hello@digitalartifacts.com.au",
+    "founder": { "@type": "Person", "name": "Isaiah Wong" },
+    "areaServed": "AU",
+    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
+    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
+  }
+  </script>
 </head>
 
 <body class="bg-cream text-navy font-body overflow-x-hidden">
@@ -825,191 +904,67 @@
           <span class="tech-label text-warm font-medium reveal-up">02 Work</span>
         </div>
         <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">Client Projects</h2>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">Selected work</h2>
         </div>
       </div>
 
-      <!-- Project List -->
-      <div class="mb-16">
-        <!-- Cee Ess Designs -->
-        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Cee Ess Designs</span>
-              <span class="text-warm text-xs">Graphic Design Studio</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Branding</span>
-            <span class="tag-pill">Portfolio</span>
-            <span class="tag-pill">Custom Domain</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
-        </a>
-
-        <!-- Jensen Design Service -->
-        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="pen-tool" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Jensen Design Service</span>
-              <span class="text-warm text-xs">Design Agency</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Design</span>
-            <span class="tag-pill">Services</span>
-            <span class="tag-pill">Portfolio</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
-        </a>
-
-        <!-- Full Circle Solutions -->
-        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="settings" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Full Circle Solutions</span>
-              <span class="text-warm text-xs">Business Solutions</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Business</span>
-            <span class="tag-pill">Corporate</span>
-            <span class="tag-pill">Services</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
-        </a>
-
-        <!-- BaySolar UK -->
-        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="sun" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">BaySolar UK</span>
-              <span class="text-warm text-xs">Solar Energy Company</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Energy</span>
-            <span class="tag-pill">Solar</span>
-            <span class="tag-pill">UK Market</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
-        </a>
-
-        <!-- Foliole Tree Management -->
-        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="trees" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Foliole Tree Management</span>
-              <span class="text-warm text-xs">Tree & Landscaping Services</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Landscaping</span>
-            <span class="tag-pill">Tree Care</span>
-            <span class="tag-pill">Local</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
-        </a>
+      <!-- Filters -->
+      <div class="pf-filters reveal-up" role="group" aria-label="Filter work">
+        <button type="button" class="pf-filter is-active" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="pf-filter" data-filter="clients" aria-pressed="false">Client work</button>
+        <button type="button" class="pf-filter" data-filter="templates" aria-pressed="false">Templates</button>
       </div>
 
-      <!-- Templates -->
-      <div class="mb-8 reveal-up">
-        <span class="tech-label text-warm font-medium block mb-3" style="font-size: 0.7rem;">Templates</span>
-        <h3 class="heading-md text-navy" style="font-size: clamp(1.5rem, 2.5vw, 2rem);">Ready-Made Templates</h3>
-      </div>
-
-      <div class="mb-16">
-        <!-- Robert Green Carpenter -->
-        <a href="https://robert-green-carpenter.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Robert Green Carpenter</span>
-              <span class="text-warm text-xs">Carpentry Services</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Trades</span>
-            <span class="tag-pill">Carpentry</span>
-            <span class="tag-pill">Local</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+      <!-- Gallery -->
+      <div class="pf-grid reveal-up" id="pfGrid">
+        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/cee-ess.jpg" alt="Cee Ess Designs website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Cee Ess Designs</span><span class="pf-card__tag">Design studio</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
         </a>
-
-        <!-- Eastern Suburbs Painting -->
-        <a href="https://eastern-suburbs-painting.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="paintbrush" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Eastern Suburbs Painting</span>
-              <span class="text-warm text-xs">Painting Services</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Trades</span>
-            <span class="tag-pill">Painting</span>
-            <span class="tag-pill">Local</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/jensen.jpg" alt="Jensen Design Service website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Jensen Design Service</span><span class="pf-card__tag">Design agency</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
         </a>
-
-        <!-- Tom's Firewood -->
-        <a href="https://toms-firewood.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="flame" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Tom's Firewood</span>
-              <span class="text-warm text-xs">Firewood Supply</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Retail</span>
-            <span class="tag-pill">Delivery</span>
-            <span class="tag-pill">Local</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        <a href="/#valley-arbor" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><span class="pf-badge">Case study</span><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Valley Arbor</span><span class="pf-card__tag">Arborist, site + quote automation</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
         </a>
-
-        <!-- Yaz Services -->
-        <a href="https://yaz-services.vercel.app" target="_blank" rel="noopener noreferrer" class="project-row py-5 px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-6 reveal-up">
-          <div class="flex items-center gap-4 md:w-[280px] flex-shrink-0">
-            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="wrench" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <span class="project-name font-display font-semibold text-navy block">Yaz Services</span>
-              <span class="text-warm text-xs">General Services</span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-1.5 md:flex-1">
-            <span class="tag-pill">Services</span>
-            <span class="tag-pill">Multi-trade</span>
-            <span class="tag-pill">Local</span>
-          </div>
-          <i data-lucide="external-link" class="w-4 h-4 text-accent flex-shrink-0 ml-auto"></i>
+        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/foliole.jpg" alt="Foliole Tree Management website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Foliole Tree Management</span><span class="pf-card__tag">Tree care, Melbourne</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
         </a>
-
+        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/fullcircle.jpg" alt="Full Circle Solutions website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Full Circle Solutions</span><span class="pf-card__tag">Business solutions</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/baysolar.jpg" alt="BaySolar UK website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">BaySolar UK</span><span class="pf-card__tag">Solar energy, United Kingdom</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://peninsula-makers-hub.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
+          <div class="pf-card__shot"><img src="/assets/portfolio/pmh.jpg" alt="Peninsula Makers Hub website" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Peninsula Makers Hub</span><span class="pf-card__tag">Makerspace, Mornington Peninsula</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://robert-green-carpenter.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
+          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/robert-green.jpg" alt="Robert Green Carpenter template" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Robert Green Carpenter</span><span class="pf-card__tag">Carpentry template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://eastern-suburbs-painting.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
+          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/eastern-painting.jpg" alt="Eastern Suburbs Painting template" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Eastern Suburbs Painting</span><span class="pf-card__tag">Painting template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://toms-firewood.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
+          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/toms-firewood.jpg" alt="Toms Firewood template" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Tom's Firewood</span><span class="pf-card__tag">Firewood supply template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://yaz-services.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
+          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/yaz.jpg" alt="Yaz Services template" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Yaz Services</span><span class="pf-card__tag">Multi-trade template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://stoafinance.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
+          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/stoa.jpg" alt="Stoa Finance professional services template" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Stoa Finance</span><span class="pf-card__tag">Professional services template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
       </div>
     </div>
   </section>
@@ -1100,7 +1055,7 @@
       <div class="text-center mb-10 md:mb-14">
         <span class="tech-label text-accent font-medium mb-3 block reveal-up">03 Pricing</span>
         <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Website Packages</h2>
-        <p class="body-text text-sm md:text-base reveal-up">Simple, transparent pricing. 14-day turnaround, no surprises!</p>
+        <p class="body-text text-sm md:text-base reveal-up max-w-xl mx-auto">Transparent pricing, built on what a site actually needs, not a guess. 14-day turnaround, and you see the number before any money changes hands.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-16">
@@ -1289,6 +1244,108 @@
 
 
   <!-- ============================== -->
+  <!-- FAQ -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[860px] mx-auto">
+      <div class="text-center mb-10 md:mb-14">
+        <span class="tech-label text-accent font-medium mb-3 block reveal-up">04 Questions</span>
+        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Before you ask.</h2>
+      </div>
+      <div class="reveal-up">
+        <details class="faq-item">
+          <summary>How long does a site take?</summary>
+          <div class="faq-item__body">Most sites go live in about 14 days from kickoff. Bigger builds with a CMS or booking run a little longer. You get a clear timeline before any money changes hands.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do you write the content?</summary>
+          <div class="faq-item__body">We shape and tighten what you have, and write the structure and the SEO copy. If you are starting from a blank page, we draft it together. You sign off on every word.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Will it rank on Google?</summary>
+          <div class="faq-item__body">Every site ships with the on-page basics done properly: titles, meta, structured data, a sitemap, and fast hosting. Ranking over time also depends on your reviews and fresh content, which we can help you keep up.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What if I need changes later?</summary>
+          <div class="faq-item__body">A care plan covers ongoing tweaks and updates, or you can edit the site yourself. Either way you are never stuck waiting.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Who owns the site?</summary>
+          <div class="faq-item__body">You do. The code, the domain, and the content are yours, with no lock-in. Hosting is on Vercel under your own account if you want it that way.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can you automate the back end too?</summary>
+          <div class="faq-item__body">Yes. A website is Layer 4 of a bigger system. We can wire the quote form, the follow-ups, the review requests, and more behind it. See the <a href="/automations.html" class="text-accent hover:underline">automation page</a>.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- FORMS THAT DO SOMETHING -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+        <!-- Form mock -->
+        <div class="lg:col-span-5 reveal-up">
+          <div class="bg-surface border border-divider rounded-2xl p-6 md:p-8 shadow-xl">
+            <div class="flex items-center gap-2 mb-6">
+              <span class="w-2.5 h-2.5 rounded-full bg-accent"></span>
+              <span class="tech-label text-warm" style="font-size: 0.65rem;">your-site.com.au / contact</span>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Name</span>
+                <div class="h-11 rounded-lg border border-divider bg-cream/50 px-4 flex items-center text-navy text-sm">Sarah Chen</div>
+              </div>
+              <div>
+                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Email</span>
+                <div class="h-11 rounded-lg border border-divider bg-cream/50 px-4 flex items-center text-navy text-sm">sarah@meridianlegal.com.au</div>
+              </div>
+              <div>
+                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Your project</span>
+                <div class="min-h-[76px] rounded-lg border border-divider bg-cream/50 px-4 py-3 text-navy text-sm" style="line-height: 1.6;">New site, and a way to stop losing enquiries when we are flat out.</div>
+              </div>
+              <div class="pt-1">
+                <span class="w-full inline-flex items-center justify-center gap-2 bg-accent text-cream font-semibold text-sm uppercase tracking-wide py-3.5 rounded-lg">
+                  Send enquiry <i data-lucide="send" class="w-4 h-4"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- The point -->
+        <div class="lg:col-span-7 reveal-up">
+          <span class="tech-label text-accent font-medium mb-4 block">The clever bit</span>
+          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Your form should do more than sit there.</h2>
+          <p class="body-text text-base md:text-lg mb-8 max-w-2xl" style="color: #1B2838;">Most website forms fire off an email you will miss at the bottom of your inbox. The ones we build catch every enquiry, drop it somewhere you will actually see it, and can start the follow-up on their own.</p>
+          <div class="space-y-5 border-t border-divider pt-7">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="inbox" class="w-5 h-5 text-accent"></i></div>
+              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Lands in your inbox in seconds</h3><p class="text-warm text-sm" style="line-height: 1.6;">Formatted and ready to action, not a raw data dump.</p></div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="table" class="w-5 h-5 text-accent"></i></div>
+              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Logged so nothing slips</h3><p class="text-warm text-sm" style="line-height: 1.6;">Every lead captured in one place, with the date and the detail.</p></div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="sparkles" class="w-5 h-5 text-accent"></i></div>
+              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Followed up automatically, if you want</h3><p class="text-warm text-sm" style="line-height: 1.6;">An instant reply or a gentle nudge sequence, written in your voice, that you approve.</p></div>
+            </div>
+          </div>
+          <p class="text-navy text-sm mt-7 flex items-start gap-2" style="line-height: 1.6;"><i data-lucide="check-circle" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>This is live work.</strong> Matt's quote form at <a href="/#valley-arbor" class="text-accent hover:underline">Valley Arbor</a> emails him the moment an enquiry lands.</span></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
   <!-- CONTACT / CTA SECTION -->
   <!-- ============================== -->
   <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
@@ -1459,8 +1516,10 @@
   <!-- SCRIPTS -->
   <!-- ============================== -->
   <script>
-    // === Initialize Lucide Icons ===
-    lucide.createIcons();
+    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
+    try { lucide.createIcons(); } catch (e) {}
+    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
+    if (!window.gsap) { document.documentElement.classList.remove('js'); }
 
     // === Mobile Menu ===
     const hamburger = document.getElementById('hamburgerBtn');
@@ -1598,6 +1657,17 @@
         );
       });
     }
+
+    // === Portfolio filter ===
+    const pfFilters = document.querySelectorAll('.pf-filter');
+    const pfCards = document.querySelectorAll('#pfGrid .pf-card');
+    pfFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        pfFilters.forEach(b => { const on = b === btn; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        pfCards.forEach(card => { const show = filter === 'all' || card.dataset.cat === filter; card.classList.toggle('is-hidden', !show); });
+      });
+    });
 
     // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
     const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';

@@ -1,0 +1,23 @@
+# Vercel serves the repo root as static files. Deny everything by default and
+# re-include only the public marketing site, so internal brain notes, prospect
+# data, client files/invoices, automation source and strategy docs are never
+# published to the web.
+/*
+
+# Public pages and config
+!index.html
+!automations.html
+!websites.html
+!robots.txt
+!sitemap.xml
+!vercel.json
+
+# Public assets referenced by the site
+!assets
+!brand
+!downloads
+!one-pagers
+!videos
+!og
+!Logo
+!Brand_Assets

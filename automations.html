@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
   <script>
@@ -121,6 +124,27 @@
       color: #8A8A80;
     }
 
+    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
+    .bg-navy [class*="text-warm"],
+    .bg-navy .body-text { color: #A8A89E; }
+
+    /* === FAQ (native details, works without JS) === */
+    .faq-item { border-bottom: 1px solid #E8E6E1; }
+    .faq-item summary {
+      list-style: none; cursor: pointer; padding: 1.4rem 0; display: flex; align-items: center;
+      justify-content: space-between; gap: 1.5rem;
+      font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 1.05rem; color: #1B2838;
+      letter-spacing: -0.01em;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '+'; font-family: 'General Sans', sans-serif; font-weight: 400; font-size: 1.5rem;
+      color: #00C853; flex-shrink: 0; transition: transform 0.3s ease; line-height: 1;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item summary:focus-visible { outline: 2px solid #00C853; outline-offset: 4px; border-radius: 4px; }
+    .faq-item__body { padding: 0 0 1.5rem; color: #8A8A80; font-size: 0.95rem; line-height: 1.7; max-width: 70ch; }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -199,8 +223,8 @@
       transform: translateY(20px);
     }
 
-    /* === Reveal Animations === */
-    .reveal-up {
+    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
+    html.js .reveal-up {
       opacity: 0;
       transform: translateY(60px);
     }
@@ -210,10 +234,24 @@
       overflow: hidden;
     }
 
-    .reveal-word-inner {
+    html.js .reveal-word-inner {
       display: inline-block;
       transform: translateY(100%);
       opacity: 0;
+    }
+
+    /* === Respect reduced-motion: reveal everything, stop animation === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-up, .reveal-word-inner {
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
     /* === Tag Pills === */
@@ -887,7 +925,361 @@
       line-height: 1.7;
       max-width: 60ch;
     }
+
+    /* === Proof: metrics strip === */
+    .proof-metric__num {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      color: #00C853;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .proof-metric__label {
+      color: rgba(247, 246, 243, 0.55);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      margin-top: 0.6rem;
+    }
+
+    .proof-bar__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #00C853;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: gap 0.3s ease, color 0.3s ease;
+    }
+
+    .proof-bar__link:hover { gap: 0.75rem; color: #2BD673; }
+    .proof-bar__link svg { transition: transform 0.3s ease; }
+    .proof-bar__link:hover svg { transform: translateY(2px); }
+
+    /* === Proof: workflow cards === */
+    .wf-card {
+      background: rgba(247, 246, 243, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.65rem;
+    }
+
+    .wf-card__head {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .wf-badge {
+      width: 2.25rem;
+      height: 2.25rem;
+      flex: 0 0 auto;
+      border-radius: 0.6rem;
+      background: rgba(0, 200, 83, 0.12);
+      border: 1px solid rgba(0, 200, 83, 0.3);
+      color: #00C853;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wf-card__title {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      color: #F7F6F3;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .wf-card__sub {
+      color: rgba(247, 246, 243, 0.45);
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+
+    .wf-live {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5FE39B;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: rgba(0, 200, 83, 0.08);
+      border: 1px solid rgba(0, 200, 83, 0.2);
+      flex: 0 0 auto;
+    }
+
+    .wf-live__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00C853;
+      animation: wfPulse 2s ease-out infinite;
+    }
+
+    @keyframes wfPulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.5); }
+      70% { box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+    }
+
+    /* === Proof: flow pipeline === */
+    .wf-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .wf-flow { flex-direction: row; align-items: flex-start; gap: 0.25rem; }
+    }
+
+    .wf-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.45rem;
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0.25rem;
+    }
+
+    .wf-node__chip {
+      width: 2.9rem;
+      height: 2.9rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+    }
+
+    .wf-node__chip svg { width: 1.15rem; height: 1.15rem; }
+    .wf-node__chip[data-kind="trigger"] { background: rgba(138, 138, 128, 0.12); border-color: rgba(138, 138, 128, 0.35); color: #B5B5AC; }
+    .wf-node__chip[data-kind="brain"] { background: rgba(0, 200, 83, 0.1); border-color: rgba(0, 200, 83, 0.35); color: #00C853; }
+    .wf-node__chip[data-kind="ai"] { background: rgba(0, 200, 83, 0.16); border-color: rgba(0, 200, 83, 0.45); color: #5FE39B; }
+    .wf-node__chip[data-kind="human"] { background: rgba(0, 200, 83, 0.06); border-color: rgba(0, 200, 83, 0.6); color: #00C853; box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.1); }
+    .wf-node__chip[data-kind="send"] { background: #00C853; border-color: #00C853; color: #0A1A12; }
+
+    .wf-node__label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #F7F6F3;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    .wf-node__sub {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(247, 246, 243, 0.4);
+    }
+
+    .wf-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(0, 200, 83, 0.45);
+      flex: 0 0 auto;
+      align-self: center;
+      padding-top: 0.6rem;
+    }
+
+    .wf-arrow svg { width: 1.1rem; height: 1.1rem; }
+
+    @media (max-width: 767px) {
+      .wf-node { flex-direction: row; justify-content: flex-start; gap: 0.85rem; text-align: left; width: 100%; }
+      .wf-arrow { transform: rotate(90deg); padding: 0; margin-left: 1.45rem; align-self: flex-start; }
+    }
+
+    .wf-foot {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: rgba(247, 246, 243, 0.55);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    /* === Proof: Telegram approval brief mock === */
+    .tg-mock {
+      background: #0F1A24;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.1rem;
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+    }
+
+    .tg-mock__head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tg-mock__avatar {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      background: #00C853;
+      color: #0A1A12;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .tg-mock__name { color: #F7F6F3; font-weight: 600; font-size: 0.85rem; }
+    .tg-mock__status { color: rgba(247, 246, 243, 0.4); font-size: 0.66rem; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .tg-mock__body { padding: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .tg-bubble {
+      background: rgba(247, 246, 243, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 0.35rem 0.9rem 0.9rem 0.9rem;
+      padding: 0.95rem 1rem;
+    }
+
+    .tg-bubble__title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #F7F6F3;
+      font-weight: 600;
+      font-size: 0.82rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .tg-pill {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      background: rgba(226, 75, 74, 0.18);
+      color: #FF8A89;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+    }
+
+    .tg-line {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .tg-line span { color: rgba(247, 246, 243, 0.45); flex: 0 0 auto; }
+    .tg-line b { color: #E8E6E1; font-weight: 500; text-align: right; }
+
+    .tg-draft {
+      margin-top: 0.75rem;
+      padding: 0.7rem 0.8rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-left: 2px solid #00C853;
+      border-radius: 0.3rem;
+      font-size: 0.74rem;
+      line-height: 1.6;
+      color: rgba(247, 246, 243, 0.7);
+      font-style: italic;
+    }
+
+    .tg-kbd { display: flex; flex-direction: column; gap: 0.4rem; }
+    .tg-kbd__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+
+    .tg-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem;
+      border-radius: 0.55rem;
+      background: rgba(247, 246, 243, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #E8E6E1;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: default;
+    }
+
+    .tg-btn svg { width: 0.85rem; height: 0.85rem; }
+    .tg-btn--approve { background: rgba(0, 200, 83, 0.16); border-color: rgba(0, 200, 83, 0.4); color: #7BE8AC; }
+
+    /* === Proof: testimonials === */
+    .tmonial {
+      background: rgba(247, 246, 243, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      height: 100%;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .tmonial:hover { background: rgba(0, 200, 83, 0.05); border-color: rgba(0, 200, 83, 0.2); }
+    .tmonial__mark { width: 1.5rem; height: 1.5rem; color: #00C853; opacity: 0.8; }
+    .tmonial__quote { color: #E8E6E1; font-size: 0.92rem; line-height: 1.7; flex: 1; }
+    .tmonial__quote--placeholder { color: rgba(247, 246, 243, 0.35); font-style: italic; }
+    .tmonial__who { display: flex; align-items: center; gap: 0.75rem; }
+
+    .tmonial__avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: rgba(0, 200, 83, 0.12);
+      border: 1px solid rgba(0, 200, 83, 0.25);
+      color: #00C853;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .tmonial__who b { color: #F7F6F3; font-size: 0.85rem; display: block; }
+    .tmonial__role { color: rgba(247, 246, 243, 0.45); font-size: 0.74rem; }
   </style>
+  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Digital Artifacts",
+    "url": "https://digitalartifacts.com.au/",
+    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
+    "image": "https://digitalartifacts.com.au/og/og-image.png",
+    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
+    "email": "hello@digitalartifacts.com.au",
+    "founder": { "@type": "Person", "name": "Isaiah Wong" },
+    "areaServed": "AU",
+    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
+    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
+  }
+  </script>
 </head>
 
 <body class="bg-cream text-navy font-body overflow-x-hidden">
@@ -971,6 +1363,45 @@
       <div class="scroll-indicator flex flex-col items-center gap-3 mt-14 md:mt-16 mx-auto w-fit">
         <span class="text-warm/60 text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
         <div class="scroll-line"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- PROOF BAR (hero credibility ribbon, jumps to #proof) -->
+  <!-- ============================== -->
+  <section class="bg-navy border-t border-white/10 px-6 md:px-12 lg:px-16 py-9 md:py-11">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div class="lg:col-span-4">
+          <div class="flex items-center gap-2.5 mb-3">
+            <span class="wf-live__dot"></span>
+            <span class="tech-label text-accent font-medium">In production</span>
+          </div>
+          <h2 class="heading-md text-cream mb-3" style="font-size: clamp(1.4rem, 2.4vw, 1.9rem);">We run our own sales on this.</h2>
+          <a href="#proof" class="proof-bar__link">See it live <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
+        </div>
+        <div class="lg:col-span-8">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden">
+            <div class="bg-navy px-5 py-5 text-center">
+              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">&lt; 2 min</div>
+              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">First reply, day or night</div>
+            </div>
+            <div class="bg-navy px-5 py-5 text-center">
+              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">8</div>
+              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Workflows run our sales</div>
+            </div>
+            <div class="bg-navy px-5 py-5 text-center">
+              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">1 tap</div>
+              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Approve or kill any draft</div>
+            </div>
+            <div class="bg-navy px-5 py-5 text-center">
+              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">100%</div>
+              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Replies a human approves</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1198,6 +1629,7 @@ tone-of-voice.md. End with a clear next step.</pre>
             ></video>
           </div>
           <p class="text-warm/70 text-xs mt-3" style="line-height: 1.6;">A real n8n workflow analysing 100 audits, scoring results, delivering a summary. No clicks.</p>
+          <a href="#proof" class="proof-bar__link mt-4">See the workflows running our own sales <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
         </div>
       </div>
 
@@ -1211,12 +1643,12 @@ tone-of-voice.md. End with a clear next step.</pre>
         <div class="surface-card">
           <div class="surface-card__icon"><i data-lucide="git-branch" class="w-5 h-5"></i></div>
           <div class="surface-card__title">New lead triage</div>
-          <p class="surface-card__desc">Webhook fires on form submit. Classify by ICP, enrich with competitor context, write to HubSpot, ping Slack. 3 seconds end-to-end.</p>
+          <p class="surface-card__desc">Webhook fires on form submit. Classify by ICP, enrich with competitor context, write to your CRM, ping your team. 3 seconds end-to-end.</p>
         </div>
         <div class="surface-card">
           <div class="surface-card__icon"><i data-lucide="mail-check" class="w-5 h-5"></i></div>
           <div class="surface-card__title">Approval flow</div>
-          <p class="surface-card__desc">Draft reply to a client. Post to Slack with approve/reject buttons. On approve: send via Outlook, log to CRM, confirm in thread.</p>
+          <p class="surface-card__desc">Draft reply to a client. Post to chat with approve/reject buttons. On approve: send the email, log to your CRM, confirm in the thread.</p>
         </div>
       </div>
     </div>
@@ -1431,10 +1863,10 @@ tone-of-voice.md. End with a clear next step.</pre>
           <div class="industry-col">
             <span class="industry-col__label">03 / Automation (n8n)</span>
             <ul class="industry-col__list space-y-1">
-              <li>New lead webhook &rarr; classify, enrich, HubSpot, Slack</li>
+              <li>New lead webhook &rarr; classify, enrich, your CRM, your team</li>
               <li>Deal no activity 14 days &rarr; risk memo &rarr; owner DM</li>
               <li>Monday 7am: weekly pipeline brief</li>
-              <li>Discovery call ends &rarr; logged next steps in HubSpot</li>
+              <li>Discovery call ends &rarr; logged next steps in your CRM</li>
               <li>Deal stage changes &rarr; battlecard refresh in DM</li>
             </ul>
           </div>
@@ -1442,7 +1874,7 @@ tone-of-voice.md. End with a clear next step.</pre>
             <span class="industry-col__label">04 / Agent</span>
             <ul class="industry-col__list space-y-1">
               <li>Team Slack channel</li>
-              <li>Inline HubSpot notes</li>
+              <li>Inline CRM notes</li>
               <li>Daily email brief at 7am</li>
               <li>Rep asks <code>@ops</code> anything in Slack</li>
               <li>Sales-leader dashboard (web)</li>
@@ -1456,13 +1888,193 @@ tone-of-voice.md. End with a clear next step.</pre>
 
 
   <!-- ============================== -->
+  <!-- 06 — PROOF IN PRODUCTION (we run our own sales on this) -->
+  <!-- ============================== -->
+  <section id="proof" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy border-t border-white/10">
+    <div class="max-w-[1440px] mx-auto">
+
+      <!-- Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-14 md:mb-20">
+        <div class="lg:col-span-5">
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">06 In production</span>
+          <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
+            Three workflows,<br>running right now.
+          </h2>
+        </div>
+        <div class="lg:col-span-7 flex items-end">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up" style="color: rgba(247,246,243,0.6);">
+            None of this is theory. It is the system that answers our enquiries, writes our outreach, and drafts our replies, every day. The same four layers on this page, pointed at our own studio.
+          </p>
+        </div>
+      </div>
+
+      <!-- Hero proof: Workflow A pipeline + the Telegram brief it produces -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-8 md:mb-10">
+        <div class="lg:col-span-7 reveal-up">
+          <div class="wf-card">
+            <div class="wf-card__head">
+              <span class="wf-badge">A</span>
+              <div>
+                <h3 class="wf-card__title">Lead capture</h3>
+                <p class="wf-card__sub">Inbound · the enquiry you are about to send</p>
+              </div>
+              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
+            </div>
+            <div class="wf-flow">
+              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="globe"></i></div><div class="wf-node__label">Website form</div><div class="wf-node__sub">webhook</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="brain"></i></div><div class="wf-node__label">Reads the brain</div><div class="wf-node__sub">6 files</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Claude drafts</div><div class="wf-node__sub">hot · warm · cool</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
+            </div>
+            <p class="wf-foot">Outside business hours it sends a holding note on its own, then waits for your approval on the personalised reply. The message to the right is the actual brief this workflow produces.</p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 reveal-up">
+          <div class="tg-mock">
+            <div class="tg-mock__head">
+              <div class="tg-mock__avatar">DA</div>
+              <div class="flex-1">
+                <div class="tg-mock__name">DA_Adminbot</div>
+                <div class="tg-mock__status">bot · via Telegram · now</div>
+              </div>
+              <i data-lucide="bell" class="w-4 h-4" style="color: rgba(247,246,243,0.35);"></i>
+            </div>
+            <div class="tg-mock__body">
+              <div class="tg-bubble">
+                <div class="tg-bubble__title"><span class="tg-pill">HOT LEAD</span> DA-2049</div>
+                <div class="tg-line"><span>Name</span><b>Sarah Chen</b></div>
+                <div class="tg-line"><span>Business</span><b>Meridian Legal, Melbourne</b></div>
+                <div class="tg-line"><span>Service</span><b>Full operating system</b></div>
+                <div class="tg-line"><span>Fit</span><b>Strong · prof. services · 12 staff</b></div>
+                <div class="tg-draft">Hi Sarah, thanks for reaching out. A 12-person firm losing hours to proposal turnaround is exactly the wound the brain is built for. Happy to map your first layer free on a quick call...</div>
+              </div>
+              <div class="tg-kbd">
+                <button class="tg-btn tg-btn--approve" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="check"></i> Approve &amp; send</button>
+                <div class="tg-kbd__row">
+                  <button class="tg-btn" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="pencil"></i> Edit</button>
+                  <button class="tg-btn" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="x"></i> Reject</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="text-warm/50 text-xs mt-3 text-center" style="line-height:1.6;">Sample brief. Real leads land the same way, approved from your phone in one tap.</p>
+        </div>
+      </div>
+
+      <!-- Two more workflows -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 md:mb-28">
+        <div class="reveal-up">
+          <div class="wf-card">
+            <div class="wf-card__head">
+              <span class="wf-badge">F</span>
+              <div>
+                <h3 class="wf-card__title">Cold opener</h3>
+                <p class="wf-card__sub">Outbound · weekday mornings</p>
+              </div>
+              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
+            </div>
+            <div class="wf-flow">
+              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="clock"></i></div><div class="wf-node__label">Weekday 9am</div><div class="wf-node__sub">cron</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="table"></i></div><div class="wf-node__label">Prospect list</div><div class="wf-node__sub">sheet · ICP</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Qualifies + writes</div><div class="wf-node__sub">names the pain</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends opener</div><div class="wf-node__sub">gmail</div></div>
+            </div>
+            <p class="wf-foot">Six a day, never a blast. It qualifies each prospect against our ICP, names a specific pain, and writes the opener. We approve or kill every one.</p>
+          </div>
+        </div>
+
+        <div class="reveal-up">
+          <div class="wf-card">
+            <div class="wf-card__head">
+              <span class="wf-badge">H</span>
+              <div>
+                <h3 class="wf-card__title">Reply handler</h3>
+                <p class="wf-card__sub">Inbound replies · checks every minute</p>
+              </div>
+              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
+            </div>
+            <div class="wf-flow">
+              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="mail"></i></div><div class="wf-node__label">Prospect replies</div><div class="wf-node__sub">gmail</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="search"></i></div><div class="wf-node__label">Reads the intent</div><div class="wf-node__sub">interested?</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="file-text"></i></div><div class="wf-node__label">Drafts a teardown</div><div class="wf-node__sub">free · honest</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
+              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends it</div><div class="wf-node__sub">gmail</div></div>
+            </div>
+            <p class="wf-foot">When a prospect replies, it works out what they need and drafts a free one-page teardown of their problem. Honest about what is worth automating, no pitch.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social proof / testimonials -->
+      <!-- TESTIMONIALS hidden until real, approved client reviews exist. To restore: remove the `hidden` attribute below and replace each placeholder quote/name/role with a real Google review. -->
+      <div class="reveal-up" hidden>
+        <div class="text-center mb-12 md:mb-14">
+          <span class="tech-label text-accent font-medium mb-4 block">Social proof</span>
+          <h3 class="heading-md text-cream" style="font-size: clamp(1.5rem, 2.8vw, 2.25rem);">In their words.</h3>
+          <p class="text-warm text-sm mt-3 max-w-xl mx-auto" style="line-height:1.7;">Foundation client results, going up here as they sign off on the numbers.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Testimonial 1 -->
+          <figure class="tmonial">
+            <i data-lucide="quote" class="tmonial__mark"></i>
+            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. The result in their words, with a number if we have one. Two or three sentences is plenty.</blockquote>
+            <figcaption class="tmonial__who">
+              <span class="tmonial__avatar">--</span>
+              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
+            </figcaption>
+          </figure>
+
+          <!-- Testimonial 2 -->
+          <figure class="tmonial">
+            <i data-lucide="quote" class="tmonial__mark"></i>
+            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. What changed for the business after the build, in plain language.</blockquote>
+            <figcaption class="tmonial__who">
+              <span class="tmonial__avatar">--</span>
+              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
+            </figcaption>
+          </figure>
+
+          <!-- Testimonial 3 -->
+          <figure class="tmonial">
+            <i data-lucide="quote" class="tmonial__mark"></i>
+            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. Why they would recommend working with Digital Artifacts.</blockquote>
+            <figcaption class="tmonial__who">
+              <span class="tmonial__avatar">--</span>
+              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
+            </figcaption>
+          </figure>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
   <!-- HOW WE BUILD IT -->
   <!-- ============================== -->
   <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
     <div class="max-w-[1440px] mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-12 md:mb-16">
         <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">06 How we build it</span>
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 How we build it</span>
           <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.5vw, 2.75rem);">
             Five steps. No mystery.
           </h2>
@@ -1510,7 +2122,7 @@ tone-of-voice.md. End with a clear next step.</pre>
     <div class="max-w-[1440px] mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14">
         <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 Toolbox</span>
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">08 Toolbox</span>
           <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">
             What we build with.
           </h2>
@@ -1550,7 +2162,7 @@ tone-of-voice.md. End with a clear next step.</pre>
   <section id="pricing" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
     <div class="max-w-[1000px] mx-auto">
       <div class="text-center mb-14 md:mb-20">
-        <span class="tech-label text-accent font-medium reveal-up block mb-6">08 Pricing</span>
+        <span class="tech-label text-accent font-medium reveal-up block mb-6">09 Pricing</span>
         <h2 class="heading-lg text-cream mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Build once. Grow forever.</h2>
         <p class="text-warm text-sm md:text-base reveal-up max-w-2xl mx-auto">Two phases, one engagement. The initial deploy gets all four layers live. The retainer grows the brain and adds skills as your team uses it.</p>
       </div>
@@ -1619,6 +2231,64 @@ tone-of-voice.md. End with a clear next step.</pre>
 
 
   <!-- ============================== -->
+  <!-- FAQ + RESOURCES -->
+  <!-- ============================== -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[860px] mx-auto">
+      <div class="text-center mb-10 md:mb-14">
+        <span class="tech-label text-accent font-medium mb-3 block reveal-up">Questions</span>
+        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Before you ask.</h2>
+      </div>
+      <div class="reveal-up">
+        <details class="faq-item">
+          <summary>How long until it is running?</summary>
+          <div class="faq-item__body">Most builds are 4 to 8 weeks to first deployment, phased so something useful goes live early rather than everything landing at the end.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need to be technical?</summary>
+          <div class="faq-item__body">No. You talk in plain English about the jobs you want gone. We build and run the technical layer, and you approve every output from your phone before it sends.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens when something breaks?</summary>
+          <div class="faq-item__body">Things do break: an API changes, a form field moves, a model updates. Keeping it alive is the job. Monitoring, alerts, and fixes are part of the retainer.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Who owns it?</summary>
+          <div class="faq-item__body">You do. The brain (a Git repo), the workflows, and the connected accounts are yours, with full admin access handed over at the end of the build.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I edit it myself?</summary>
+          <div class="faq-item__body">Yes. Everything is visible in n8n and plain markdown. You change the brain through a review step, and we train your team to run it without us.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What does it cost to run?</summary>
+          <div class="faq-item__body">The build is fixed-price. After that the model and tool costs are usually small at typical volume, and the retainer covers monitoring and new work as your needs grow.</div>
+        </details>
+      </div>
+
+      <!-- Resources -->
+      <div class="mt-16 reveal-up">
+        <span class="tech-label text-accent font-medium mb-5 block">Resources</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="/one-pagers/01-admin-assistance.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
+            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
+            <div><span class="font-display font-semibold text-navy block text-sm">Admin assistance</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
+          </a>
+          <a href="/one-pagers/02-virtual-pa.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
+            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
+            <div><span class="font-display font-semibold text-navy block text-sm">Virtual PA</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
+          </a>
+          <a href="/one-pagers/03-onboarding-support.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
+            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
+            <div><span class="font-display font-semibold text-navy block text-sm">Onboarding support</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
   <!-- CONTACT -->
   <!-- ============================== -->
   <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
@@ -1628,7 +2298,7 @@ tone-of-voice.md. End with a clear next step.</pre>
 
     <div class="max-w-[1440px] mx-auto relative z-10">
       <div class="text-center mb-14">
-        <span class="tech-label text-accent font-medium reveal-up block mb-8">09 Contact</span>
+        <span class="tech-label text-accent font-medium reveal-up block mb-8">10 Contact</span>
         <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
           What would your<br>operating system do?<span class="text-accent cursor-blink">_</span>
         </h2>
@@ -1790,8 +2460,10 @@ tone-of-voice.md. End with a clear next step.</pre>
   <!-- SCRIPTS -->
   <!-- ============================== -->
   <script>
-    // === Initialize Lucide Icons ===
-    lucide.createIcons();
+    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
+    try { lucide.createIcons(); } catch (e) {}
+    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
+    if (!window.gsap) { document.documentElement.classList.remove('js'); }
 
     // === Mobile Menu ===
     const hamburger = document.getElementById('hamburgerBtn');

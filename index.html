@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
   <script>
@@ -121,6 +124,52 @@
       color: #8A8A80;
     }
 
+    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
+    .bg-navy [class*="text-warm"],
+    .bg-navy .body-text { color: #A8A89E; }
+
+    /* === Portfolio gallery (Selected work) === */
+    .pf-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .pf-filter {
+      padding: 0.45rem 1.1rem; border-radius: 9999px; border: 1px solid #E8E6E1;
+      background: transparent; color: #8A8A80; font-family: 'General Sans', sans-serif;
+      font-weight: 500; font-size: 0.8rem; cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .pf-filter:hover { color: #1B2838; border-color: #1B2838; }
+    .pf-filter.is-active { color: #F7F6F3; background: #1B2838; border-color: #1B2838; }
+    .pf-filter:focus-visible { outline: 2px solid #00C853; outline-offset: 2px; }
+
+    .pf-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
+    @media (min-width: 640px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .pf-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .pf-card {
+      display: block; border: 1px solid #E8E6E1; border-radius: 0.9rem; overflow: hidden;
+      background: #FFFFFF; text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .pf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(27, 40, 56, 0.12); border-color: rgba(0, 200, 83, 0.4); }
+    .pf-card.is-hidden { display: none; }
+    .pf-card__shot { aspect-ratio: 16 / 10; overflow: hidden; background: #F1EFE8; position: relative; }
+    .pf-card__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
+    .pf-card:hover .pf-card__shot img { transform: scale(1.03); }
+    .pf-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(0, 200, 83, 0.92); color: #0A1A12; padding: 0.2rem 0.55rem; border-radius: 9999px; }
+    .pf-card__meta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem; }
+    .pf-card__name { font-family: 'Clash Display', sans-serif; font-weight: 600; color: #1B2838; font-size: 0.95rem; display: block; line-height: 1.2; }
+    .pf-card__tag { color: #8A8A80; font-size: 0.74rem; }
+    .pf-card__icon { width: 1.1rem; height: 1.1rem; color: #8A8A80; margin-left: auto; flex-shrink: 0; transition: color 0.3s ease, transform 0.3s ease; }
+    .pf-card:hover .pf-card__icon { color: #00C853; transform: translate(2px, -2px); }
+
+    /* === Founder block === */
+    .founder-avatar {
+      width: clamp(7rem, 16vw, 11rem); height: clamp(7rem, 16vw, 11rem); border-radius: 1.25rem;
+      background: linear-gradient(145deg, rgba(0, 200, 83, 0.18), rgba(27, 40, 56, 0.06));
+      border: 1px solid rgba(0, 200, 83, 0.3); display: flex; align-items: center; justify-content: center;
+      font-family: 'Clash Display', sans-serif; font-weight: 600; color: #00C853; font-size: clamp(2rem, 5vw, 3.25rem);
+      flex-shrink: 0; letter-spacing: -0.02em;
+    }
+
     /* === Nav === */
     .nav-fixed {
       position: fixed;
@@ -231,8 +280,8 @@
       100% { top: 100%; }
     }
 
-    /* === Reveal Animations === */
-    .reveal-up {
+    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
+    html.js .reveal-up {
       opacity: 0;
       transform: translateY(60px);
     }
@@ -242,10 +291,24 @@
       overflow: hidden;
     }
 
-    .reveal-word-inner {
+    html.js .reveal-word-inner {
       display: inline-block;
       transform: translateY(100%);
       opacity: 0;
+    }
+
+    /* === Respect reduced-motion: reveal everything, stop animation === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-up, .reveal-word-inner {
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
     /* === Project Row === */
@@ -1016,6 +1079,24 @@
       line-height: 1.3;
     }
   </style>
+  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Digital Artifacts",
+    "url": "https://digitalartifacts.com.au/",
+    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
+    "image": "https://digitalartifacts.com.au/og/og-image.png",
+    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
+    "email": "hello@digitalartifacts.com.au",
+    "founder": { "@type": "Person", "name": "Isaiah Wong" },
+    "areaServed": "AU",
+    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
+    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
+  }
+  </script>
 </head>
 
 <body class="bg-cream text-navy font-body overflow-x-hidden">
@@ -1028,7 +1109,7 @@
   <!-- ============================== -->
   <nav class="nav-fixed" id="mainNav">
     <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <a href="#" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
+      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
         <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-10 w-10">
         <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
       </a>
@@ -1432,7 +1513,7 @@
           <div class="industry-col">
             <span class="industry-col__label">03 &middot; Automation</span>
             <ul class="industry-col__list space-y-1">
-              <li>New lead &rarr; AI classify + HubSpot + Slack</li>
+              <li>New lead &rarr; AI classify + your CRM + your team</li>
               <li>Deal stuck 14 days &rarr; risk memo</li>
               <li>Monday 7am pipeline brief</li>
               <li>Discovery call &rarr; logged next steps</li>
@@ -1442,7 +1523,7 @@
             <span class="industry-col__label">04 &middot; Agent</span>
             <ul class="industry-col__list space-y-1">
               <li>Team Slack channel</li>
-              <li>Inline HubSpot notes</li>
+              <li>Inline CRM notes</li>
               <li>Daily email brief at 7am</li>
               <li>Rep asks <code>@ops</code> anything</li>
             </ul>
@@ -1529,6 +1610,151 @@
 
 
   <!-- ============================== -->
+  <!-- 07 — SELECTED WORK (real, live client sites) -->
+  <!-- ============================== -->
+  <section id="work" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-12 md:mb-16">
+        <div class="lg:col-span-5">
+          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 Selected work</span>
+          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">Real businesses,<br>live and shipped.</h2>
+        </div>
+        <div class="lg:col-span-7 flex items-end">
+          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
+            A selection of client work, every one live online right now. Across design studios, solar, tree care, and local services, in Australia and the UK. Click any of them and see for yourself.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="pf-filters reveal-up" role="group" aria-label="Filter work by industry">
+        <button type="button" class="pf-filter is-active" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="pf-filter" data-filter="design" aria-pressed="false">Design</button>
+        <button type="button" class="pf-filter" data-filter="trades" aria-pressed="false">Trades</button>
+        <button type="button" class="pf-filter" data-filter="services" aria-pressed="false">Services</button>
+      </div>
+
+      <!-- Gallery -->
+      <div class="pf-grid reveal-up" id="pfGrid">
+        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="design">
+          <div class="pf-card__shot"><img src="/assets/portfolio/cee-ess.jpg" alt="Cee Ess Designs website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Cee Ess Designs</span><span class="pf-card__tag">Design studio</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://jensen-design-service.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="design">
+          <div class="pf-card__shot"><img src="/assets/portfolio/jensen.jpg" alt="Jensen Design Service website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Jensen Design Service</span><span class="pf-card__tag">Design agency</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="#valley-arbor" class="pf-card" data-cat="trades">
+          <div class="pf-card__shot"><span class="pf-badge">Case study</span><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Valley Arbor</span><span class="pf-card__tag">Arborist, site + quote automation</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://foliole-tree-management.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="trades">
+          <div class="pf-card__shot"><img src="/assets/portfolio/foliole.jpg" alt="Foliole Tree Management website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Foliole Tree Management</span><span class="pf-card__tag">Tree care, Melbourne</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
+          <div class="pf-card__shot"><img src="/assets/portfolio/fullcircle.jpg" alt="Full Circle Solutions website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Full Circle Solutions</span><span class="pf-card__tag">Business solutions</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
+          <div class="pf-card__shot"><img src="/assets/portfolio/baysolar.jpg" alt="BaySolar UK website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">BaySolar UK</span><span class="pf-card__tag">Solar energy, United Kingdom</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+        <a href="https://peninsula-makers-hub.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
+          <div class="pf-card__shot"><img src="/assets/portfolio/pmh.jpg" alt="Peninsula Makers Hub website homepage" loading="lazy" width="800" height="500"></div>
+          <div class="pf-card__meta"><div><span class="pf-card__name">Peninsula Makers Hub</span><span class="pf-card__tag">Makerspace, Mornington Peninsula</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
+        </a>
+      </div>
+
+      <div class="mt-10 reveal-up">
+        <a href="/websites.html#portfolio" class="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all">See all work and website packages <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- VALLEY ARBOR CASE STUDY -->
+  <!-- ============================== -->
+  <section id="valley-arbor" class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider" style="scroll-margin-top: 5rem;">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div class="lg:col-span-6 reveal-up">
+          <div class="rounded-2xl overflow-hidden border border-divider shadow-xl">
+            <img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website" class="w-full block" width="800" height="500" loading="lazy">
+          </div>
+        </div>
+        <div class="lg:col-span-6 reveal-up">
+          <span class="tech-label text-accent font-medium mb-4 block">Case study</span>
+          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">A website that answers, on a system that follows up.</h2>
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Matt runs Valley Arbor, a climbing arborist in Melbourne. Good reputation, real Google reviews, but enquiries arrived ad hoc and the follow-up was all manual.</p>
+          <div class="space-y-3 border-t border-divider pt-6">
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The build.</strong> A fast custom site in his brand with his real work photos, per-suburb pages for local search, and his live Google reviews wired straight in.</p></div>
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The system behind it.</strong> A quote form that drops every enquiry straight into his inbox through an automation, so nothing slips. Layer 4 (the site) sitting on Layer 3 (the follow-up).</p></div>
+            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The point.</strong> The same operating-system idea, scaled down to a sole trader. One brain, one surface, one less thing to chase.</p></div>
+          </div>
+          <!-- TODO: add a real outcome line once Matt confirms numbers (quote requests per month, response time). -->
+          <p class="text-warm text-xs mt-6" style="line-height: 1.6;">Outcome numbers to follow as the new site beds in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- MEET THE FOUNDER -->
+  <!-- ============================== -->
+  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div class="lg:col-span-4 flex justify-center lg:justify-start reveal-up">
+          <!-- Swap this monogram for a headshot any time: replace with <img src="..." class="founder-avatar" style="object-fit:cover"> -->
+          <div class="founder-avatar">IW</div>
+        </div>
+        <div class="lg:col-span-8 reveal-up">
+          <span class="tech-label text-accent font-medium mb-4 block">The studio</span>
+          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">One person. You always know who built it.</h2>
+          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Digital Artifacts is Isaiah Wong, working direct. No account managers, no handoffs, no junior doing the real work. You talk to the person who builds your system, you own every file and workflow, and the brain only changes through a human review step.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag-pill">Single operator</span>
+            <span class="tag-pill">Direct work</span>
+            <span class="tag-pill">You own the stack</span>
+            <span class="tag-pill">Based in Australia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
+  <!-- 08 — REFER A BUSINESS -->
+  <!-- ============================== -->
+  <section class="py-16 md:py-20 px-6 md:px-12 lg:px-16 bg-cream">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="rounded-2xl bg-navy p-8 md:p-12 reveal-up">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
+          <div class="md:col-span-8">
+            <span class="tech-label text-accent font-medium mb-3 block">Refer a business</span>
+            <h3 class="heading-md text-cream mb-3" style="font-size: clamp(1.5rem, 2.4vw, 2rem); letter-spacing: -0.02em;">Know a business drowning in admin?</h3>
+            <p class="text-warm text-sm md:text-base max-w-2xl" style="line-height: 1.7;">
+              Most of our work starts with a quiet word between people who trust each other. Send someone our way, and if they build with us there is a thank-you in it for both of you.
+              <!-- TODO confirm referral incentive wording before publishing. Current offer: 10% off the referred client's first retainer month. -->
+            </p>
+          </div>
+          <div class="md:col-span-4 md:text-right">
+            <a href="#contact" class="inline-flex items-center gap-2 bg-accent text-cream font-semibold text-sm uppercase tracking-wide px-7 py-3.5 rounded-full hover:scale-[1.03] transition-transform">
+              Refer someone
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================== -->
   <!-- LEAD MAGNET SECTION -->
   <!-- ============================== -->
   <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 relative overflow-hidden" style="background: linear-gradient(135deg, #E8F5E9 0%, #F7F6F3 50%, #E8F5E9 100%);">
@@ -1553,10 +1779,12 @@
           <div class="w-full md:w-[320px] flex-shrink-0">
             <form id="leadMagnetForm" class="space-y-3">
               <div>
-                <input type="text" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
+                <label for="lm-name" class="sr-only">Your name</label>
+                <input type="text" id="lm-name" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
               </div>
               <div>
-                <input type="email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
+                <label for="lm-email" class="sr-only">Your email</label>
+                <input type="email" id="lm-email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-divider bg-cream/50 text-navy text-sm placeholder:text-warm/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
               </div>
               <button type="submit" class="w-full px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center justify-center gap-2">
                 <span>Get the Blueprint</span>
@@ -1753,8 +1981,10 @@
         <div class="md:col-span-2 md:col-start-7">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
           <div class="flex flex-col gap-3">
+            <a href="/" class="footer-link">Home</a>
             <a href="/automations.html" class="footer-link">Automation</a>
             <a href="/websites.html" class="footer-link">Websites</a>
+            <a href="#work" class="footer-link">Selected work</a>
             <a href="#layers" class="footer-link">The 4 layers</a>
             <a href="#contact" class="footer-link">Contact</a>
           </div>
@@ -1773,6 +2003,7 @@
         <div class="md:col-span-2">
           <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
           <p class="text-warm text-sm">Digital Artifacts</p>
+          <p class="text-warm/50 text-xs mt-2">Run by Isaiah Wong. Single operator, direct work, you own the stack.</p>
           <p class="text-warm/50 text-xs mt-2">Australia</p>
         </div>
       </div>
@@ -1789,8 +2020,10 @@
   <!-- SCRIPTS -->
   <!-- ============================== -->
   <script>
-    // === Initialize Lucide Icons ===
-    lucide.createIcons();
+    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
+    try { lucide.createIcons(); } catch (e) {}
+    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
+    if (!window.gsap) { document.documentElement.classList.remove('js'); }
 
     // === Mobile Menu ===
     const hamburger = document.getElementById('hamburgerBtn');
@@ -2101,6 +2334,24 @@
         });
         panels.forEach(p => {
           p.classList.toggle('is-active', p.dataset.panel === target);
+        });
+      });
+    });
+
+    // === Portfolio filter (Selected work) ===
+    const pfFilters = document.querySelectorAll('.pf-filter');
+    const pfCards = document.querySelectorAll('#pfGrid .pf-card');
+    pfFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        pfFilters.forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        pfCards.forEach(card => {
+          const show = filter === 'all' || card.dataset.cat === filter;
+          card.classList.toggle('is-hidden', !show);
         });
       });
     });
