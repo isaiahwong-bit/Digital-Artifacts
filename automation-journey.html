@@ -209,23 +209,46 @@
     margin-top:26px;font-weight:300;font-size:clamp(1.05rem,2vw,1.35rem);
     line-height:1.55;color:rgba(247,246,243,.74);max-width:60ch;
   }
-  .figure{margin:7vh 0 0}
-  .frame{
-    border:1px solid rgba(255,255,255,.1);border-radius:16px;overflow:hidden;
-    background:#14202C;box-shadow:0 30px 80px rgba(0,0,0,.45);
+  /* under-the-hood flow, in the site's own wf-node style (matches the // 06 In Production section) */
+  .wf-card{
+    margin-top:7vh;
+    background:rgba(247,246,243,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:1rem;padding:1.65rem;
   }
-  .frame-bar{
-    display:flex;align-items:center;gap:10px;padding:14px 18px;
-    border-bottom:1px solid rgba(255,255,255,.07);
-    font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--muted);
+  .wf-card__head{display:flex;align-items:center;gap:.9rem;margin-bottom:1.6rem}
+  .wf-badge{
+    width:2.25rem;height:2.25rem;flex:0 0 auto;border-radius:.6rem;
+    background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.3);color:#00C853;
+    font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.05rem;
+    display:flex;align-items:center;justify-content:center;
   }
-  .frame-bar .dots{display:flex;gap:7px}
-  .frame-bar .dots i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)}
-  .frame img{display:block;width:100%;height:auto}
-  .frame-cap{
-    margin-top:18px;font-family:var(--mono);font-size:.74rem;
-    letter-spacing:.04em;color:var(--muted);text-align:center;
+  .wf-card__title{font-family:"Clash Display",sans-serif;font-weight:500;color:#F7F6F3;font-size:1.1rem;letter-spacing:-.01em}
+  .wf-card__sub{color:rgba(247,246,243,.45);font-size:.75rem;margin-top:.1rem}
+  .wf-live{
+    margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;
+    font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
+    color:#5FE39B;padding:.25rem .6rem;border-radius:9999px;
+    background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);flex:0 0 auto;
   }
+  .wf-live__dot{width:6px;height:6px;border-radius:50%;background:#00C853;animation:wfPulse 2s ease-out infinite}
+  @keyframes wfPulse{0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}70%{box-shadow:0 0 0 6px rgba(0,200,83,0)}100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}}
+  .wf-flow{display:flex;flex-direction:column;gap:.5rem}
+  @media (min-width:768px){.wf-flow{flex-direction:row;align-items:flex-start;gap:.25rem}}
+  .wf-node{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.45rem;flex:1 1 0;min-width:0;padding:.25rem}
+  .wf-node__chip{width:2.9rem;height:2.9rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;border:1px solid transparent}
+  .wf-node__chip svg{width:1.15rem;height:1.15rem}
+  .wf-node__chip[data-kind="trigger"]{background:rgba(138,138,128,.12);border-color:rgba(138,138,128,.35);color:#B5B5AC}
+  .wf-node__chip[data-kind="brain"]{background:rgba(0,200,83,.1);border-color:rgba(0,200,83,.35);color:#00C853}
+  .wf-node__chip[data-kind="ai"]{background:rgba(0,200,83,.16);border-color:rgba(0,200,83,.45);color:#5FE39B}
+  .wf-node__chip[data-kind="human"]{background:rgba(0,200,83,.06);border-color:rgba(0,200,83,.6);color:#00C853;box-shadow:0 0 0 4px rgba(0,200,83,.1)}
+  .wf-node__chip[data-kind="send"]{background:#00C853;border-color:#00C853;color:#0A1A12}
+  .wf-node__label{font-size:.72rem;font-weight:600;color:#F7F6F3;line-height:1.25;letter-spacing:-.01em}
+  .wf-node__sub{font-family:var(--mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(247,246,243,.4)}
+  .wf-arrow{display:flex;align-items:center;justify-content:center;color:rgba(0,200,83,.45);flex:0 0 auto;align-self:center;padding-top:.6rem}
+  .wf-arrow svg{width:1.1rem;height:1.1rem}
+  @media (max-width:767px){.wf-node{flex-direction:row;justify-content:flex-start;gap:.85rem;text-align:left;width:100%}.wf-arrow{transform:rotate(90deg);padding:0;margin-left:1.45rem;align-self:flex-start}}
+  .wf-foot{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.07);color:rgba(247,246,243,.55);font-size:.82rem;line-height:1.65}
   .cards{margin-top:9vh;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
   .card{
     border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:30px;
@@ -339,21 +362,33 @@
         <p class="eyebrow2">UNDER THE HOOD</p>
         <h2>No chatbot pulling the strings.</h2>
         <p class="lead">
-          The journey you just travelled is not a clever prompt hoping for the best. It is a real flow,
-          built once, that runs the same way on every single trigger. Here is one we run in production.
+          What you just travelled is not a clever prompt hoping for the best. It is a real flow,
+          built once, that runs the same way on every single trigger. Here is the actual flow behind
+          lead response, the one that answers our own enquiries.
         </p>
 
-        <figure class="figure">
-          <div class="frame">
-            <div class="frame-bar">
-              <span class="dots"><i></i><i></i><i></i></span>
-              <span>production · timesheet-compliance.flow</span>
+        <div class="wf-card">
+          <div class="wf-card__head">
+            <span class="wf-badge">A</span>
+            <div>
+              <h3 class="wf-card__title">Lead response</h3>
+              <p class="wf-card__sub">Inbound · the flow behind the journey above</p>
             </div>
-            <img src="under-the-hood-flow.png" width="1186" height="425"
-                 alt="A real n8n automation flow: a 9am daily trigger pulls 36 hours of timesheets, then branches into compliance checks, an event log, and a styled workbook uploaded to OneDrive. Every step shows a green success tick and the number of records it handled." />
+            <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
           </div>
-          <figcaption class="frame-cap">A live flow. The green ticks are real runs. 268 records in, the right ones out, every morning at 9am.</figcaption>
-        </figure>
+          <div class="wf-flow">
+            <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="globe"></i></div><div class="wf-node__label">Website form</div><div class="wf-node__sub">webhook</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="brain"></i></div><div class="wf-node__label">Reads the brain</div><div class="wf-node__sub">6 files</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Claude drafts</div><div class="wf-node__sub">hot · warm · cool</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
+          </div>
+          <p class="wf-foot">Notice the AI writes exactly one thing: the draft. Every other step is fixed. Read the brain, wait for your approval, send and log. Same path, every lead.</p>
+        </div>
 
         <div class="cards">
           <article class="card">
@@ -387,6 +422,8 @@
     <a href="https://digitalartifacts.com.au/#contact">hello@digitalartifacts.com.au</a>
   </footer>
 
+<!-- Lucide icons for the under-the-hood flow (same source the live site uses) -->
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
 const CTA_HREF = 'https://digitalartifacts.com.au/#contact';
 
@@ -597,6 +634,9 @@ if(reduce){
   if(cam!==null){ locked = true; target = cur = parseFloat(cam); }   // dev: pin the camera at a journey position for screenshots
   requestAnimationFrame(frame);
 }
+
+// render the under-the-hood flow icons
+if(window.lucide){ lucide.createIcons(); }
 </script>
 </body>
 </html>
