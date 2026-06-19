@@ -1,2636 +1,876 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
-  <script>document.documentElement.classList.add('js');</script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-FGKKW3ERQ5');
-  </script>
-
-  <title>Automation | A 4-layer framework for AI that actually works | Digital Artifacts</title>
-  <link rel="icon" type="image/png" href="/brand/da-mark-tile.png">
-  <link rel="apple-touch-icon" href="/brand/da-mark-tile.png">
-  <meta name="description" content="Context, Skills, Automation, Agent. The 4-layer framework we use to build AI operating systems for small business. Deep dive with sample files, real n8n workflows, and worked examples by industry.">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Automation | A 4-layer framework for AI that actually works">
-  <meta property="og:description" content="Context, Skills, Automation, Agent. The framework behind every build. Deep dive with sample files, real n8n workflows, and worked examples.">
-  <meta property="og:url" content="https://digitalartifacts.com.au/automations.html">
-  <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Automation | A 4-layer framework for AI that actually works">
-  <meta name="twitter:description" content="Context, Skills, Automation, Agent. The framework behind every build. Deep dive with sample files, real n8n workflows, and worked examples.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <link rel="canonical" href="https://digitalartifacts.com.au/automations.html">
-
-  <!-- Fonts: Clash Display + General Sans from Fontshare -->
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#1B2838',
-            cream: '#F7F6F3',
-            warm: '#8A8A80',
-            divider: '#E8E6E1',
-            accent: '#00C853',
-            surface: '#FFFFFF',
-            mint: '#E8F5E9',
-          },
-          fontFamily: {
-            display: ['"Clash Display"', 'sans-serif'],
-            body: ['"General Sans"', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
-
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <!-- Lenis Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
-
-  <style>
-    /* === Base Reset === */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      background: #F7F6F3;
-      color: #1B2838;
-      font-family: 'General Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html.lenis, html.lenis body { height: auto; }
-    .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-    .lenis.lenis-stopped { overflow: hidden; }
-
-    /* === Typography === */
-    .font-display { font-family: 'Clash Display', sans-serif; }
-    .font-body { font-family: 'General Sans', sans-serif; }
-
-    .heading-xl {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-    }
-
-    .heading-lg {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-    }
-
-    .heading-md {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-
-    .body-text {
-      font-family: 'General Sans', sans-serif;
-      font-weight: 400;
-      line-height: 1.7;
-      color: #8A8A80;
-    }
-
-    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
-    .bg-navy [class*="text-warm"],
-    .bg-navy .body-text { color: #A8A89E; }
-
-    /* === FAQ (native details, works without JS) === */
-    .faq-item { border-bottom: 1px solid #E8E6E1; }
-    .faq-item summary {
-      list-style: none; cursor: pointer; padding: 1.4rem 0; display: flex; align-items: center;
-      justify-content: space-between; gap: 1.5rem;
-      font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 1.05rem; color: #1B2838;
-      letter-spacing: -0.01em;
-    }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after {
-      content: '+'; font-family: 'General Sans', sans-serif; font-weight: 400; font-size: 1.5rem;
-      color: #00C853; flex-shrink: 0; transition: transform 0.3s ease; line-height: 1;
-    }
-    .faq-item[open] summary::after { transform: rotate(45deg); }
-    .faq-item summary:focus-visible { outline: 2px solid #00C853; outline-offset: 4px; border-radius: 4px; }
-    .faq-item__body { padding: 0 0 1.5rem; color: #8A8A80; font-size: 0.95rem; line-height: 1.7; max-width: 70ch; }
-
-    /* === Nav === */
-    .nav-fixed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      transition: background-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .nav-fixed.scrolled {
-      background: rgba(247, 246, 243, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 1px 0 0 #E8E6E1;
-    }
-
-    .nav-link {
-      position: relative;
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 500;
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 0.25rem 0;
-      transition: color 0.4s ease;
-    }
-
-    .nav-fixed.scrolled .nav-link {
-      color: #1B2838;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0%;
-      height: 1.5px;
-      background: #00C853;
-      transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .nav-link:hover::after,
-    .nav-link:focus-visible::after {
-      width: 100%;
-    }
-
-    .nav-link:active {
-      opacity: 0.7;
-    }
-
-    .nav-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    /* === Hero === */
-    .hero-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 5rem;
-    }
-
-    .hero-subtitle {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
-    html.js .reveal-up {
-      opacity: 0;
-      transform: translateY(60px);
-    }
-
-    .reveal-word {
-      display: inline-block;
-      overflow: hidden;
-    }
-
-    html.js .reveal-word-inner {
-      display: inline-block;
-      transform: translateY(100%);
-      opacity: 0;
-    }
-
-    /* === Respect reduced-motion: reveal everything, stop animation === */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-      .reveal-up, .reveal-word-inner {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-
-    /* === Tag Pills === */
-    .tag-pill {
-      display: inline-block;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      background: rgba(0, 200, 83, 0.08);
-      color: #00C853;
-      letter-spacing: 0.02em;
-    }
-
-    /* === Service Card === */
-    .service-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(27, 40, 56, 0.08);
-    }
-
-    /* === Pricing Card === */
-    .pricing-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(27, 40, 56, 0.1);
-    }
-
-    .pricing-card.featured {
-      border: 2px solid #00C853;
-    }
-
-    /* === CTA Shimmer Button === */
-    .cta-btn {
-      --shimmer-color: rgba(255, 255, 255, 0.6);
-      --bg: #00C853;
-      --radius: 100px;
-      --speed: 3s;
-      --cut: 0.05em;
-      --spread: 90deg;
-      position: relative;
-      z-index: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem 2.25rem;
-      background: var(--bg);
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.875rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      overflow: hidden;
-      transform: translateZ(0);
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover {
-      transform: scale(1.04);
-    }
-
-    .cta-btn:active {
-      transform: scale(0.98) translateY(1px);
-    }
-
-    .cta-btn:focus-visible {
-      outline: 2px solid #F7F6F3;
-      outline-offset: 4px;
-    }
-
-    .cta-btn-dark {
-      --bg: #1B2838;
-      --shimmer-color: rgba(0, 200, 83, 0.5);
-    }
-
-    .cta-btn .shimmer-spark {
-      position: absolute;
-      inset: 0;
-      z-index: -3;
-      overflow: visible;
-      filter: blur(2px);
-    }
-
-    .cta-btn .shimmer-slide {
-      position: absolute;
-      inset: 0;
-      aspect-ratio: 1;
-      height: 100cqh;
-      animation: shimmerSlide var(--speed) ease-in-out infinite;
-    }
-
-    .cta-btn .shimmer-spin {
-      position: absolute;
-      inset: -100%;
-      width: auto;
-      background: conic-gradient(
-        from calc(270deg - (var(--spread) * 0.5)),
-        transparent 0,
-        var(--shimmer-color) var(--spread),
-        transparent var(--spread)
-      );
-      animation: shimmerSpin 2s linear infinite;
-    }
-
-    .cta-btn .shimmer-highlight {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      box-shadow: inset 0 -8px 10px rgba(255, 255, 255, 0.12);
-      transition: box-shadow 0.3s ease;
-      pointer-events: none;
-    }
-
-    .cta-btn:hover .shimmer-highlight {
-      box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn:active .shimmer-highlight {
-      box-shadow: inset 0 -10px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn .shimmer-backdrop {
-      position: absolute;
-      inset: var(--cut);
-      z-index: -2;
-      background: var(--bg);
-      border-radius: var(--radius);
-    }
-
-    @keyframes shimmerSlide {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-    }
-
-    @keyframes shimmerSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* === Arrow Icon === */
-    .arrow-icon {
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover .arrow-icon {
-      transform: translateX(4px);
-    }
-
-    /* === Mobile Menu === */
-    .mobile-menu {
-      position: fixed;
-      inset: 0;
-      z-index: 99;
-      background: #F7F6F3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .mobile-menu.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .mobile-menu-link {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      color: #1B2838;
-      text-decoration: none;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: color 0.3s ease;
-    }
-
-    .mobile-menu.open .mobile-menu-link {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .mobile-menu-link:hover {
-      color: #00C853;
-    }
-
-    .mobile-menu-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-    }
-
-    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-
-    /* === Hamburger === */
-    .hamburger {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      z-index: 101;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 1.5px;
-      background: #F7F6F3;
-      display: block;
-      transition: transform 0.3s ease, opacity 0.3s ease, background 0.4s ease;
-    }
-
-    .nav-fixed.scrolled .hamburger span {
-      background: #1B2838;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: translateY(7.5px) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: translateY(-7.5px) rotate(-45deg);
-    }
-
-    /* === Footer Links === */
-    .footer-link {
-      color: #8A8A80;
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.3s ease;
-    }
-
-    .footer-link:hover {
-      color: #F7F6F3;
-    }
-
-    .footer-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    /* === Grain Texture Overlay === */
-    .grain-overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-    }
-
-    /* === Selection === */
-    ::selection {
-      background: rgba(0, 200, 83, 0.12);
-      color: #1B2838;
-    }
-
-    /* === Tech Label === */
-    .tech-label {
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .tech-label::before {
-      content: '// ';
-      opacity: 0.4;
-    }
-
-    /* === Terminal cursor blink === */
-    .cursor-blink {
-      animation: cursorBlink 1.2s step-end infinite;
-    }
-
-    @keyframes cursorBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* === Tech grid background === */
-    .tech-grid-bg {
-      background-image:
-        linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* === Form Styles === */
-    .form-input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 0.5rem;
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-size: 0.9rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-input::placeholder {
-      color: rgba(247, 246, 243, 0.4);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #00C853;
-      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
-    }
-
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238A8A80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
-    }
-
-    .form-select option {
-      background: #1B2838;
-      color: #F7F6F3;
-    }
-
-    /* === Tool Badge === */
-    .tool-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1.25rem;
-      border-radius: 9999px;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 500;
-      font-size: 0.85rem;
-      background: rgba(0, 200, 83, 0.06);
-      border: 1px solid rgba(0, 200, 83, 0.15);
-      color: #1B2838;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-
-    .tool-badge:hover {
-      transform: translateY(-2px);
-      background: rgba(0, 200, 83, 0.12);
-    }
-
-    /* === Example Card === */
-    .example-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .example-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-    }
-
-    /* === Scroll Indicator === */
-    .scroll-indicator {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 48px;
-      background: rgba(232, 230, 225, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .scroll-line::after {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #F7F6F3;
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0% { top: -100%; }
-      50% { top: 0%; }
-      100% { top: 100%; }
-    }
-
-    /* === Layer Section === */
-    .layer-section {
-      scroll-margin-top: 5rem;
-    }
-
-    .layer-stamp {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: clamp(5rem, 12vw, 9.5rem);
-      line-height: 0.85;
-      letter-spacing: -0.05em;
-      color: rgba(0, 200, 83, 0.12);
-      position: relative;
-    }
-
-    .layer-stamp-dark {
-      color: rgba(0, 200, 83, 0.18);
-    }
-
-    .layer-stamp__slash {
-      color: rgba(0, 200, 83, 0.6);
-      font-weight: 500;
-    }
-
-    /* === Artefact Card (code/file mock) === */
-    .artefact {
-      background: #1B2838;
-      border: 1px solid rgba(0, 200, 83, 0.18);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 1.7;
-      color: #E8E6E1;
-    }
-
-    .artefact__bar {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.6rem 1rem;
-      background: rgba(0, 0, 0, 0.25);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.72rem;
-      color: rgba(247, 246, 243, 0.5);
-      letter-spacing: 0.05em;
-    }
-
-    .artefact__dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .artefact__dot:nth-child(1) { background: rgba(230, 95, 95, 0.5); }
-    .artefact__dot:nth-child(2) { background: rgba(230, 180, 95, 0.5); }
-    .artefact__dot:nth-child(3) { background: rgba(95, 200, 120, 0.5); }
-
-    .artefact__file {
-      margin-left: auto;
-      color: rgba(247, 246, 243, 0.65);
-      text-transform: none;
-      letter-spacing: 0;
-    }
-
-    .artefact__body {
-      padding: 1.25rem 1.5rem;
-      overflow-x: auto;
-    }
-
-    .artefact pre {
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .artefact .c-key { color: #00C853; }
-    .artefact .c-str { color: #D8C07E; }
-    .artefact .c-cm  { color: rgba(247, 246, 243, 0.4); font-style: italic; }
-    .artefact .c-h1  { color: #F7F6F3; font-weight: 600; }
-    .artefact .c-h2  { color: #BEE3C7; }
-
-    /* === Industry Tabs (deep version) === */
-    .industry-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      border-bottom: 1px solid #E8E6E1;
-      margin-bottom: 2.5rem;
-    }
-
-    .industry-tab {
-      padding: 0.75rem 1.25rem;
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: #8A8A80;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      transition: color 0.25s ease, border-color 0.25s ease;
-      margin-bottom: -1px;
-    }
-
-    .industry-tab:hover { color: #1B2838; }
-
-    .industry-tab.is-active {
-      color: #1B2838;
-      border-bottom-color: #00C853;
-    }
-
-    .industry-tab:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-
-    .industry-panel { display: none; }
-
-    .industry-panel.is-active {
-      display: grid;
-      animation: fadeInUp 0.4s ease;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .industry-col {
-      border-left: 2px solid rgba(0, 200, 83, 0.35);
-      padding: 0.25rem 0 0.25rem 1.25rem;
-    }
-
-    .industry-col__label {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #00C853;
-      margin-bottom: 0.75rem;
-      display: block;
-    }
-
-    .industry-col__group {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: 0.78rem;
-      color: #1B2838;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-top: 1.1rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .industry-col__list {
-      color: #1B2838;
-      font-size: 0.88rem;
-      line-height: 1.7;
-    }
-
-    .industry-col__list li {
-      list-style: none;
-    }
-
-    .industry-col__list code {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.76rem;
-      background: rgba(0, 200, 83, 0.07);
-      color: #007F3A;
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
-    }
-
-    /* === Surface cards (Layer 4 Agent) === */
-    .surface-card {
-      background: rgba(247, 246, 243, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-      padding: 1.75rem;
-      transition: background 0.3s ease, border-color 0.3s ease;
-    }
-
-    .surface-card:hover {
-      background: rgba(0, 200, 83, 0.06);
-      border-color: rgba(0, 200, 83, 0.25);
-    }
-
-    .surface-card__icon {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 0.5rem;
-      background: rgba(0, 200, 83, 0.12);
-      color: #00C853;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .surface-card__title {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      color: #F7F6F3;
-      font-size: 1.05rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.01em;
-    }
-
-    .surface-card__desc {
-      color: rgba(247, 246, 243, 0.55);
-      font-size: 0.85rem;
-      line-height: 1.65;
-    }
-
-    /* === Build steps === */
-    .build-step {
-      position: relative;
-      padding: 1.75rem 0 1.75rem 3.5rem;
-      border-top: 1px solid #E8E6E1;
-    }
-
-    .build-step:last-child {
-      border-bottom: 1px solid #E8E6E1;
-    }
-
-    .build-step::before {
-      content: attr(data-step);
-      position: absolute;
-      left: 0;
-      top: 1.75rem;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      color: #00C853;
-    }
-
-    .build-step h3 {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: 1.25rem;
-      color: #1B2838;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.015em;
-    }
-
-    .build-step p {
-      color: #8A8A80;
-      font-size: 0.92rem;
-      line-height: 1.7;
-      max-width: 60ch;
-    }
-
-    /* === Proof: metrics strip === */
-    .proof-metric__num {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      color: #00C853;
-      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-      letter-spacing: -0.03em;
-      line-height: 1;
-    }
-
-    .proof-metric__label {
-      color: rgba(247, 246, 243, 0.55);
-      font-size: 0.8rem;
-      line-height: 1.5;
-      margin-top: 0.6rem;
-    }
-
-    .proof-bar__link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: #00C853;
-      font-weight: 600;
-      font-size: 0.85rem;
-      text-decoration: none;
-      transition: gap 0.3s ease, color 0.3s ease;
-    }
-
-    .proof-bar__link:hover { gap: 0.75rem; color: #2BD673; }
-    .proof-bar__link svg { transition: transform 0.3s ease; }
-    .proof-bar__link:hover svg { transform: translateY(2px); }
-
-    /* === Proof: workflow cards === */
-    .wf-card {
-      background: rgba(247, 246, 243, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-      padding: 1.65rem;
-    }
-
-    .wf-card__head {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      margin-bottom: 1.6rem;
-    }
-
-    .wf-badge {
-      width: 2.25rem;
-      height: 2.25rem;
-      flex: 0 0 auto;
-      border-radius: 0.6rem;
-      background: rgba(0, 200, 83, 0.12);
-      border: 1px solid rgba(0, 200, 83, 0.3);
-      color: #00C853;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wf-card__title {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      color: #F7F6F3;
-      font-size: 1.1rem;
-      letter-spacing: -0.01em;
-    }
-
-    .wf-card__sub {
-      color: rgba(247, 246, 243, 0.45);
-      font-size: 0.75rem;
-      margin-top: 0.1rem;
-    }
-
-    .wf-live {
-      margin-left: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.62rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #5FE39B;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      background: rgba(0, 200, 83, 0.08);
-      border: 1px solid rgba(0, 200, 83, 0.2);
-      flex: 0 0 auto;
-    }
-
-    .wf-live__dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #00C853;
-      animation: wfPulse 2s ease-out infinite;
-    }
-
-    @keyframes wfPulse {
-      0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.5); }
-      70% { box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
-    }
-
-    /* === Proof: flow pipeline === */
-    .wf-flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .wf-flow { flex-direction: row; align-items: flex-start; gap: 0.25rem; }
-    }
-
-    .wf-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0.45rem;
-      flex: 1 1 0;
-      min-width: 0;
-      padding: 0.25rem;
-    }
-
-    .wf-node__chip {
-      width: 2.9rem;
-      height: 2.9rem;
-      border-radius: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid transparent;
-    }
-
-    .wf-node__chip svg { width: 1.15rem; height: 1.15rem; }
-    .wf-node__chip[data-kind="trigger"] { background: rgba(138, 138, 128, 0.12); border-color: rgba(138, 138, 128, 0.35); color: #B5B5AC; }
-    .wf-node__chip[data-kind="brain"] { background: rgba(0, 200, 83, 0.1); border-color: rgba(0, 200, 83, 0.35); color: #00C853; }
-    .wf-node__chip[data-kind="ai"] { background: rgba(0, 200, 83, 0.16); border-color: rgba(0, 200, 83, 0.45); color: #5FE39B; }
-    .wf-node__chip[data-kind="human"] { background: rgba(0, 200, 83, 0.06); border-color: rgba(0, 200, 83, 0.6); color: #00C853; box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.1); }
-    .wf-node__chip[data-kind="send"] { background: #00C853; border-color: #00C853; color: #0A1A12; }
-
-    .wf-node__label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #F7F6F3;
-      line-height: 1.25;
-      letter-spacing: -0.01em;
-    }
-
-    .wf-node__sub {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.58rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: rgba(247, 246, 243, 0.4);
-    }
-
-    .wf-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(0, 200, 83, 0.45);
-      flex: 0 0 auto;
-      align-self: center;
-      padding-top: 0.6rem;
-    }
-
-    .wf-arrow svg { width: 1.1rem; height: 1.1rem; }
-
-    @media (max-width: 767px) {
-      .wf-node { flex-direction: row; justify-content: flex-start; gap: 0.85rem; text-align: left; width: 100%; }
-      .wf-arrow { transform: rotate(90deg); padding: 0; margin-left: 1.45rem; align-self: flex-start; }
-    }
-
-    .wf-foot {
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-      color: rgba(247, 246, 243, 0.55);
-      font-size: 0.82rem;
-      line-height: 1.65;
-    }
-
-    /* === Proof: Telegram approval brief mock === */
-    .tg-mock {
-      background: #0F1A24;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 1.1rem;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
-    }
-
-    .tg-mock__head {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.85rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .tg-mock__avatar {
-      width: 2.2rem;
-      height: 2.2rem;
-      border-radius: 50%;
-      background: #00C853;
-      color: #0A1A12;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: 0.78rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-    }
-
-    .tg-mock__name { color: #F7F6F3; font-weight: 600; font-size: 0.85rem; }
-    .tg-mock__status { color: rgba(247, 246, 243, 0.4); font-size: 0.66rem; font-family: 'SF Mono', 'Fira Code', monospace; }
-    .tg-mock__body { padding: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
-
-    .tg-bubble {
-      background: rgba(247, 246, 243, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.35rem 0.9rem 0.9rem 0.9rem;
-      padding: 0.95rem 1rem;
-    }
-
-    .tg-bubble__title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #F7F6F3;
-      font-weight: 600;
-      font-size: 0.82rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .tg-pill {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      background: rgba(226, 75, 74, 0.18);
-      color: #FF8A89;
-      padding: 0.15rem 0.5rem;
-      border-radius: 9999px;
-    }
-
-    .tg-line {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: space-between;
-      font-size: 0.76rem;
-      padding: 0.25rem 0;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-    }
-
-    .tg-line span { color: rgba(247, 246, 243, 0.45); flex: 0 0 auto; }
-    .tg-line b { color: #E8E6E1; font-weight: 500; text-align: right; }
-
-    .tg-draft {
-      margin-top: 0.75rem;
-      padding: 0.7rem 0.8rem;
-      background: rgba(0, 0, 0, 0.25);
-      border-left: 2px solid #00C853;
-      border-radius: 0.3rem;
-      font-size: 0.74rem;
-      line-height: 1.6;
-      color: rgba(247, 246, 243, 0.7);
-      font-style: italic;
-    }
-
-    .tg-kbd { display: flex; flex-direction: column; gap: 0.4rem; }
-    .tg-kbd__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
-
-    .tg-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.65rem;
-      border-radius: 0.55rem;
-      background: rgba(247, 246, 243, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #E8E6E1;
-      font-size: 0.72rem;
-      font-weight: 600;
-      cursor: default;
-    }
-
-    .tg-btn svg { width: 0.85rem; height: 0.85rem; }
-    .tg-btn--approve { background: rgba(0, 200, 83, 0.16); border-color: rgba(0, 200, 83, 0.4); color: #7BE8AC; }
-
-    /* === Proof: testimonials === */
-    .tmonial {
-      background: rgba(247, 246, 243, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-      height: 100%;
-      transition: background 0.3s ease, border-color 0.3s ease;
-    }
-
-    .tmonial:hover { background: rgba(0, 200, 83, 0.05); border-color: rgba(0, 200, 83, 0.2); }
-    .tmonial__mark { width: 1.5rem; height: 1.5rem; color: #00C853; opacity: 0.8; }
-    .tmonial__quote { color: #E8E6E1; font-size: 0.92rem; line-height: 1.7; flex: 1; }
-    .tmonial__quote--placeholder { color: rgba(247, 246, 243, 0.35); font-style: italic; }
-    .tmonial__who { display: flex; align-items: center; gap: 0.75rem; }
-
-    .tmonial__avatar {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 50%;
-      background: rgba(0, 200, 83, 0.12);
-      border: 1px solid rgba(0, 200, 83, 0.25);
-      color: #00C853;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-    }
-
-    .tmonial__who b { color: #F7F6F3; font-size: 0.85rem; display: block; }
-    .tmonial__role { color: rgba(247, 246, 243, 0.45); font-size: 0.74rem; }
-  </style>
-  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
-  <!-- Structured data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Digital Artifacts",
-    "url": "https://digitalartifacts.com.au/",
-    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
-    "image": "https://digitalartifacts.com.au/og/og-image.png",
-    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
-    "email": "hello@digitalartifacts.com.au",
-    "founder": { "@type": "Person", "name": "Isaiah Wong" },
-    "areaServed": "AU",
-    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
-    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- progressive-enhancement flag: flip to .js before paint so the journey only engages when JS runs -->
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+<title>Automation that runs your whole customer journey | Digital Artifacts</title>
+<meta name="description" content="Digital Artifacts builds automation flows that run your whole customer journey, from first enquiry to booked work. Real, deterministic systems, not a chatbot guessing." />
+<meta property="og:title" content="Automation that runs your whole customer journey | Digital Artifacts" />
+<meta property="og:description" content="Travel a real automation flow, then see what runs under the hood. Deterministic systems you own, not an LLM you hope behaves." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://digitalartifacts.com.au/automations.html" />
+<link rel="canonical" href="https://digitalartifacts.com.au/automations.html" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<!-- Fonts: Clash Display + General Sans from Fontshare, matching the Digital Artifacts brand -->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1B2838;                      /* brand navy */
+    --bg2:#15202D;                     /* deeper navy for under-the-hood + footer */
+    --ink:#F7F6F3;                     /* brand cream */
+    --muted:rgba(247,246,243,.52);     /* faded cream for secondary text */
+    --cool:#4C7E8C;                    /* signal start: muted steel-teal, reads cool on navy */
+    --warm:#00C853;                    /* brand accent green: the value end of the signal, CTAs, lit state */
+    --line:#2A3A49;                    /* dim path on navy */
+    --mono:'SF Mono','Fira Code','Cascadia Code','JetBrains Mono',monospace;
   }
-  </script>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"General Sans",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+
+  /* skip link */
+  .skip{
+    position:absolute;left:-9999px;top:0;z-index:60;
+    background:var(--warm);color:var(--bg);padding:12px 18px;border-radius:0 0 10px 0;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-decoration:none;
+  }
+  .skip:focus{left:0}
+
+  /* ---- the scroll track gives us distance to travel (taller = slower journey) ---- */
+  .track{height:680vh;position:relative}
+
+  /* ---- the pinned window we look through ---- */
+  .stage{
+    position:sticky;top:0;height:100vh;width:100%;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 70% 0%, rgba(0,200,83,0.10), transparent 55%),
+      radial-gradient(130% 100% at 20% 100%, rgba(0,200,83,0.06), transparent 55%),
+      var(--bg);
+  }
+
+  /* faint drifting dot field for a sense of travelling through space */
+  .field{
+    position:absolute;inset:-40% -40%;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.4px);
+    background-size:46px 46px;
+    will-change:transform;
+    pointer-events:none;
+  }
+
+  /* the world that the camera pans across */
+  .world{position:absolute;left:0;top:0;width:100%;height:100%;will-change:transform,opacity}
+
+  svg.paths{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+  .path-dim{fill:none;stroke:var(--line);stroke-width:2.5}
+  .path-live{fill:none;stroke:url(#flow);stroke-width:3.5;stroke-linecap:round;
+    filter:drop-shadow(0 0 10px rgba(0,200,83,0.35))}
+
+  .node{
+    position:absolute;
+    width:min(82vw,560px);
+    transform:translate(-50%,-50%);
+    will-change:transform,opacity;
+  }
+  .node .dot{
+    display:block;
+    width:14px;height:14px;border-radius:50%;
+    background:var(--ink);
+    box-shadow:0 0 0 6px rgba(247,246,243,0.06), 0 0 24px rgba(0,200,83,0.0);
+    margin-bottom:26px;
+  }
+  .node.lit .dot{box-shadow:0 0 0 7px rgba(0,200,83,0.12), 0 0 30px rgba(0,200,83,0.55)}
+  .tag{
+    font-family:var(--mono);
+    font-size:.72rem;letter-spacing:.22em;
+    color:var(--warm);
+    margin-bottom:18px;
+  }
+  .kicker{
+    font-size:.95rem;font-weight:500;color:var(--muted);
+    letter-spacing:.01em;margin-bottom:14px;
+  }
+  .title{
+    font-family:"Clash Display",sans-serif;
+    font-weight:700;
+    font-size:clamp(2.3rem,8.4vw,6.8rem);
+    line-height:.96;
+    letter-spacing:-.03em;
+  }
+  .note{
+    margin-top:22px;
+    font-weight:300;
+    font-size:clamp(1rem,2.4vw,1.35rem);
+    line-height:1.45;
+    color:rgba(247,246,243,.74);
+    max-width:30ch;
+  }
+  .cta{
+    margin-top:34px;display:inline-flex;align-items:center;gap:12px;
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.12em;
+    color:var(--bg);background:var(--warm);
+    padding:16px 26px;border-radius:100px;border:none;cursor:pointer;
+    font-weight:700;text-decoration:none;
+  }
+  .cta:hover{filter:brightness(1.06)}
+  .cta:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+
+  /* hero framing, fades out as the journey begins */
+  .hero{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    justify-content:center;padding:0 8vw;z-index:5;will-change:opacity,transform;
+  }
+  .hero .eyebrow{
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;
+    color:var(--muted);margin-bottom:26px;
+  }
+  .hero h1{
+    font-family:"Clash Display",sans-serif;
+    font-weight:700;letter-spacing:-.035em;line-height:.98;
+    font-size:clamp(2.6rem,9vw,7.2rem);max-width:14ch;
+  }
+  .hero h1 em{font-style:normal;color:var(--warm)}
+  .scrollcue{
+    position:absolute;left:8vw;bottom:7vh;display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;
+    color:var(--muted);
+  }
+  .scrollcue .arrow{
+    width:26px;height:26px;border-right:2px solid var(--muted);
+    border-bottom:2px solid var(--muted);transform:rotate(45deg);
+    animation:nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}
+    50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
+
+  /* site nav */
+  .site-nav{
+    position:fixed;top:0;left:0;right:0;z-index:40;
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;padding:0 6vw;
+  }
+  .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .nav-mark{width:38px;height:38px;border-radius:9px;display:block}
+  .nav-word{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.05rem;color:var(--ink);letter-spacing:-.01em}
+  .nav-dot{color:var(--warm)}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-link{
+    font-family:"General Sans",sans-serif;font-weight:500;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;transition:color .3s ease;
+  }
+  .nav-link:hover,.nav-link.is-active{color:var(--warm)}
+  .nav-cta{
+    text-transform:none;letter-spacing:.02em;
+    border:1px solid rgba(247,246,243,.28);padding:9px 18px;border-radius:100px;
+    transition:background .2s,color .2s,border-color .2s;
+  }
+  .nav-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .nav-link:focus-visible,.nav-brand:focus-visible{outline:2px solid var(--warm);outline-offset:3px}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;z-index:50}
+  .hamburger span{width:24px;height:2px;background:var(--ink);transition:transform .3s,opacity .3s}
+  .hamburger.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.is-open span:nth-child(2){opacity:0}
+  .hamburger.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{
+    position:fixed;inset:0;z-index:45;background:var(--bg2);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;
+    opacity:0;pointer-events:none;transition:opacity .35s ease;
+  }
+  .mobile-menu.is-open{opacity:1;pointer-events:auto}
+  .mobile-link{font-family:"Clash Display",sans-serif;font-weight:500;font-size:1.6rem;color:var(--ink);text-decoration:none}
+  .mobile-link:hover{color:var(--warm)}
+
+  /* flow switcher: same engine, a different journey per product */
+  .flows{
+    position:fixed;top:80px;left:0;right:0;z-index:39;
+    display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;padding:0 6vw;
+    transition:opacity .3s;
+  }
+  .count{position:absolute;right:6vw;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--muted);transition:opacity .3s}
+  @media(max-width:820px){.nav-links{display:none}.hamburger{display:flex}}
+  .pill{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);padding:8px 14px;border-radius:100px;cursor:pointer;
+    transition:color .2s,background .2s,border-color .2s;
+  }
+  .pill:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
+  .pill[aria-pressed="true"]{color:var(--bg);background:var(--warm);border-color:var(--warm)}
+  .pill:focus-visible{outline:2px solid var(--cool);outline-offset:3px}
+
+  .progress{position:fixed;left:0;top:0;height:3px;background:var(--warm);width:0;z-index:21;transition:opacity .3s}
+
+  /* once the journey has been scrolled past, get the journey chrome out of the way */
+  .past-journey .flows,.past-journey .progress,.past-journey .count{opacity:0;pointer-events:none}
+
+  /* ============ UNDER THE HOOD ============ */
+  .hood{
+    position:relative;z-index:2;background:var(--bg2);
+    border-top:1px solid rgba(255,255,255,.06);
+    padding:16vh 6vw;
+  }
+  .hood-inner{max-width:1140px;margin:0 auto}
+  .hood .eyebrow2{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;
+    color:var(--warm);margin-bottom:22px;
+  }
+  .hood h2{
+    font-family:"Clash Display",sans-serif;
+    font-weight:700;font-size:clamp(2rem,5.2vw,3.6rem);line-height:1.02;
+    letter-spacing:-.03em;max-width:18ch;
+  }
+  .hood .lead{
+    margin-top:26px;font-weight:300;font-size:clamp(1.05rem,2vw,1.35rem);
+    line-height:1.55;color:rgba(247,246,243,.74);max-width:60ch;
+  }
+  /* under-the-hood flow, in the site's own wf-node style (matches the // 06 In Production section) */
+  .wf-card{
+    margin-top:7vh;
+    background:rgba(247,246,243,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:1rem;padding:1.65rem;
+  }
+  .wf-card__head{display:flex;align-items:center;gap:.9rem;margin-bottom:1.6rem}
+  .wf-badge{
+    width:2.25rem;height:2.25rem;flex:0 0 auto;border-radius:.6rem;
+    background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.3);color:#00C853;
+    font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.05rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .wf-card__title{font-family:"Clash Display",sans-serif;font-weight:500;color:#F7F6F3;font-size:1.1rem;letter-spacing:-.01em}
+  .wf-card__sub{color:rgba(247,246,243,.45);font-size:.75rem;margin-top:.1rem}
+  .wf-live{
+    margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;
+    font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
+    color:#5FE39B;padding:.25rem .6rem;border-radius:9999px;
+    background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);flex:0 0 auto;
+  }
+  .wf-live__dot{width:6px;height:6px;border-radius:50%;background:#00C853;animation:wfPulse 2s ease-out infinite}
+  @keyframes wfPulse{0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}70%{box-shadow:0 0 0 6px rgba(0,200,83,0)}100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}}
+  .wf-flow{display:flex;flex-direction:column;gap:.5rem}
+  @media (min-width:768px){.wf-flow{flex-direction:row;align-items:flex-start;gap:.25rem}}
+  .wf-node{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.45rem;flex:1 1 0;min-width:0;padding:.25rem}
+  .wf-node__chip{width:2.9rem;height:2.9rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;border:1px solid transparent}
+  .wf-node__chip svg{width:1.15rem;height:1.15rem}
+  .wf-node__chip[data-kind="trigger"]{background:rgba(138,138,128,.12);border-color:rgba(138,138,128,.35);color:#B5B5AC}
+  .wf-node__chip[data-kind="brain"]{background:rgba(0,200,83,.1);border-color:rgba(0,200,83,.35);color:#00C853}
+  .wf-node__chip[data-kind="ai"]{background:rgba(0,200,83,.16);border-color:rgba(0,200,83,.45);color:#5FE39B}
+  .wf-node__chip[data-kind="human"]{background:rgba(0,200,83,.06);border-color:rgba(0,200,83,.6);color:#00C853;box-shadow:0 0 0 4px rgba(0,200,83,.1)}
+  .wf-node__chip[data-kind="send"]{background:#00C853;border-color:#00C853;color:#0A1A12}
+  .wf-node__label{font-size:.72rem;font-weight:600;color:#F7F6F3;line-height:1.25;letter-spacing:-.01em}
+  .wf-node__sub{font-family:var(--mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(247,246,243,.4)}
+  .wf-arrow{display:flex;align-items:center;justify-content:center;color:rgba(0,200,83,.45);flex:0 0 auto;align-self:center;padding-top:.6rem}
+  .wf-arrow svg{width:1.1rem;height:1.1rem}
+  @media (max-width:767px){.wf-node{flex-direction:row;justify-content:flex-start;gap:.85rem;text-align:left;width:100%}.wf-arrow{transform:rotate(90deg);padding:0;margin-left:1.45rem;align-self:flex-start}}
+  .wf-foot{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.07);color:rgba(247,246,243,.55);font-size:.82rem;line-height:1.65}
+  .cards{margin-top:9vh;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{
+    border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:30px;
+    background:rgba(255,255,255,.02);
+  }
+  .card .n{
+    font-family:var(--mono);font-size:.7rem;color:var(--warm);
+    letter-spacing:.18em;margin-bottom:16px;
+  }
+  .card h3{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.3rem;line-height:1.15;margin-bottom:12px;letter-spacing:-.01em}
+  .card p{font-weight:300;font-size:1rem;line-height:1.55;color:rgba(247,246,243,.66)}
+  .pullquote{
+    font-family:"Clash Display",sans-serif;
+    margin:11vh auto 0;max-width:24ch;text-align:center;
+    font-weight:500;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.25;letter-spacing:-.02em;
+  }
+  .pullquote em{font-style:normal;color:var(--warm)}
+  .hood-cta-wrap{margin-top:7vh;text-align:center}
+
+  .site-foot{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:64px 6vw 40px}
+  .foot-grid{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1.5fr 1fr;gap:40px}
+  .foot-mark{width:46px;height:46px;border-radius:10px;margin-bottom:20px;display:block}
+  .foot-tag{color:rgba(247,246,243,.55);font-size:.9rem;line-height:1.7;max-width:30ch}
+  .foot-col{display:flex;flex-direction:column;gap:12px}
+  .foot-col h4{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,246,243,.5);margin-bottom:6px}
+  .footer-link{color:rgba(247,246,243,.7);text-decoration:none;font-size:.9rem;transition:color .2s}
+  .footer-link:hover{color:var(--warm)}
+  .foot-studio{color:rgba(247,246,243,.7);font-size:.9rem}
+  .foot-loc{color:rgba(247,246,243,.4);font-size:.78rem;margin-top:6px}
+  .foot-bottom{max-width:1140px;margin:48px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--muted)}
+  @media(max-width:820px){.foot-grid{grid-template-columns:1fr 1fr;gap:32px}}
+  @media(max-width:520px){.foot-grid{grid-template-columns:1fr}}
+
+  /* ============ ENQUIRY FORM ============ */
+  .enquiry{position:relative;z-index:2;background:var(--bg);border-top:1px solid rgba(255,255,255,.06);padding:16vh 6vw}
+  .enquiry-inner{max-width:760px;margin:0 auto}
+  .enq-title{font-family:"Clash Display",sans-serif;font-weight:700;font-size:clamp(2rem,5.2vw,3.4rem);line-height:1.04;letter-spacing:-.03em;margin-top:20px}
+  .enq-title em{font-style:normal;color:var(--warm)}
+  .enq-lead{margin-top:22px;font-weight:300;font-size:clamp(1.05rem,2vw,1.3rem);line-height:1.55;color:rgba(247,246,243,.74);max-width:54ch}
+  .enq-form{margin-top:7vh;display:flex;flex-direction:column;gap:22px}
+  .enq-row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .enq-field{display:flex;flex-direction:column}
+  .enq-field label{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .enq-field input,.enq-field select,.enq-field textarea{
+    font-family:"General Sans",sans-serif;font-size:1rem;color:var(--ink);
+    background:rgba(247,246,243,.03);border:1px solid rgba(247,246,243,.14);border-radius:12px;
+    padding:14px 16px;width:100%;transition:border-color .2s,background .2s;
+  }
+  .enq-field textarea{resize:vertical}
+  .enq-field input::placeholder,.enq-field textarea::placeholder{color:rgba(247,246,243,.32)}
+  .enq-field input:focus,.enq-field select:focus,.enq-field textarea:focus{outline:none;border-color:var(--warm);background:rgba(247,246,243,.05)}
+  .enq-field select{appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237E8A99' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
+  .enq-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:8px}
+  .enq-submit{margin-top:0}
+  .enq-note{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--muted)}
+  .enq-result,.enq-error{margin-top:7vh;text-align:center}
+  .enq-result[hidden],.enq-error[hidden]{display:none}
+  .enq-check{width:64px;height:64px;border-radius:50%;background:rgba(0,200,83,.18);color:var(--warm);display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 22px}
+  .enq-result h3{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.45rem;margin-bottom:12px}
+  .enq-result p{font-weight:300;color:rgba(247,246,243,.7);line-height:1.6;max-width:50ch;margin:0 auto}
+  .enq-error p{color:#FF8A8A}
+
+  @media (max-width:820px){.cards{grid-template-columns:1fr}}
+  @media (max-width:640px){.enq-row{grid-template-columns:1fr}}
+  @media (max-width:720px){
+    .count{display:none}
+    .flows{top:74px}
+    .pill{font-size:.6rem;padding:7px 11px}
+  }
+  @media (max-width:640px){
+    .node .note{max-width:26ch}
+    .hud{padding:16px 6vw}
+    .hero{padding:0 6vw}
+    .scrollcue{left:6vw}
+  }
+
+  /* ---- progressive-enhancement / reduced-motion fallback: a clean, readable stack ---- */
+  .no-js .flows,.no-js .progress,.no-js .scrollcue{display:none}
+  .reduced .count,.reduced .progress{display:none}
+  .no-js .track,.reduced .track{height:auto!important}
+  .no-js .stage,.reduced .stage{position:static;height:auto;overflow:visible;padding:13vh 6vw 6vh}
+  .no-js .field,.reduced .field,.no-js svg.paths,.reduced svg.paths{display:none}
+  .no-js .world,.reduced .world{
+    position:static;transform:none!important;opacity:1!important;
+    display:flex;flex-direction:column;gap:11vh;max-width:620px;margin:9vh auto 0;
+  }
+  .no-js .node,.reduced .node{
+    position:static!important;left:auto!important;top:auto!important;
+    width:auto!important;transform:none!important;opacity:1!important;
+  }
+  .no-js .hero,.reduced .hero{position:static;inset:auto;height:auto;padding:0}
+
+  @media (prefers-reduced-motion:reduce){
+    .field,.arrow{animation:none}
+  }
+</style>
 </head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
 
-<body class="bg-cream text-navy font-body overflow-x-hidden">
-
-  <!-- Grain Overlay -->
-  <div class="grain-overlay"></div>
-
-  <!-- ============================== -->
-  <!-- NAVIGATION -->
-  <!-- ============================== -->
-  <nav class="nav-fixed" id="mainNav">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
-        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-10 w-10">
-        <span id="navBrandText" class="font-display font-semibold text-cream text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
-      </a>
-
-      <div class="hidden md:flex items-center gap-10">
-        <a href="/automations.html" class="nav-link active">Automation</a>
-        <a href="/websites.html" class="nav-link">Websites</a>
-        <a href="/#layers" class="nav-link">How it works</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-
-      <button class="hamburger md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+  <nav class="site-nav" id="siteNav">
+    <a class="nav-brand" href="/" aria-label="Digital Artifacts home">
+      <img src="/brand/da-mark-tile.png" alt="" class="nav-mark">
+      <span class="nav-word">Digital Artifacts<span class="nav-dot">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/automations.html" class="nav-link is-active">Automation</a>
+      <a href="/websites.html" class="nav-link">Websites</a>
+      <a href="/#layers" class="nav-link">How it works</a>
+      <a href="#contact" class="nav-link nav-cta">Book a call</a>
     </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automation</a>
-    <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
-    <a href="/#layers" class="mobile-menu-link" onclick="closeMobileMenu()">How it works</a>
-    <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
+    <a href="/automations.html" class="mobile-link">Automation</a>
+    <a href="/websites.html" class="mobile-link">Websites</a>
+    <a href="/#layers" class="mobile-link">How it works</a>
+    <a href="#contact" class="mobile-link">Book a call</a>
   </div>
 
+  <div class="flows" role="group" aria-label="Choose a flow">
+    <button class="pill" data-flow="lead" aria-pressed="true">Lead response</button>
+    <button class="pill" data-flow="reactivation" aria-pressed="false">Reactivation</button>
+    <button class="pill" data-flow="reputation" aria-pressed="false">Reputation</button>
+    <span class="count" id="stagecount">FLOW · 00</span>
+  </div>
 
-  <!-- ============================== -->
-  <!-- HERO SECTION -->
-  <!-- ============================== -->
-  <section class="hero-section bg-navy relative px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto">
+  <div class="progress" id="bar"></div>
 
-      <!-- Label -->
-      <div class="hero-label mb-6" style="opacity: 0; transform: translateY(20px);">
-        <span class="tag-pill text-xs uppercase tracking-wider">The 4-layer framework</span>
+  <main id="main">
+    <div class="track" id="track">
+      <div class="stage">
+        <div class="hero" id="hero">
+          <p class="eyebrow" id="heroEyebrow">LEAD RESPONSE</p>
+          <h1 id="heroTitle">Imagine a flow that runs the <em>whole journey.</em></h1>
+          <div class="scrollcue"><span>SCROLL TO TRAVEL</span><span class="arrow" aria-hidden="true"></span></div>
+        </div>
+
+        <div class="field" id="field" aria-hidden="true"></div>
+
+        <svg class="paths" id="svg" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <linearGradient id="flow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4C7E8C"/>
+              <stop offset="55%" stop-color="#1AA86A"/>
+              <stop offset="100%" stop-color="#00C853"/>
+            </linearGradient>
+          </defs>
+          <path class="path-dim" id="pathDim"></path>
+          <path class="path-live" id="pathLive"></path>
+        </svg>
+
+        <div class="world" id="world"></div>
       </div>
+    </div>
 
-      <!-- Hero H1 Headline -->
-      <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
-        <h1 class="heading-xl text-cream max-w-4xl" style="font-size: clamp(2rem, 5.2vw, 5rem);">
-          A 4-layer framework<br class="hidden sm:inline"> for AI that<br class="hidden sm:inline"> actually works<span class="text-accent cursor-blink">_</span>
-        </h1>
-        <p class="text-warm font-body max-w-2xl mt-6" style="font-size: clamp(1rem, 1.3vw, 1.125rem); line-height: 1.7;">
-          <strong class="text-cream">Context, Skills, Automation, Agent.</strong> Deployable for any function your business needs to run itself: an executive assistant, a sales-ops brain, a site-ops dashboard, a compliance officer that never sleeps. Same framework, different deployment.
+    <!-- ============ WHAT'S UNDER THE HOOD ============ -->
+    <section class="hood" id="hood">
+      <div class="hood-inner">
+        <p class="eyebrow2">UNDER THE HOOD</p>
+        <h2>No chatbot pulling the strings.</h2>
+        <p class="lead">
+          What you just travelled is not a clever prompt hoping for the best. It is a real flow,
+          built once, that runs the same way on every single trigger. Here is the actual flow behind
+          lead response, the one that answers our own enquiries.
         </p>
-      </div>
 
-      <!-- Hero CTAs -->
-      <div class="hero-cta mt-10 flex flex-col sm:flex-row items-start gap-4" style="opacity: 0; transform: translateY(20px);">
-        <a href="#layer-1" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Start with Layer 01</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="#contact" class="nav-link text-cream" style="padding: 1rem 0.5rem; text-decoration: none;">
-          <span>Book a call &rarr;</span>
-        </a>
-      </div>
-
-      <!-- Byline -->
-      <p class="text-warm/60 text-xs mt-8 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; AI &amp; automation studio &bull; Australia</p>
-
-      <!-- Scroll Indicator -->
-      <div class="scroll-indicator flex flex-col items-center gap-3 mt-14 md:mt-16 mx-auto w-fit">
-        <span class="text-warm/60 text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- PROOF BAR (hero credibility ribbon, jumps to #proof) -->
-  <!-- ============================== -->
-  <section class="bg-navy border-t border-white/10 px-6 md:px-12 lg:px-16 py-9 md:py-11">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-        <div class="lg:col-span-4">
-          <div class="flex items-center gap-2.5 mb-3">
-            <span class="wf-live__dot"></span>
-            <span class="tech-label text-accent font-medium">In production</span>
-          </div>
-          <h2 class="heading-md text-cream mb-3" style="font-size: clamp(1.4rem, 2.4vw, 1.9rem);">We run our own sales on this.</h2>
-          <a href="#proof" class="proof-bar__link">See it live <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
-        </div>
-        <div class="lg:col-span-8">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden">
-            <div class="bg-navy px-5 py-5 text-center">
-              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">&lt; 2 min</div>
-              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">First reply, day or night</div>
+        <div class="wf-card">
+          <div class="wf-card__head">
+            <span class="wf-badge">A</span>
+            <div>
+              <h3 class="wf-card__title">Lead response</h3>
+              <p class="wf-card__sub">Inbound · the flow behind the journey above</p>
             </div>
-            <div class="bg-navy px-5 py-5 text-center">
-              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">8</div>
-              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Workflows run our sales</div>
-            </div>
-            <div class="bg-navy px-5 py-5 text-center">
-              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">1 tap</div>
-              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Approve or kill any draft</div>
-            </div>
-            <div class="bg-navy px-5 py-5 text-center">
-              <div class="proof-metric__num" style="font-size: clamp(1.4rem, 2.6vw, 2rem);">100%</div>
-              <div class="proof-metric__label" style="font-size: 0.72rem; margin-top: 0.4rem;">Replies a human approves</div>
-            </div>
+            <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
           </div>
+          <div class="wf-flow">
+            <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="globe"></i></div><div class="wf-node__label">Website form</div><div class="wf-node__sub">webhook</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="brain"></i></div><div class="wf-node__label">Reads the brain</div><div class="wf-node__sub">6 files</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Claude drafts</div><div class="wf-node__sub">hot · warm · cool</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
+            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
+            <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
+          </div>
+          <p class="wf-foot">Notice the AI writes exactly one thing: the draft. Every other step is fixed. Read the brain, wait for your approval, send and log. Same path, every lead.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <p class="n">01</p>
+            <h3>Same input, same result.</h3>
+            <p>Deterministic just means predictable. The same trigger follows the same path and lands the same outcome, whether it fires once or ten thousand times. No mood. No drift. No surprises on a Monday.</p>
+          </article>
+          <article class="card">
+            <p class="n">02</p>
+            <h3>The AI has one job, not every job.</h3>
+            <p>A model writes a line of copy or reads a photo, only where judgment actually helps. It never decides what happens next. The flow does. So a model having a bad day can never derail your business.</p>
+          </article>
+          <article class="card">
+            <p class="n">03</p>
+            <h3>You can see every step.</h3>
+            <p>Each box is a named step you can open, test and fix. When something needs to change, you change that one step. A black box prompt can never tell you why it did what it did.</p>
+          </article>
+        </div>
+
+        <p class="pullquote">You are not betting your business on a model behaving <em>today.</em> You are running a system that behaves the same <em>tomorrow.</em></p>
+
+        <div class="hood-cta-wrap">
+          <a class="cta" href="#contact">SEE WHAT WE'D BUILD YOU <span aria-hidden="true">&#8599;</span></a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
+    <!-- ============ ENQUIRY ============ -->
+    <section class="enquiry" id="contact">
+      <div class="enquiry-inner">
+        <p class="eyebrow2">ENQUIRY</p>
+        <h2 class="enq-title">What would your <em>flow</em> run?</h2>
+        <p class="enq-lead">One short brief. We map your first flow free and send back a one-page plan of what we would build. Send this and you trigger the exact lead-response flow above.</p>
 
-  <!-- ============================== -->
-  <!-- WHY PROMPT-ONLY AI FAILS -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="w-full h-px bg-divider mb-16 md:mb-24"></div>
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-warm font-medium reveal-up">01 Why a framework</span>
-          <h2 class="heading-lg text-navy mt-6 reveal-up" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">
-            Prompt-only AI is a black box.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up mb-5">
-            Most teams pay for ChatGPT and hope for the best. One prompt, no memory, no audit trail. It drifts, hallucinates, and six months in nobody trusts its output. The fix isn't a better prompt. It's a better architecture.
-          </p>
-          <p class="text-navy text-base md:text-lg max-w-2xl reveal-up" style="font-weight: 500;">
-            Four layers. Each one is inspectable. Each one is fixable. Each one stays the same when you swap models, vendors, or interfaces.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- LAYER 01 — CONTEXT -->
-  <!-- ============================== -->
-  <section id="layer-1" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
-        <div>
-          <span class="tech-label text-accent font-medium mb-3 block">Layer 01 / the brain</span>
-          <h2 class="heading-xl text-navy" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Context.</h2>
-        </div>
-        <div class="layer-stamp hidden md:block">01<span class="layer-stamp__slash">/</span></div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        <!-- Left: explainer -->
-        <div class="lg:col-span-6 reveal-up">
-          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">
-            Your business, written down. Structured markdown in a Git repo you own. Human-editable. AI-readable. Version-controlled forever.
-          </p>
-          <p class="body-text text-sm md:text-base mb-8">
-            It's the stable ground the rest of the stack stands on. Positioning, clients, pipeline, SOPs, tone of voice, team roster, pricing logic, competitor battlecards. Everything your team already "just knows", made explicit and queryable.
-          </p>
-          <div class="space-y-3 border-t border-divider pt-6">
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Humans write, AI reads.</strong> The brain is only edited through a review step. Never mutated by the model at runtime.</p>
-            </div>
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Correct a fact once.</strong> Every brief, draft, and summary from that day forward is right.</p>
-            </div>
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Portable forever.</strong> Swap Claude for a different model tomorrow, the brain doesn't change.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: artefact mock -->
-        <div class="lg:col-span-6 reveal-up">
-          <div class="artefact">
-            <div class="artefact__bar">
-              <span class="artefact__dot"></span>
-              <span class="artefact__dot"></span>
-              <span class="artefact__dot"></span>
-              <span class="artefact__file">brain / company-brief.md</span>
-            </div>
-            <div class="artefact__body">
-<pre><span class="c-cm">---</span>
-<span class="c-key">name:</span> <span class="c-str">Company brief</span>
-<span class="c-key">updated:</span> <span class="c-str">2026-04-21</span>
-<span class="c-cm">---</span>
-
-<span class="c-h1"># Who we are</span>
-We build AI operating systems for small business.
-One brain, many surfaces. Layers over prompts.
-
-<span class="c-h1"># Who we serve</span>
-<span class="c-h2">## Primary</span>
-- Professional services firms (legal, accounting, consulting)
-- Trades &amp; field services (plumbing, electrical, building)
-- B2B sales teams (agencies, SaaS)
-
-<span class="c-h1"># Tone of voice</span>
-Professional, warm, never salesy. Peer-to-peer.
-No em dashes. Short sentences. Direct.
-
-<span class="c-h1"># Non-negotiables</span>
-- Human review before any AI-written commit
-- Every output cites the brain file it came from
-- Brief beats fluff. Always.</pre>
-            </div>
-          </div>
-          <p class="text-warm text-xs mt-3" style="line-height: 1.6;">Sample. Real deployments run 20-60 files across `clients/`, `pipeline/`, `skills/`, `tone-of-voice/`, and more.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- LAYER 02 — SKILLS -->
-  <!-- ============================== -->
-  <section id="layer-2" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
-        <div>
-          <span class="tech-label text-accent font-medium mb-3 block">Layer 02 / the how</span>
-          <h2 class="heading-xl text-navy" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Skills.</h2>
-        </div>
-        <div class="layer-stamp hidden md:block">02<span class="layer-stamp__slash">/</span></div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        <!-- Left: artefact mock -->
-        <div class="lg:col-span-6 order-2 lg:order-1 reveal-up">
-          <div class="artefact">
-            <div class="artefact__bar">
-              <span class="artefact__dot"></span>
-              <span class="artefact__dot"></span>
-              <span class="artefact__dot"></span>
-              <span class="artefact__file">skills / proposal-writer.md</span>
-            </div>
-            <div class="artefact__body">
-<pre><span class="c-cm">---</span>
-<span class="c-key">name:</span> <span class="c-str">proposal-writer</span>
-<span class="c-key">reads:</span>
-  <span class="c-cm">-</span> <span class="c-str">clients/&#123;client&#125;.md</span>
-  <span class="c-cm">-</span> <span class="c-str">pricing.md</span>
-  <span class="c-cm">-</span> <span class="c-str">tone-of-voice.md</span>
-<span class="c-key">output:</span> <span class="c-str">docx</span>
-<span class="c-cm">---</span>
-
-<span class="c-h1"># When to use</span>
-A client has asked for a proposal. You want a
-first draft ready for review in 60 seconds.
-
-<span class="c-h1"># The prompt</span>
-Draft a proposal for &#123;&#123; client &#125;&#125; covering
-&#123;&#123; scope &#125;&#125;. Use the firm's standard format.
-Pull pricing from pricing.md. Match tone from
-tone-of-voice.md. End with a clear next step.</pre>
-            </div>
-          </div>
-          <p class="text-warm text-xs mt-3" style="line-height: 1.6;">Sample. A typical deploy has 5-15 skills, each 30-100 lines, each knowing exactly which parts of the brain to open.</p>
-        </div>
-
-        <!-- Right: explainer -->
-        <div class="lg:col-span-6 order-1 lg:order-2 reveal-up">
-          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">
-            Reusable recipes for the jobs your team does every week. Drafting a proposal. Prepping for a meeting. Triaging an inbox. Writing a follow-up. Each skill is a short, named file.
-          </p>
-          <p class="body-text text-sm md:text-base mb-8">
-            Think of them as saved searches crossed with templates crossed with standard operating procedures. Each one declares what it reads from Layer 1 and what it produces. That means outputs are consistent, reviewable, and portable across whoever is using them.
-          </p>
-          <div class="space-y-3 border-t border-divider pt-6">
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Named and versioned.</strong> `proposal-writer-v2` is a Git commit away. Never lose a prompt that worked.</p>
-            </div>
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Composable.</strong> A `follow-up` skill can call a `client-update` skill, which calls `tone-of-voice`. Layers all the way down.</p>
-            </div>
-            <div class="flex items-start gap-3">
-              <i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i>
-              <p class="text-sm text-navy" style="line-height: 1.6;"><strong>Your voice, not the model's.</strong> Skills pin the output format so drafts sound like you, not ChatGPT.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- LAYER 03 — AUTOMATION (n8n) -->
-  <!-- ============================== -->
-  <section id="layer-3" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
-        <div>
-          <span class="tech-label text-accent font-medium mb-3 block">Layer 03 / the triggers</span>
-          <h2 class="heading-xl text-cream" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Automation.</h2>
-        </div>
-        <div class="layer-stamp layer-stamp-dark hidden md:block">03<span class="layer-stamp__slash">/</span></div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-12 md:mb-16">
-        <div class="lg:col-span-8 reveal-up">
-          <p class="text-cream text-base md:text-lg mb-6" style="line-height: 1.7;">
-            Scheduled and event-driven workflows that tie Context and Skills to the rest of your stack. <strong class="text-accent">n8n</strong> runs the wiring.
-          </p>
-          <p class="text-warm text-sm md:text-base mb-8" style="line-height: 1.75;">
-            Cron jobs that fire at 8:30am. Webhooks that catch a new lead the instant it lands. API calls that pull a Fireflies transcript and drop a draft meeting note in your inbox. Conditional branches, retries, error alerts. All visual. All inspectable. All yours to edit after we hand it over.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="tag-pill">cron: daily 08:30</span>
-            <span class="tag-pill">webhook: new-lead</span>
-            <span class="tag-pill">trigger: transcript-ready</span>
-            <span class="tag-pill">retry: 3x exponential</span>
-          </div>
-          <div class="mt-8">
-            <a href="#proof" class="proof-bar__link">See the workflows running our own sales <i data-lucide="arrow-down" class="w-4 h-4"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Three example triggers -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 reveal-up">
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="clock" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">Daily brief at 8:30am</div>
-          <p class="surface-card__desc">Cron pulls today's matters, deadlines, and inbound. Claude drafts the brief. Slack delivers it. One fewer 6am scramble.</p>
-        </div>
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="git-branch" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">New lead triage</div>
-          <p class="surface-card__desc">Webhook fires on form submit. Classify by ICP, enrich with competitor context, write to your CRM, ping your team. 3 seconds end-to-end.</p>
-        </div>
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="mail-check" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">Approval flow</div>
-          <p class="surface-card__desc">Draft reply to a client. Post to chat with approve/reject buttons. On approve: send the email, log to your CRM, confirm in the thread.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- LAYER 04 — AGENT -->
-  <!-- ============================== -->
-  <section id="layer-4" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy border-t border-white/10">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="flex items-end justify-between mb-10 md:mb-14 reveal-up">
-        <div>
-          <span class="tech-label text-accent font-medium mb-3 block">Layer 04 / the face</span>
-          <h2 class="heading-xl text-cream" style="font-size: clamp(2.25rem, 4.5vw, 4rem);">Agent.</h2>
-        </div>
-        <div class="layer-stamp layer-stamp-dark hidden md:block">04<span class="layer-stamp__slash">/</span></div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-12">
-        <div class="lg:col-span-7 reveal-up">
-          <p class="text-cream text-base md:text-lg" style="line-height: 1.7;">
-            How your team talks to the system and how the system talks back. Slack, SMS, voice, dashboards, email, whatever fits where the team already works.
-          </p>
-          <p class="text-warm text-sm md:text-base mt-4" style="line-height: 1.75;">
-            One brain, many surfaces. The operator in the field gets SMS. The partner gets a daily email. The rep uses Slack. The CEO asks by voice while driving. Same underlying system, different face depending on who's asking and what they need.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 reveal-up">
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="message-square" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">Slack</div>
-          <p class="surface-card__desc">DM a Slack bot "what's the status on Acme?" Get a 3-second synthesis with links to every source file.</p>
-        </div>
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">SMS</div>
-          <p class="surface-card__desc">Crew gets the day's schedule at 6am. A missed invoice fires a follow-up sequence. No app to download.</p>
-        </div>
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="mic" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">Voice (ElevenLabs + Twilio)</div>
-          <p class="surface-card__desc">Call a number, ask a question, get a synthesised voice answer. Missed calls get triaged and logged.</p>
-        </div>
-        <div class="surface-card">
-          <div class="surface-card__icon"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
-          <div class="surface-card__title">Dashboard</div>
-          <p class="surface-card__desc">Custom web interface for the office. Open pipeline, job queue, team utilisation, rendered live from the brain.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WORKED EXAMPLES (DEEP INDUSTRY TABS) -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-16">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">05 Worked examples</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
-            Same stack.<br>Three businesses.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            Below is the same 4-layer framework, deployed three ways. Pick the industry closest to yours. Each tab shows the brain files, the skills, the n8n triggers, and the surfaces that actually get used.
-          </p>
-        </div>
-      </div>
-
-      <div class="industry-tabs reveal-up" role="tablist" aria-label="Worked examples by industry">
-        <button class="industry-tab is-active" role="tab" aria-selected="true" data-panel="services">Professional services firm</button>
-        <button class="industry-tab" role="tab" aria-selected="false" data-panel="trades">Trades &amp; field services</button>
-        <button class="industry-tab" role="tab" aria-selected="false" data-panel="sales">B2B sales team</button>
-      </div>
-
-      <div class="industry-panels reveal-up">
-
-        <!-- Panel: Services -->
-        <div class="industry-panel is-active grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="services">
-          <div class="industry-col">
-            <span class="industry-col__label">01 / Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Client histories &amp; matter files</li>
-              <li>Proposal templates</li>
-              <li>Billing rates &amp; scope rules</li>
-              <li>Conflict-of-interest register</li>
-              <li>Partner bios &amp; tone</li>
-            </ul>
-            <div class="industry-col__group">Repo shape</div>
-            <ul class="industry-col__list space-y-1">
-              <li><code>clients/</code></li>
-              <li><code>proposals/</code></li>
-              <li><code>pricing.md</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 / Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>proposal-writer</code></li>
-              <li><code>meeting-prep</code></li>
-              <li><code>client-update</code></li>
-              <li><code>scope-change-memo</code></li>
-              <li><code>matter-summary</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 / Automation (n8n)</span>
-            <ul class="industry-col__list space-y-1">
-              <li>8:30am: today's matters brief &rarr; Slack</li>
-              <li>Fireflies transcript ready &rarr; draft meeting note</li>
-              <li>Inbound RFP email &rarr; proposal scaffold in Slack</li>
-              <li>Friday 5pm: weekly partner pipeline summary</li>
-              <li>Deadline approaching (72h) &rarr; DM + calendar block</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 / Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Slack <code>@ops</code> for anything</li>
-              <li>Daily brief in DM</li>
-              <li>Voice call (driving / between meetings)</li>
-              <li>Partner dashboard (web)</li>
-              <li>Weekly email digest</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Panel: Trades -->
-        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="trades">
-          <div class="industry-col">
-            <span class="industry-col__label">01 / Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Supplier pricelists</li>
-              <li>Crew schedules &amp; skills matrix</li>
-              <li>Job templates by trade</li>
-              <li>Site safety &amp; SWMS rules</li>
-              <li>Recurring customer notes</li>
-            </ul>
-            <div class="industry-col__group">Repo shape</div>
-            <ul class="industry-col__list space-y-1">
-              <li><code>suppliers/</code></li>
-              <li><code>crews/</code></li>
-              <li><code>job-templates/</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 / Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>quote-builder</code></li>
-              <li><code>job-wrap-up-note</code></li>
-              <li><code>supplier-reorder</code></li>
-              <li><code>overdue-chaser</code></li>
-              <li><code>review-request</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 / Automation (n8n)</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Quote request form &rarr; draft quote in owner's inbox</li>
-              <li>Invoice 7 days overdue &rarr; SMS follow-up sequence</li>
-              <li>Job marked complete &rarr; review request SMS</li>
-              <li>6am daily: crew schedule &rarr; SMS per person</li>
-              <li>Stock low in job sheet &rarr; supplier reorder email</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 / Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>SMS-first for crew</li>
-              <li>Office dashboard (simple web)</li>
-              <li>Voice intake for missed calls</li>
-              <li>Owner daily email at 6pm</li>
-              <li>Customer SMS for quotes &amp; confirmations</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Panel: Sales -->
-        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="sales">
-          <div class="industry-col">
-            <span class="industry-col__label">01 / Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>ICP definitions</li>
-              <li>Pipeline stages &amp; exit criteria</li>
-              <li>Competitor battlecards</li>
-              <li>Objection-handling library</li>
-              <li>Pricing logic &amp; discount rules</li>
-            </ul>
-            <div class="industry-col__group">Repo shape</div>
-            <ul class="industry-col__list space-y-1">
-              <li><code>icp.md</code></li>
-              <li><code>competitors/</code></li>
-              <li><code>battlecards/</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 / Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>lead-qualifier</code></li>
-              <li><code>discovery-summary</code></li>
-              <li><code>pipeline-movement</code></li>
-              <li><code>deal-risk-flag</code></li>
-              <li><code>proposal-draft</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 / Automation (n8n)</span>
-            <ul class="industry-col__list space-y-1">
-              <li>New lead webhook &rarr; classify, enrich, your CRM, your team</li>
-              <li>Deal no activity 14 days &rarr; risk memo &rarr; owner DM</li>
-              <li>Monday 7am: weekly pipeline brief</li>
-              <li>Discovery call ends &rarr; logged next steps in your CRM</li>
-              <li>Deal stage changes &rarr; battlecard refresh in DM</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 / Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Team Slack channel</li>
-              <li>Inline CRM notes</li>
-              <li>Daily email brief at 7am</li>
-              <li>Rep asks <code>@ops</code> anything in Slack</li>
-              <li>Sales-leader dashboard (web)</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- 06 — PROOF IN PRODUCTION (we run our own sales on this) -->
-  <!-- ============================== -->
-  <section id="proof" class="layer-section py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-navy border-t border-white/10">
-    <div class="max-w-[1440px] mx-auto">
-
-      <!-- Header -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-14 md:mb-20">
-        <div class="lg:col-span-5">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">06 In production</span>
-          <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
-            Three workflows,<br>running right now.
-          </h2>
-        </div>
-        <div class="lg:col-span-7 flex items-end">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up" style="color: rgba(247,246,243,0.6);">
-            None of this is theory. It is the system that answers our enquiries, writes our outreach, and drafts our replies, every day. The same four layers on this page, pointed at our own studio.
-          </p>
-        </div>
-      </div>
-
-      <!-- Hero proof: Workflow A pipeline + the Telegram brief it produces -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-8 md:mb-10">
-        <div class="lg:col-span-7 reveal-up">
-          <div class="wf-card">
-            <div class="wf-card__head">
-              <span class="wf-badge">A</span>
-              <div>
-                <h3 class="wf-card__title">Lead capture</h3>
-                <p class="wf-card__sub">Inbound · the enquiry you are about to send</p>
-              </div>
-              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
-            </div>
-            <div class="wf-flow">
-              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="globe"></i></div><div class="wf-node__label">Website form</div><div class="wf-node__sub">webhook</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="brain"></i></div><div class="wf-node__label">Reads the brain</div><div class="wf-node__sub">6 files</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Claude drafts</div><div class="wf-node__sub">hot · warm · cool</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
-            </div>
-            <p class="wf-foot">Outside business hours it sends a holding note on its own, then waits for your approval on the personalised reply. The message to the right is the actual brief this workflow produces.</p>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5 reveal-up">
-          <div class="tg-mock">
-            <div class="tg-mock__head">
-              <div class="tg-mock__avatar">DA</div>
-              <div class="flex-1">
-                <div class="tg-mock__name">DA_Adminbot</div>
-                <div class="tg-mock__status">bot · via Telegram · now</div>
-              </div>
-              <i data-lucide="bell" class="w-4 h-4" style="color: rgba(247,246,243,0.35);"></i>
-            </div>
-            <div class="tg-mock__body">
-              <div class="tg-bubble">
-                <div class="tg-bubble__title"><span class="tg-pill">HOT LEAD</span> DA-2049</div>
-                <div class="tg-line"><span>Name</span><b>Sarah Chen</b></div>
-                <div class="tg-line"><span>Business</span><b>Meridian Legal, Melbourne</b></div>
-                <div class="tg-line"><span>Service</span><b>Full operating system</b></div>
-                <div class="tg-line"><span>Fit</span><b>Strong · prof. services · 12 staff</b></div>
-                <div class="tg-draft">Hi Sarah, thanks for reaching out. A 12-person firm losing hours to proposal turnaround is exactly the wound the brain is built for. Happy to map your first layer free on a quick call...</div>
-              </div>
-              <div class="tg-kbd">
-                <button class="tg-btn tg-btn--approve" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="check"></i> Approve &amp; send</button>
-                <div class="tg-kbd__row">
-                  <button class="tg-btn" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="pencil"></i> Edit</button>
-                  <button class="tg-btn" type="button" tabindex="-1" aria-hidden="true"><i data-lucide="x"></i> Reject</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p class="text-warm/50 text-xs mt-3 text-center" style="line-height:1.6;">Sample brief. Real leads land the same way, approved from your phone in one tap.</p>
-        </div>
-      </div>
-
-      <!-- Two more workflows -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 md:mb-28">
-        <div class="reveal-up">
-          <div class="wf-card">
-            <div class="wf-card__head">
-              <span class="wf-badge">F</span>
-              <div>
-                <h3 class="wf-card__title">Cold opener</h3>
-                <p class="wf-card__sub">Outbound · weekday mornings</p>
-              </div>
-              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
-            </div>
-            <div class="wf-flow">
-              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="clock"></i></div><div class="wf-node__label">Weekday 9am</div><div class="wf-node__sub">cron</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="table"></i></div><div class="wf-node__label">Prospect list</div><div class="wf-node__sub">sheet · ICP</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Qualifies + writes</div><div class="wf-node__sub">names the pain</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends opener</div><div class="wf-node__sub">gmail</div></div>
-            </div>
-            <p class="wf-foot">Six a day, never a blast. It qualifies each prospect against our ICP, names a specific pain, and writes the opener. We approve or kill every one.</p>
-          </div>
-        </div>
-
-        <div class="reveal-up">
-          <div class="wf-card">
-            <div class="wf-card__head">
-              <span class="wf-badge">H</span>
-              <div>
-                <h3 class="wf-card__title">Reply handler</h3>
-                <p class="wf-card__sub">Inbound replies · checks every minute</p>
-              </div>
-              <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
-            </div>
-            <div class="wf-flow">
-              <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="mail"></i></div><div class="wf-node__label">Prospect replies</div><div class="wf-node__sub">gmail</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="search"></i></div><div class="wf-node__label">Reads the intent</div><div class="wf-node__sub">interested?</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="file-text"></i></div><div class="wf-node__label">Drafts a teardown</div><div class="wf-node__sub">free · honest</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
-              <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-              <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends it</div><div class="wf-node__sub">gmail</div></div>
-            </div>
-            <p class="wf-foot">When a prospect replies, it works out what they need and drafts a free one-page teardown of their problem. Honest about what is worth automating, no pitch.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Social proof / testimonials -->
-      <!-- TESTIMONIALS hidden until real, approved client reviews exist. To restore: remove the `hidden` attribute below and replace each placeholder quote/name/role with a real Google review. -->
-      <div class="reveal-up" hidden>
-        <div class="text-center mb-12 md:mb-14">
-          <span class="tech-label text-accent font-medium mb-4 block">Social proof</span>
-          <h3 class="heading-md text-cream" style="font-size: clamp(1.5rem, 2.8vw, 2.25rem);">In their words.</h3>
-          <p class="text-warm text-sm mt-3 max-w-xl mx-auto" style="line-height:1.7;">Foundation client results, going up here as they sign off on the numbers.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <!-- Testimonial 1 -->
-          <figure class="tmonial">
-            <i data-lucide="quote" class="tmonial__mark"></i>
-            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. The result in their words, with a number if we have one. Two or three sentences is plenty.</blockquote>
-            <figcaption class="tmonial__who">
-              <span class="tmonial__avatar">--</span>
-              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
-            </figcaption>
-          </figure>
-
-          <!-- Testimonial 2 -->
-          <figure class="tmonial">
-            <i data-lucide="quote" class="tmonial__mark"></i>
-            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. What changed for the business after the build, in plain language.</blockquote>
-            <figcaption class="tmonial__who">
-              <span class="tmonial__avatar">--</span>
-              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
-            </figcaption>
-          </figure>
-
-          <!-- Testimonial 3 -->
-          <figure class="tmonial">
-            <i data-lucide="quote" class="tmonial__mark"></i>
-            <blockquote class="tmonial__quote tmonial__quote--placeholder">Client quote goes here. Why they would recommend working with Digital Artifacts.</blockquote>
-            <figcaption class="tmonial__who">
-              <span class="tmonial__avatar">--</span>
-              <span><b>First name</b><span class="tmonial__role">Role · Company</span></span>
-            </figcaption>
-          </figure>
-
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- HOW WE BUILD IT -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-12 md:mb-16">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 How we build it</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.5vw, 2.75rem);">
-            Five steps. No mystery.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            Most engagements run 4-8 weeks to initial deployment. We stay on as a retainer to grow the brain, add skills, and wire up new surfaces as your team uses them.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
-        <div class="lg:col-span-3"></div>
-        <div class="lg:col-span-9">
-          <div class="build-step reveal-up" data-step="STEP 01">
-            <h3>Workflow audit</h3>
-            <p>We sit with your team for a day or two. Map what everyone actually does each week. Find the five repeatable jobs worth automating first.</p>
-          </div>
-          <div class="build-step reveal-up" data-step="STEP 02">
-            <h3>Brain seed (Layer 1)</h3>
-            <p>We set up the Git repo, write the first 15-25 context files with you, get the structure right. You own the repo from day one.</p>
-          </div>
-          <div class="build-step reveal-up" data-step="STEP 03">
-            <h3>Skills authoring (Layer 2)</h3>
-            <p>We build 3-5 skills to cover the priority jobs. Version them. Test each one against real inputs before shipping.</p>
-          </div>
-          <div class="build-step reveal-up" data-step="STEP 04">
-            <h3>n8n workflows (Layer 3)</h3>
-            <p>Wire the skills to triggers. Schedules, webhooks, APIs, approvals. Everything visible in n8n so you can edit it yourself later.</p>
-          </div>
-          <div class="build-step reveal-up" data-step="STEP 05">
-            <h3>Agent surfaces (Layer 4)</h3>
-            <p>Slack bot, SMS sender, voice endpoint, or custom dashboard. We ship the one that fits where your team already works.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- TOOLBOX -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">08 Toolbox</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">
-            What we build with.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            We integrate with the platforms your team already uses. No rip-and-replace. <strong class="text-navy">n8n</strong> is the orchestration layer for every build. Everything else is a node on the graph.
-          </p>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap gap-3 reveal-up">
-        <div class="tool-badge"><i data-lucide="workflow" class="w-4 h-4 text-accent"></i> n8n</div>
-        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> Claude (Anthropic)</div>
-        <div class="tool-badge"><i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> OpenAI</div>
-        <div class="tool-badge"><i data-lucide="message-square" class="w-4 h-4 text-accent"></i> Slack</div>
-        <div class="tool-badge"><i data-lucide="database" class="w-4 h-4 text-accent"></i> HubSpot</div>
-        <div class="tool-badge"><i data-lucide="cloud" class="w-4 h-4 text-accent"></i> Google Workspace</div>
-        <div class="tool-badge"><i data-lucide="mail" class="w-4 h-4 text-accent"></i> Outlook</div>
-        <div class="tool-badge"><i data-lucide="mic" class="w-4 h-4 text-accent"></i> ElevenLabs</div>
-        <div class="tool-badge"><i data-lucide="phone" class="w-4 h-4 text-accent"></i> Twilio</div>
-        <div class="tool-badge"><i data-lucide="server" class="w-4 h-4 text-accent"></i> Supabase</div>
-        <div class="tool-badge"><i data-lucide="file-text" class="w-4 h-4 text-accent"></i> Notion</div>
-        <div class="tool-badge"><i data-lucide="table" class="w-4 h-4 text-accent"></i> Airtable / Sheets</div>
-        <div class="tool-badge"><i data-lucide="zap" class="w-4 h-4 text-accent"></i> Zapier</div>
-        <div class="tool-badge"><i data-lucide="settings" class="w-4 h-4 text-accent"></i> Make</div>
-        <div class="tool-badge"><i data-lucide="github" class="w-4 h-4 text-accent"></i> GitHub</div>
-      </div>
-      <p class="text-warm text-xs mt-6 reveal-up" style="line-height: 1.6;">Don't see yours? n8n has 500+ native integrations and an HTTP node for everything else. If it has an API, we can wire it.</p>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- PRICING -->
-  <!-- ============================== -->
-  <section id="pricing" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1000px] mx-auto">
-      <div class="text-center mb-14 md:mb-20">
-        <span class="tech-label text-accent font-medium reveal-up block mb-6">09 Pricing</span>
-        <h2 class="heading-lg text-cream mb-4 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">Build once. Grow forever.</h2>
-        <p class="text-warm text-sm md:text-base reveal-up max-w-2xl mx-auto">Two phases, one engagement. The initial deploy gets all four layers live. The retainer grows the brain and adds skills as your team uses it.</p>
-      </div>
-
-      <div class="pricing-card featured bg-white/[0.04] rounded-2xl p-10 md:p-14 relative reveal-up">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
-          <!-- Build -->
-          <div>
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
-                <i data-lucide="hammer" class="w-5 h-5 text-accent"></i>
-              </div>
-              <div>
-                <h3 class="font-display font-semibold text-cream text-lg">Initial 4-layer deploy</h3>
-                <p class="text-warm text-xs mt-0.5">One-time. 4-8 weeks.</p>
-              </div>
-            </div>
-            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">We take you from nothing to a working operating system with all four layers live. At the end you own the repo, the n8n workflows, and the surface.</p>
-            <ul class="space-y-2.5">
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 01 brain seed</strong>: Git repo + 15-25 context files written with you</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 02 skills</strong>: 3-5 skills authored, versioned, tested</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 03 automations</strong>: 2-4 n8n workflows (cron + event-driven)</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>Layer 04 surface</strong>: one interface (Slack / SMS / voice / dashboard)</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Training, handover docs, admin access to everything</span></li>
-            </ul>
-          </div>
-
-          <!-- Retainer -->
-          <div>
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center">
-                <i data-lucide="refresh-cw" class="w-5 h-5 text-accent"></i>
-              </div>
-              <div>
-                <h3 class="font-display font-semibold text-cream text-lg">Brain + skills growth</h3>
-                <p class="text-warm text-xs mt-0.5">Monthly. Ongoing.</p>
-              </div>
-            </div>
-            <p class="text-warm text-sm mb-6" style="line-height: 1.7;">Included with every build. We grow the brain as your business changes, add skills when your team asks for them, and wire up new surfaces as use cases surface.</p>
-            <ul class="space-y-2.5">
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Monitoring, alerts, error recovery on every workflow</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>New skills authored each month (2-3 typical)</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Brain grooming sessions: we sit with you and extend Layer 01</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>New automations as priorities shift</span></li>
-              <li class="flex items-start gap-3 text-sm text-cream"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span>Slack channel for questions, same-day response</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <p class="heading-lg text-accent" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Custom quote</p>
-            <p class="text-warm text-xs mt-1">Scoped after the initial audit. No surprise invoices.</p>
-          </div>
-          <a href="#contact" class="cta-btn">
-            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-            <div class="shimmer-backdrop"></div>
-            <div class="shimmer-highlight"></div>
-            <span>Scope a build</span>
-            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FAQ + RESOURCES -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[860px] mx-auto">
-      <div class="text-center mb-10 md:mb-14">
-        <span class="tech-label text-accent font-medium mb-3 block reveal-up">Questions</span>
-        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Before you ask.</h2>
-      </div>
-      <div class="reveal-up">
-        <details class="faq-item">
-          <summary>How long until it is running?</summary>
-          <div class="faq-item__body">Most builds are 4 to 8 weeks to first deployment, phased so something useful goes live early rather than everything landing at the end.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Do I need to be technical?</summary>
-          <div class="faq-item__body">No. You talk in plain English about the jobs you want gone. We build and run the technical layer, and you approve every output from your phone before it sends.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What happens when something breaks?</summary>
-          <div class="faq-item__body">Things do break: an API changes, a form field moves, a model updates. Keeping it alive is the job. Monitoring, alerts, and fixes are part of the retainer.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Who owns it?</summary>
-          <div class="faq-item__body">You do. The brain (a Git repo), the workflows, and the connected accounts are yours, with full admin access handed over at the end of the build.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I edit it myself?</summary>
-          <div class="faq-item__body">Yes. Everything is visible in n8n and plain markdown. You change the brain through a review step, and we train your team to run it without us.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What does it cost to run?</summary>
-          <div class="faq-item__body">The build is fixed-price. After that the model and tool costs are usually small at typical volume, and the retainer covers monitoring and new work as your needs grow.</div>
-        </details>
-      </div>
-
-      <!-- Resources -->
-      <div class="mt-16 reveal-up">
-        <span class="tech-label text-accent font-medium mb-5 block">Resources</span>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href="/one-pagers/01-admin-assistance.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
-            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
-            <div><span class="font-display font-semibold text-navy block text-sm">Admin assistance</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
-          </a>
-          <a href="/one-pagers/02-virtual-pa.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
-            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
-            <div><span class="font-display font-semibold text-navy block text-sm">Virtual PA</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
-          </a>
-          <a href="/one-pagers/03-onboarding-support.pdf" target="_blank" rel="noopener" class="flex items-start gap-3 border border-divider rounded-xl p-5 bg-surface hover:border-accent/40 transition-colors">
-            <i data-lucide="file-text" class="w-5 h-5 text-accent flex-shrink-0 mt-0.5"></i>
-            <div><span class="font-display font-semibold text-navy block text-sm">Onboarding support</span><span class="text-warm text-xs">One-page overview (PDF)</span></div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- CONTACT -->
-  <!-- ============================== -->
-  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
-    <!-- Decorative circles -->
-    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
-    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
-
-    <div class="max-w-[1440px] mx-auto relative z-10">
-      <div class="text-center mb-14">
-        <span class="tech-label text-accent font-medium reveal-up block mb-8">10 Contact</span>
-        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
-          What would your<br>operating system do?<span class="text-accent cursor-blink">_</span>
-        </h2>
-        <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          30-minute call. We'll map the first layer for free and send you back a one-pager of what the build would look like.
-        </p>
-      </div>
-
-      <!-- Lead Capture Form -->
-      <div class="max-w-2xl mx-auto reveal-up">
-        <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
+        <form id="contactForm" class="enq-form" action="https://formspree.io/f/mreypwgk" method="POST">
           <input type="hidden" name="lead_magnet" value="false">
           <input type="hidden" name="page" value="automations">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
-              <input type="text" name="name" id="name" required placeholder="Your name" class="form-input">
+          <div class="enq-row">
+            <div class="enq-field">
+              <label for="name">Name *</label>
+              <input type="text" name="name" id="name" required placeholder="Your name">
             </div>
-            <div>
-              <label for="email" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Email *</label>
-              <input type="email" name="email" id="email" required placeholder="you@company.com" class="form-input">
+            <div class="enq-field">
+              <label for="email">Email *</label>
+              <input type="email" name="email" id="email" required placeholder="you@company.com">
             </div>
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="phone" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Phone Number</label>
-              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX" class="form-input">
+          <div class="enq-row">
+            <div class="enq-field">
+              <label for="phone">Phone</label>
+              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX">
             </div>
-            <div>
-              <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
-              <select name="service" id="service" class="form-input form-select">
+            <div class="enq-field">
+              <label for="service">Service</label>
+              <select name="service" id="service">
                 <option value="operating-system" selected>Full 4-layer operating system</option>
-                <option value="automation">A specific workflow / automation</option>
+                <option value="automation">A specific workflow or automation</option>
                 <option value="agent">An AI agent (Slack, voice, SMS)</option>
-                <option value="website">Website / interface work</option>
+                <option value="website">Website or interface work</option>
                 <option value="not-sure">Not sure yet, want to talk it through</option>
               </select>
             </div>
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
-              <select name="budget" id="budget" class="form-input form-select">
+          <div class="enq-row">
+            <div class="enq-field">
+              <label for="budget">Budget range</label>
+              <select name="budget" id="budget">
                 <option value="" disabled selected>Select your budget</option>
-                <option value="2500-5000">$2,500 – $5,000</option>
-                <option value="5000-10000">$5,000 – $10,000</option>
-                <option value="10000-15000">$10,000 – $15,000</option>
+                <option value="2500-5000">$2,500 to $5,000</option>
+                <option value="5000-10000">$5,000 to $10,000</option>
+                <option value="10000-15000">$10,000 to $15,000</option>
                 <option value="15000+">$15,000+</option>
                 <option value="not-sure">Not sure yet</option>
               </select>
             </div>
-            <div>
-              <label for="how-heard" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">How did you find us?</label>
-              <select name="how-heard" id="how-heard" class="form-input form-select">
+            <div class="enq-field">
+              <label for="how-heard">How did you find us?</label>
+              <select name="how-heard" id="how-heard">
                 <option value="" disabled selected>Select an option</option>
-                <option value="google">Google Search</option>
-                <option value="social-media">Social Media</option>
+                <option value="google">Google search</option>
+                <option value="social-media">Social media</option>
                 <option value="referral">Referral</option>
-                <option value="existing-client">Existing Client</option>
+                <option value="existing-client">Existing client</option>
                 <option value="other">Other</option>
               </select>
             </div>
           </div>
-
-          <div>
-            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">What would you have it do?</label>
-            <textarea name="message" id="message" rows="4" placeholder="The jobs your team does every week that you wish ran themselves. Tools you currently use. What "done" looks like." class="form-input" style="resize: vertical;"></textarea>
+          <div class="enq-field">
+            <label for="message">What would you have it do?</label>
+            <textarea name="message" id="message" rows="4" placeholder="The jobs your team does every week that you wish ran themselves. Tools you use now. What done looks like."></textarea>
           </div>
-
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
-            <button type="submit" class="cta-btn w-full sm:w-auto">
-              <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-              <div class="shimmer-backdrop"></div>
-              <div class="shimmer-highlight"></div>
-              <span>Send Message</span>
-              <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
-            <span class="text-warm/50 text-xs flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-3 h-3"></i> Based in Australia
-            </span>
+          <div class="enq-actions">
+            <button type="submit" class="cta enq-submit"><span>Send enquiry</span> <span aria-hidden="true">&#8599;</span></button>
+            <span class="enq-note">Based in Australia. Replies from hello@digitalartifacts.com.au</span>
           </div>
         </form>
 
-        <!-- Success/Error Messages -->
-        <div id="formSuccess" class="hidden text-center py-12">
-          <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
-            <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Got it. A draft reply is already on the way.</h3>
-          <p class="text-warm text-sm max-w-md mx-auto" style="line-height: 1.7;">
-            You just triggered the 4-layer stack this page describes. Claude read the brain files, classified the enquiry, drafted a personalised reply, and pinged Isaiah on Telegram. Approval hits your inbox from hello@digitalartifacts.com.au shortly. Outside business hours, a holding note goes out automatically.
-          </p>
+        <div id="formSuccess" class="enq-result" hidden>
+          <div class="enq-check" aria-hidden="true">&#10003;</div>
+          <h3>Got it. A draft reply is already on the way.</h3>
+          <p>You just triggered the same flow shown on this page. Claude read the brain, classified the enquiry, drafted a personal reply, and pinged us to approve. Outside business hours, a holding note goes out on its own.</p>
         </div>
-        <div id="formError" class="hidden text-center py-6">
-          <p class="text-red-400 text-sm flex items-center justify-center gap-2">
-            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-            Something went wrong. Please try again or email us directly.
-          </p>
+        <div id="formError" class="enq-error" hidden>
+          <p>Something went wrong. Please try again, or email hello@digitalartifacts.com.au directly.</p>
         </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="foot-mark">
+        <p class="foot-tag">AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navigate</h4>
+        <a href="/" class="footer-link">Home</a>
+        <a href="/automations.html" class="footer-link">Automation</a>
+        <a href="/websites.html" class="footer-link">Websites</a>
+        <a href="/#layers" class="footer-link">The 4 layers</a>
+        <a href="#contact" class="footer-link">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Connect</h4>
+        <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
+        <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
+      </div>
+      <div class="foot-col">
+        <h4>Studio</h4>
+        <p class="foot-studio">Digital Artifacts</p>
+        <p class="foot-loc">Australia</p>
       </div>
     </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FOOTER -->
-  <!-- ============================== -->
-  <footer class="bg-navy py-16 md:py-20 px-6 md:px-12 lg:px-16 border-t border-white/10">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
-        <!-- Logo + Tagline -->
-        <div class="md:col-span-4">
-          <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-12 w-12 mb-6">
-          <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
-          </p>
-        </div>
-
-        <!-- Navigation -->
-        <div class="md:col-span-2 md:col-start-7">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
-          <div class="flex flex-col gap-3">
-            <a href="/" class="footer-link">Home</a>
-            <a href="/automations.html" class="footer-link">Automation</a>
-            <a href="/websites.html" class="footer-link">Websites</a>
-            <a href="/#layers" class="footer-link">The 4 layers</a>
-            <a href="#contact" class="footer-link">Contact</a>
-          </div>
-        </div>
-
-        <!-- Connect -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Connect</h4>
-          <div class="flex flex-col gap-3">
-            <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
-            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
-          </div>
-        </div>
-
-        <!-- Branding -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
-          <p class="text-warm text-sm">Digital Artifacts</p>
-          <p class="text-warm/50 text-xs mt-2">Australia</p>
-        </div>
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <p class="text-warm/50 text-xs">&copy; 2026 Digital Artifacts. All rights reserved.</p>
-      </div>
+    <div class="foot-bottom">
+      <span>&copy; Digital Artifacts</span>
+      <span>Australia</span>
     </div>
   </footer>
 
+<!-- Lucide icons for the under-the-hood flow (same source the live site uses) -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+const CTA_HREF = '#contact';
 
-  <!-- ============================== -->
-  <!-- SCRIPTS -->
-  <!-- ============================== -->
-  <script>
-    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
-    try { lucide.createIcons(); } catch (e) {}
-    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
-    if (!window.gsap) { document.documentElement.classList.remove('js'); }
+const FLOWS = {
+  lead: {
+    eyebrow: 'LEAD RESPONSE',
+    h1: 'Imagine a flow that runs the <em>whole journey.</em>',
+    layout: { pattern:'zigzag' },                 // weaves left and right as it descends
+    nodes: [
+      { tag:'TRIGGER · 00', kicker:'It starts with one moment', title:'Someone reaches out.', note:'A form, a message, a missed call. The journey begins the instant they do.' },
+      { tag:'NODE 01 · RESPOND', kicker:'No lead left waiting', title:'They hear back in seconds.', note:'While they are still interested. Not three hours later.' },
+      { tag:'NODE 02 · QUALIFY', kicker:'The right ones rise up', title:'The right questions, asked for you.', note:'Every enquiry sorted before it reaches your desk.' },
+      { tag:'NODE 03 · BOOK', kicker:'Straight into the calendar', title:'A booking, already made.', note:'No back and forth. No phone tag.' },
+      { tag:'NODE 04 · HAND OVER', kicker:'Your team steps in warm', title:'You meet a ready client.', note:'Briefed, booked, and expecting you.' },
+      { tag:'OUTCOME', kicker:'Built once. Runs every time.', title:'Same result. Every time.', note:'This is one flow. Yours is mapped around your business.', cta:'MAP MY FLOW' },
+    ],
+  },
+  reactivation: {
+    eyebrow: 'DATABASE REACTIVATION',
+    h1: 'Imagine a list that <em>books its own work.</em>',
+    layout: { pattern:'sweep', dir:1 },           // one steady diagonal sweeping down to the right
+    nodes: [
+      { tag:'TRIGGER · 00', kicker:'The value already in your list', title:'A list sitting idle.', note:'Old leads, past clients, quotes that went quiet. You already paid to win them.' },
+      { tag:'NODE 01 · REACH', kicker:'The right message, the right moment', title:'A personal touch, sent for you.', note:'Timely and human, never the same blast twice.' },
+      { tag:'NODE 02 · STIR', kicker:'Old interest, woken up', title:'Conversations restart on their own.', note:'People reply, and the flow keeps the thread warm.' },
+      { tag:'NODE 03 · ROUTE', kicker:'Hot and warm, sorted', title:'Replies land where they should.', note:'The ready ones flagged for you, the rest nurtured.' },
+      { tag:'NODE 04 · CONVERT', kicker:'Revenue from what you owned', title:'Booked work from a list you forgot.', note:'Money that was sitting there the whole time.' },
+      { tag:'OUTCOME', kicker:'Built once. Runs across everyone.', title:'Your database, earning again.', note:'One flow, run over every contact you own.', cta:'REACTIVATE MY LIST' },
+    ],
+  },
+  reputation: {
+    eyebrow: 'REPUTATION ENGINE',
+    h1: 'Imagine reviews that <em>arrive on their own.</em>',
+    layout: { pattern:'sweep', dir:-1, steep:1.18 },  // steeper diagonal sweeping down to the left
+    nodes: [
+      { tag:'TRIGGER · 00', kicker:'The moment to ask', title:'A job, done well.', note:'The instant the work is finished is the instant to ask.' },
+      { tag:'NODE 01 · ASK', kicker:'Timed to the happy moment', title:'The review request, sent for you.', note:'Every time, without you remembering to.' },
+      { tag:'NODE 02 · GUIDE', kicker:'Friction removed', title:'A two-tap path to five stars.', note:'So they actually finish, not just intend to.' },
+      { tag:'NODE 03 · CATCH', kicker:'Problems, caught first', title:'Unhappy ones reach you privately.', note:'Sorted quietly, before they ever go public.' },
+      { tag:'NODE 04 · SHOW', kicker:'Where buyers look', title:'Fresh reviews, out in the world.', note:'Your reputation building while you work.' },
+      { tag:'OUTCOME', kicker:'Built once. Runs after every job.', title:'More reviews. Better ones. On their own.', note:'One flow, running after every job you finish.', cta:'BUILD MY REPUTATION' },
+    ],
+  },
+};
 
-    // === Mobile Menu ===
-    const hamburger = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+const world = document.getElementById('world');
+const svg = document.getElementById('svg');
+const pathDim = document.getElementById('pathDim');
+const pathLive = document.getElementById('pathLive');
+const field = document.getElementById('field');
+const hero = document.getElementById('hero');
+const heroEyebrow = document.getElementById('heroEyebrow');
+const heroTitle = document.getElementById('heroTitle');
+const bar = document.getElementById('bar');
+const track = document.getElementById('track');
+const stagecount = document.getElementById('stagecount');
+const pills = Array.from(document.querySelectorAll('.pill'));
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
+let nodes = [];
+let els = [];
+let pos = [];
+let currentLayout = { pattern:'zigzag' };
+let vw, vh, reduce;
 
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
+function buildFlow(flow){
+  heroEyebrow.textContent = flow.eyebrow;
+  heroTitle.innerHTML = flow.h1;
+  nodes = flow.nodes;
+  currentLayout = flow.layout || { pattern:'zigzag' };
+  world.innerHTML = '';
+  els = nodes.map(n => {
+    const d = document.createElement('article');
+    d.className = 'node';
+    d.innerHTML = `
+      <span class="dot" aria-hidden="true"></span>
+      <p class="tag">${n.tag}</p>
+      <p class="kicker">${n.kicker}</p>
+      <h2 class="title">${n.title}</h2>
+      <p class="note">${n.note}</p>
+      ${n.cta ? `<a class="cta" href="${CTA_HREF}">${n.cta} <span aria-hidden="true">&#8599;</span></a>` : ''}
+    `;
+    world.appendChild(d);
+    return d;
+  });
+  layout();
+}
+
+function layout(){
+  vw = window.innerWidth; vh = window.innerHeight;
+  const narrow = vw < 720;
+  const spreadX = reduce ? 0 : (narrow ? vw*0.20 : vw*0.26);
+  const spreadY = vh*0.92;
+  const baseX = vw*0.5;
+
+  // each flow travels in its own direction: a weaving zigzag, or a steady one-way diagonal sweep
+  const cfg = currentLayout || { pattern:'zigzag' };
+  const sx = spreadX * (cfg.steep || 1);
+  const mid = (nodes.length - 1) / 2;
+  pos = nodes.map((_,i)=>{
+    const x = cfg.pattern === 'sweep'
+      ? baseX + (cfg.dir || 1) * (i - mid) * (sx * 0.9)
+      : baseX + (i % 2 === 0 ? -sx : sx);
+    return { x, y: vh*0.5 + i*spreadY };
+  });
+
+  els.forEach((el,i)=>{ el.style.left = pos[i].x+'px'; el.style.top = pos[i].y+'px'; });
+
+  const dStr = pos.map((p,i)=> (i?'L':'M')+p.x+' '+p.y).join(' ');
+  pathDim.setAttribute('d', dStr);
+  pathLive.setAttribute('d', dStr);
+  const len = pathLive.getTotalLength();
+  pathLive.style.strokeDasharray = len;
+  pathLive.style.strokeDashoffset = len;
+  pathLive._len = len;
+}
+
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+const LEAD = 0.08;   // fraction of scroll spent on the intro: hero fades out, node 00 fades in, no overlap
+let target=0, cur=0, locked=false;
+
+function onScroll(){
+  if(locked) return;          // dev cam pin holds the camera still
+  const rect = track.getBoundingClientRect();
+  target = clamp(-rect.top / (track.offsetHeight - vh), 0, 1);
+  document.body.classList.toggle('past-journey', rect.bottom <= vh*0.6);
+}
+
+function frame(){
+  cur += (target-cur)*0.12;             // smoothing
+  const p = cur;
+  const N = nodes.length;
+  const jp = clamp((p-LEAD)/(1-LEAD), 0, 1);   // journey progress after the intro hold
+  const f = jp*(N-1);                    // position along the node chain
+  const i0 = Math.floor(f);
+  const frac = easeInOut(f-i0);
+  const a = pos[i0], b = pos[Math.min(i0+1,N-1)];
+
+  // camera centres the current point of the journey
+  const camX = lerp(a.x,b.x,frac);
+  const camY = lerp(a.y,b.y,frac);
+  const tx = vw/2 - camX;
+  const ty = vh/2 - camY;
+
+  world.style.transform = `translate(${tx}px,${ty}px)`;
+  svg.style.transform = `translate(${tx}px,${ty}px)`;
+  field.style.transform = `translate(${tx*0.35}px,${ty*0.35}px)`;
+
+  // the whole node layer fades in across the intro, so it never sits on top of the hero
+  world.style.opacity = clamp(p/(LEAD*0.95), 0, 1).toFixed(3);
+
+  // light up nodes near the camera
+  els.forEach((el,i)=>{
+    const focus = clamp(1-Math.abs(f-i),0,1);
+    const fp = Math.pow(focus,1.6);
+    el.style.opacity = (0.12 + 0.88*fp).toFixed(3);
+    el.style.transform = `translate(-50%,-50%) scale(${(0.82+0.18*fp).toFixed(3)})`;
+    el.classList.toggle('lit', focus>0.55);
+  });
+
+  // draw the signal along the path as the journey runs
+  if(pathLive._len){
+    pathLive.style.strokeDashoffset = pathLive._len*(1-jp);
+  }
+
+  // hero fades out within the intro, ahead of the nodes fading in
+  const h = clamp(1 - p/(LEAD*0.85), 0, 1);
+  hero.style.opacity = h;
+  hero.style.transform = `translateY(${(1-h)*-30}px)`;
+  hero.style.pointerEvents = h>0.1 ? 'auto':'none';
+
+  bar.style.width = (jp*100)+'%';
+  const idx = clamp(Math.round(f),0,N-1);
+  stagecount.textContent = 'FLOW · '+String(idx).padStart(2,'0');
+
+  requestAnimationFrame(frame);
+}
+
+function setFlow(key){
+  pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===key)));
+  buildFlow(FLOWS[key]);
+  window.scrollTo(0,0);
+  target = 0; cur = 0;
+}
+
+pills.forEach(p=> p.addEventListener('click', ()=> setFlow(p.dataset.flow)));
+
+// dev helper: ?only=hood hides the journey so the under-the-hood section can be screenshotted
+if(new URLSearchParams(location.search).get('only')==='hood'){ track.style.display='none'; }
+
+// init
+reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+// a flow can be deep-linked, e.g. /automations?flow=reputation, for per-vertical entry points
+const startKey = (k => FLOWS[k] ? k : 'lead')(new URLSearchParams(location.search).get('flow'));
+pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===startKey)));
+buildFlow(FLOWS[startKey]);
+
+if(reduce){
+  document.documentElement.classList.add('reduced');
+} else {
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', ()=>{ layout(); onScroll(); });
+  onScroll();
+  // dev helper: ?cam=0.0-1.0 pins the camera at a journey position at first paint, for screenshots
+  const cam = new URLSearchParams(location.search).get('cam');
+  if(cam!==null){ locked = true; target = cur = parseFloat(cam); }   // dev: pin the camera at a journey position for screenshots
+  requestAnimationFrame(frame);
+}
+
+// render the under-the-hood flow icons
+if(window.lucide){ lucide.createIcons(); }
+
+// === enquiry form: posts to the same n8n webhook + Formspree as the rest of the site ===
+const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
+const contactForm = document.getElementById('contactForm');
+if(contactForm){
+  const FORMSPREE_URL = contactForm.getAttribute('action');
+  contactForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const span = btn.querySelector('span');
+    const original = span.textContent;
+    span.textContent = 'Sending...';
+    btn.disabled = true;
+
+    const formData = new FormData(contactForm);
+    const data = Object.fromEntries(formData.entries());
+    data.lead_magnet = false;
+    data.submitted_at = new Date().toISOString();
+    data.source_page = 'automations';
+    data.source_url = window.location.href;
+
+    try{
+      await Promise.allSettled([
+        fetch(N8N_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(()=>null),
+        fetch(FORMSPREE_URL, { method:'POST', headers:{'Accept':'application/json'}, body:formData }).catch(()=>null),
+      ]);
+      contactForm.hidden = true;
+      document.getElementById('formSuccess').hidden = false;
+    }catch(err){
+      document.getElementById('formError').hidden = false;
+    }finally{
+      span.textContent = original;
+      btn.disabled = false;
     }
+  });
+}
 
-    // === Lenis Smooth Scroll ===
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    // Sync GSAP ScrollTrigger with Lenis
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-
-    // === Nav Scroll State ===
-    const nav = document.getElementById('mainNav');
-    const navBrandText = document.getElementById('navBrandText');
-    ScrollTrigger.create({
-      start: 'top -80',
-      onUpdate: (self) => {
-        if (self.scroll() > 80) {
-          nav.classList.add('scrolled');
-          navBrandText.style.opacity = '0';
-          navBrandText.style.transform = 'translateX(-8px)';
-          navBrandText.style.pointerEvents = 'none';
-          navBrandText.style.color = '#1B2838';
-        } else {
-          nav.classList.remove('scrolled');
-          navBrandText.style.opacity = '1';
-          navBrandText.style.transform = 'translateX(0)';
-          navBrandText.style.pointerEvents = '';
-          navBrandText.style.color = '#F7F6F3';
-        }
-      }
-    });
-
-    // === Hero Animation ===
-    gsap.to('.hero-label', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
-
-    gsap.to('.hero-headline', {
-      y: 0,
-      opacity: 1,
-      duration: 1,
-      ease: 'power3.out',
-      delay: 0.6,
-    });
-
-    gsap.to('.hero-cta', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 0.9,
-      stagger: 0.15,
-    });
-
-    gsap.to('.scroll-indicator', {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: 1.2,
-    });
-
-    // === Scroll Reveal Animations ===
-    gsap.utils.toArray('.reveal-up').forEach(el => {
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: 'power3.out',
-      });
-    });
-
-    // === Industry Tabs ===
-    const tabs = document.querySelectorAll('.industry-tab');
-    const panels = document.querySelectorAll('.industry-panel');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.panel;
-        tabs.forEach(t => {
-          const active = t === tab;
-          t.classList.toggle('is-active', active);
-          t.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        panels.forEach(p => {
-          p.classList.toggle('is-active', p.dataset.panel === target);
-        });
-      });
-    });
-
-    // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
-    const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
-    const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
-
-    function handleFormSubmit(form, isLeadMagnet) {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      data.lead_magnet = isLeadMagnet;
-      data.submitted_at = new Date().toISOString();
-      data.source_page = 'automations';
-      data.source_url = window.location.href;
-
-      const promises = [];
-
-      // Send to n8n webhook (if configured)
-      if (N8N_WEBHOOK_URL) {
-        promises.push(
-          fetch(N8N_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          }).catch(() => null)
-        );
-      }
-
-      // Send to Formspree (if configured)
-      if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
-        promises.push(
-          fetch(FORMSPREE_URL, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: formData,
-          }).catch(() => null)
-        );
-      }
-
-      return Promise.allSettled(promises);
-    }
-
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = contactForm.querySelector('button[type="submit"]');
-        const originalText = btn.querySelector('span').textContent;
-        btn.querySelector('span').textContent = 'Sending...';
-        btn.disabled = true;
-
-        try {
-          await handleFormSubmit(contactForm, false);
-          contactForm.classList.add('hidden');
-          document.getElementById('formSuccess').classList.remove('hidden');
-          lucide.createIcons();
-        } catch (err) {
-          document.getElementById('formError').classList.remove('hidden');
-        } finally {
-          btn.querySelector('span').textContent = originalText;
-          btn.disabled = false;
-        }
-      });
-    }
-  </script>
+// === mobile nav ===
+const hamburger = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if(hamburger && mobileMenu){
+  const setMenu = (open)=>{
+    mobileMenu.classList.toggle('is-open', open);
+    hamburger.classList.toggle('is-open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  hamburger.addEventListener('click', ()=> setMenu(!mobileMenu.classList.contains('is-open')));
+  mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> setMenu(false)));
+}
+</script>
 </body>
 </html>

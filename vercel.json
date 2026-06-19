@@ -4,5 +4,17 @@
       "source": "/unsubscribe",
       "destination": "https://n8nbeginner-sga.app.n8n.cloud/webhook/da-unsubscribe"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/automation-journey.html",
+      "destination": "/automations.html",
+      "permanent": true
+    },
+    {
+      "source": "/automation-journey",
+      "destination": "/automations.html",
+      "permanent": true
+    }
   ]
 }
