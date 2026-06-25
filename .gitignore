@@ -1,11 +1,37 @@
 .DS_Store
 node_modules/
-.claude/
 screenshots/
 Brand_Assets/*.docx
 Brand_Assets/~$*
-CLAUDE*.md
 .vercel
+
+# Claude Code wiring: CLAUDE.md, commands, and hooks ARE tracked.
+# Only per-machine config and MCP endpoints stay local.
+.claude/settings.local.json
+.mcp.json
+
+# Obsidian vault config: per-machine, not brain content.
+.obsidian/
+
+# Binary clutter: large media and archives stay out of git (live in Drive/OneDrive).
+# Note: this only stops NEW untracked binaries; anything already committed is unaffected.
+*.zip
+*.mov
+*.mp4
+
+# Loose screenshots and recordings dropped at the repo root
+/Screenshot *
+/Screen Recording *
+
+# Slide decks and source-media folders
+PowerPoint/
+Logo/*.png
+Logo/*.jpg
+Logo/*.jpeg
+
+# Drive exports and generated working binaries under client folders
+clients/**/drive-download-*
+clients/**/*.pdf
 
 # Secrets (real values go in n8n Credentials UI, not this repo)
 .env

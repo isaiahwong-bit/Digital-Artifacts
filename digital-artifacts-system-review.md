@@ -1,7 +1,7 @@
 # State of Digital Artifacts
 
 A holistic review of the whole operation: how it fits together, what is live versus planned, and
-what to improve. The system map is in `SYSTEM.md`; this is the assessment and the roadmap.
+what to improve. The system map is in `Walter.md`; this is the assessment and the roadmap.
 
 ## Headline
 
@@ -11,13 +11,13 @@ meet Isaiah through Telegram, Gmail, and two Google Sheets. The design is tracea
 and the brand voice rule holds throughout.
 
 Cohesion sits around 65%. The pieces connect, but there is no single map (now addressed by
-`SYSTEM.md`), some state does not flow between stores, and a surprising amount of finished work is
+`Walter.md`), some state does not flow between stores, and a surprising amount of finished work is
 not live. The biggest lever is unglamorous: **ship what is already built.** Collateral, a case
 study, a nurture flow, and a branch of site improvements are all done and just not deployed.
 
 ## How it fits together
 
-See `SYSTEM.md` for the full map. In short: two funnels (inbound a/b/c/d/e and outbound f/g/h)
+See `Walter.md` for the full map. In short: two funnels (inbound a/b/c/d/e and outbound f/g/h)
 share one human approval gate (Telegram, workflow-c) and write durable state to two Google Sheets.
 Layer 1 (the brain) is fetched at runtime from GitHub, so editing a brain file changes every
 downstream output without redeploying anything. That runtime-fetch design is the cleverest part of
@@ -52,7 +52,7 @@ testimonials and the referral incentive wording. Until then, finished work sits 
 ## The seams (cohesion gaps)
 
 1. **The deployment gap above.** Built does not equal live.
-2. **No master document** tying the system together. Addressed this pass by `SYSTEM.md`.
+2. **No master document** tying the system together. Addressed this pass by `Walter.md`.
 3. **Two stores that do not merge.** Active deals live in `brain/engagements/*.md`; prospects live
    in the Sheet. There is no one place to see all open opportunities.
 4. **Hardcoded IDs.** The Prospects sheet ID and Telegram chat ID are pasted into 5+ workflows
@@ -75,7 +75,7 @@ testimonials and the referral incentive wording. Until then, finished work sits 
 | Deploy unused collateral on the site (videos, one-pagers, case study) | 1-2 days | High: conversion, already paid for | None (started this pass) |
 | Activate the nurture workflow (b) | 0.5 day | High: free, automated lead nurture | Copy sign-off |
 | Publish Valley Arbor as a case study | done this pass | Medium: real, live proof | Outcome numbers from Matt |
-| Write the master `SYSTEM.md` | done this pass | Medium: cohesion, onboarding | None |
+| Write the master `Walter.md` | done this pass | Medium: cohesion, onboarding | None |
 | Move active deals into the Prospects sheet | 0.5 day | Medium: one pipeline view | None |
 | Env-inject the hardcoded sheet/chat IDs | 0.5 day | Medium: maintainability | None |
 | Decide the strategic direction (systems vs retainers vs hybrid) | 0.5 day decision | Strategic | None |
@@ -97,6 +97,6 @@ is itself a high-value move.
 
 On the `feat/sales-ops-automation` branch (off production): captured real screenshots of the five
 live client sites and rebuilt the homepage "selected work" into a filterable visual gallery; added a
-Valley Arbor case study and a founder block; wrote `SYSTEM.md` and this review. Not touched: the live
+Valley Arbor case study and a founder block; wrote `Walter.md` and this review. Not touched: the live
 n8n instance (nurture activation stays a recommendation) and production (the merge is prepped, not
 executed).

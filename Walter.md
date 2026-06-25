@@ -1,8 +1,8 @@
-# Digital Artifacts: System Map
+# Walter: the Digital Artifacts brain
 
-The single source of truth for how Digital Artifacts (DA) is built and how it runs its own sales
-operation. Start here, then follow the links into `brain/`. This file is the map; the brain files
-are the territory.
+Walter is the brain of Digital Artifacts (DA): the single source of truth for how DA is built and
+how it runs its own sales operation. Start here, then follow the links into `brain/`. Walter is the
+map; the brain files are the territory.
 
 DA is a solo Australian studio that builds AI operating systems on a reusable 4-layer framework, and
 runs its own sales on that same framework. This document describes the DA-runs-on-DA system, not a
@@ -17,7 +17,7 @@ client build.
 | 1 Context (the brain) | Everything DA knows: positioning, ICP, offer, pricing, tone, state rules | `brain/*.md` (this repo) | Humans only, via git commit |
 | 2 Skills (the how) | Claude prompt recipes for each decision/draft job | `skills/*.md` | Humans, mirrored into workflow nodes |
 | 3 Automation (the wiring) | n8n workflows that trigger skills and move state | n8n cloud, exported to `n8n-workflows/*.json` | Humans, in n8n |
-| 4 Agent (the surfaces) | Where humans meet the system | Telegram, Gmail, two Google Sheets, the website form | n/a |
+| 4 Agent (the surfaces) | Where humans meet the system | Discord (migrating in), Telegram, Gmail, two Google Sheets, the website form | n/a |
 
 **Governing rule: humans write, AI reads.** Layer 1 is only changed by a human through a review
 step. The model reads it at runtime (via GitHub raw URLs) but never writes to it. Every outbound
@@ -63,6 +63,7 @@ scope notes.
 | workflow-f-cold-opener | qualify + draft cold opener | cron weekday 9am AEST | LIVE |
 | workflow-g-followup-nudge | draft nudge after 5+ days | cron weekday 9:30am AEST | LIVE |
 | workflow-h-reply-handler | classify replies + draft teardown | Gmail reply trigger | LIVE |
+| workflow-i-inbox-monitor | triage inbox email, alert Discord | Gmail trigger (DA inbox) | PLANNED |
 
 Note: the repo `.json` files are exports; the live active/inactive state is set on the n8n cloud
 instance, not in these files.
@@ -92,17 +93,23 @@ Everything else reads from or writes to these. The Sheets are the durable write-
 | reply-classifier | route an inbound reply | outbound-offer |
 | teardown-writer | write the free one-page teardown (the pretzel) | outbound-offer, company-brief, pricing, tone |
 | telegram-brief | render the Telegram approval card | n/a |
+| email-triage | triage an inbox email's importance for Discord alerts | icp, company-brief |
 
 When a skill changes, the matching prompt node inside its workflow must be updated too (manual sync).
 
 ## Brain index (`brain/`)
 
-`company-brief` (who we are, non-negotiables), `icp` (inbound targets), `outbound-icp` (who we cold
-contact), `outbound-offer` (the salty-pretzel strategy), `pricing` (tiers + walk-away signals),
-`tone-of-voice` (voice rules, no em dashes), `integrations` (runtime endpoints + credentials),
-`prospect-state` (the outbound state machine), `field-service` (trades positioning + the FSM honesty
-rule), `response-scaffolds` (inbound reply templates), `scope` (the DA- boundary + workflow IDs),
-`engagements/` (active deals).
+[company-brief](brain/company-brief.md) (who we are, non-negotiables),
+[icp](brain/icp.md) (inbound targets), [outbound-icp](brain/outbound-icp.md) (who we cold contact),
+[outbound-offer](brain/outbound-offer.md) (the salty-pretzel strategy),
+[pricing](brain/pricing.md) (tiers + walk-away signals),
+[tone-of-voice](brain/tone-of-voice.md) (voice rules, no em dashes),
+[integrations](brain/integrations.md) (runtime endpoints + credentials),
+[prospect-state](brain/prospect-state.md) (the outbound state machine),
+[field-service](brain/field-service.md) (trades positioning + the FSM honesty rule),
+[response-scaffolds](brain/response-scaffolds.md) (inbound reply templates),
+[scope](brain/scope.md) (the DA- boundary + workflow IDs),
+[engagements/jbryant](brain/engagements/jbryant.md) and [tesla](brain/engagements/tesla.md) (active deals).
 
 ---
 
