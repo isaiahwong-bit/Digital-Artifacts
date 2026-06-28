@@ -109,8 +109,8 @@ Gmail connector, triages with judgement, and posts to Discord, all on a cron, no
 
 ## Status and next
 
-- **Stage:** Discord webhook live and tested; `email-triage` skill written; cloud routine created
-  and a manual test run triggered. Awaiting the test result (does headless Gmail access hold).
-- **Next:** read the test run's final report (it states the Gmail-access result). If it worked,
-  keep the routine and refine triage calibration (courtesy replies = normal). If not, build the
-  n8n version. Either way, add the daily digest for normal/low items.
+- **Stage:** LIVE and verified. The headless scheduled run had Gmail access (it created the
+  `DA-triaged` label and triaged the inbox), so the cron Claude-agent approach works. No n8n needed.
+  Window widened to `newer_than:1d` with label dedup for resilience.
+- **Next:** add the daily digest for normal/low items, refine triage calibration (courtesy replies
+  stay normal), and monitor the 9am AEST scheduled runs. This routine is the working seed of Hermes.
