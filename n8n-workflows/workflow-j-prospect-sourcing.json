@@ -1,0 +1,294 @@
+{
+  "name": "DA - Prospect Sourcing (Places + website, defensible)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Run Sourcing",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "search_query",
+              "value": "plumber in Brunswick VIC Australia",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "category",
+              "value": "plumber",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "location",
+              "value": "Brunswick VIC",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "archetype",
+              "value": "trades",
+              "type": "string"
+            },
+            {
+              "id": "a5",
+              "name": "max_results",
+              "value": 20,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cohort-config",
+      "name": "Cohort Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [440, 320],
+      "notes": "Edit per run. One tight category + one locality at a time so the copy stays specific. Places Text Search returns up to 20; run several suburbs to build a ~50 cohort."
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultName": "Prospects"
+        },
+        "options": {}
+      },
+      "id": "read-prospects",
+      "name": "Read Prospects Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [660, 480],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "Read once. Used by the suppress + dedupe step to never re-contact an existing or opted-out address. This branch terminates here; it is referenced by node name later."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://places.googleapis.com/v1/places:searchText",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            {
+              "name": "X-Goog-FieldMask",
+              "value": "places.id,places.displayName,places.websiteUri,places.nationalPhoneNumber,places.formattedAddress,places.rating,places.userRatingCount,places.businessStatus"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ textQuery: $json.search_query, regionCode: 'AU', maxResultCount: ($json.max_results || 20) }) }}",
+        "options": {}
+      },
+      "id": "places-search",
+      "name": "Places: Text Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 320],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Google Places key (header X-Goog-Api-Key) - ATTACH ME"
+        }
+      },
+      "notes": "Create an n8n 'Header Auth' credential: Name = X-Goog-Api-Key, Value = the GOOGLE_PLACES_KEY from clients/valley-arbor/.env. Attach it here. Places returns the website, never the email."
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// One item per discovered business that has a website. No website = no way to find a\n// conspicuously published address, so it is dropped (logged in notes, not queued).\nconst body = $input.first().json || {};\nconst places = Array.isArray(body.places) ? body.places : [];\nconst cfg = $('Cohort Config').first().json;\nconst out = [];\nfor (let i = 0; i < places.length; i++) {\n  const p = places[i] || {};\n  const website = String(p.websiteUri || '').trim();\n  if (!website) continue; // cannot source a published address without a site\n  if (String(p.businessStatus || '').toUpperCase() === 'CLOSED_PERMANENTLY') continue;\n  out.push({ json: {\n    place_id: p.id || '',\n    business_name: (p.displayName && p.displayName.text) || '',\n    website: website,\n    phone: p.nationalPhoneNumber || '',\n    address: p.formattedAddress || '',\n    rating: p.rating || '',\n    review_count: p.userRatingCount || '',\n    category: cfg.category || '',\n    location: cfg.location || '',\n    archetype: cfg.archetype || 'trades',\n  } });\n}\nreturn out;\n"
+      },
+      "id": "explode-places",
+      "name": "Explode Places",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 320]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.website }}",
+        "options": {
+          "response": { "response": { "responseFormat": "text" } },
+          "timeout": 12000,
+          "redirect": { "redirect": {} }
+        }
+      },
+      "id": "fetch-website",
+      "name": "Fetch Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 320],
+      "onError": "continueRegularOutput",
+      "alwaysOutputData": true,
+      "notes": "Fetch the business's own homepage. continueRegularOutput so a dead or slow site does not stop the run. The published email (if any) is extracted from this HTML in the next step."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\n// Extract the published email from each business's own homepage, then apply the two\n// non-negotiable gates: (1) never re-contact an address already in the sheet (any status),\n// (2) never contact a suppressed / unsubscribed / bounced address. Build the enrichment\n// request only for genuinely fresh, contactable prospects.\n\nconst places = $('Explode Places').all().map(function (i) { return i.json; });\nconst fetched = $('Fetch Website').all();\n\n// --- Build the existing + suppression sets from the live sheet ---\nconst sheetRows = $('Read Prospects Sheet').all().map(function (i) { return i.json; });\n// Safe-fail: if the suppression read is empty, abort rather than risk re-contacting an opt-out.\n// (The live prospects sheet always has rows; 0 means the read did not run, e.g. a node-order issue.)\nif (!sheetRows.length) throw new Error('Suppression read returned 0 rows; aborting so no opt-out can be re-contacted.');\nconst existingEmails = new Set();\nconst suppressedEmails = new Set();\nconst existingBusinesses = new Set();\nconst SUPPRESS = ['unsubscribed', 'suppressed', 'rejected', 'bounced'];\nfor (const r of sheetRows) {\n  const em = String(r.email || '').trim().toLowerCase();\n  const st = String(r.status || '').trim().toLowerCase();\n  const bn = String(r.business_name || '').trim().toLowerCase();\n  if (em) existingEmails.add(em);\n  if (em && SUPPRESS.indexOf(st) !== -1) suppressedEmails.add(em);\n  if (bn) existingBusinesses.add(bn);\n}\n\n// --- Fetch Layer 1 brain for the enrichment prompt (human-write, read at runtime) ---\nconst repo = 'https://raw.githubusercontent.com/isaiahwong-bit/Digital-Artifacts';\nconst refs = ['main', 'feat/automation-journey-live', 'feat/sales-ops-automation'];\nconst files = ['outbound-icp', 'field-service', 'company-brief'];\nconst brain = {};\nfor (const f of files) {\n  let got = null;\n  for (const ref of refs) {\n    try { got = await this.helpers.httpRequest({ method: 'GET', url: repo + '/' + ref + '/brain/' + f + '.md', encoding: 'text', json: false }); break; } catch (e) { got = null; }\n  }\n  if (got === null) throw new Error('Brain file unreachable on any branch: ' + f);\n  brain[f] = got;\n}\n\n// --- Email extraction helpers ---\nconst JUNK = /(\\.png|\\.jpg|\\.jpeg|\\.gif|\\.webp|\\.svg|sentry\\.|wixpress|example\\.|yourdomain|your-email|email@|@2x|@sentry|godaddy|squarespace|cloudflare|\\.wix|domain\\.com)/i;\nfunction extractEmails(html, siteUrl) {\n  if (!html || typeof html !== 'string') return [];\n  const found = new Set();\n  const mailtoRe = /mailto:([^\"'?>\\s]+@[^\"'?>\\s]+)/gi;\n  const plainRe = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n  let m;\n  while ((m = mailtoRe.exec(html)) !== null) found.add(m[1].toLowerCase());\n  const plain = html.match(plainRe) || [];\n  for (const e of plain) found.add(e.toLowerCase());\n  let list = Array.from(found).filter(function (e) { return !JUNK.test(e) && e.length < 80; });\n  // Prefer an address on the same domain as the website.\n  let host = '';\n  try { host = new URL(siteUrl).hostname.replace(/^www\\./, ''); } catch (e) { host = ''; }\n  if (host) {\n    const sameDomain = list.filter(function (e) { return e.split('@')[1] && e.split('@')[1].indexOf(host) !== -1; });\n    if (sameDomain.length) list = sameDomain;\n  }\n  // Prefer role / catch-all addresses over personal noise.\n  const ROLE = /^(info|hello|admin|office|accounts|enquiries|enquiry|contact|sales|bookings|service)@/i;\n  list.sort(function (a, b) { return (ROLE.test(b) ? 1 : 0) - (ROLE.test(a) ? 1 : 0); });\n  return list;\n}\n\nconst now = new Date();\nconst stamp = now.getTime().toString(36);\nconst seenThisRun = new Set();\nconst fresh = [];\n\nfor (let i = 0; i < places.length; i++) {\n  const p = places[i];\n  const fItem = fetched[i] ? fetched[i].json : {};\n  const html = (fItem && (fItem.data || fItem.body || '')) || '';\n  const emails = extractEmails(html, p.website);\n  const email = emails.length ? emails[0] : '';\n  const bn = String(p.business_name || '').trim().toLowerCase();\n\n  // GATE 1: no published address found -> not a defensible send. Drop (do not queue).\n  if (!email) continue;\n  // GATE 2: hard suppression. Never re-contact an opt-out / bounce.\n  if (suppressedEmails.has(email)) continue;\n  // GATE 3: never double-touch an address already in the sheet (any status).\n  if (existingEmails.has(email)) continue;\n  // GATE 4: skip a business already in the sheet under a different address.\n  if (existingBusinesses.has(bn)) continue;\n  // GATE 5: de-dupe within this run.\n  if (seenThisRun.has(email)) continue;\n  seenThisRun.add(email);\n\n  const websiteText = String(html).replace(/<script[\\s\\S]*?<\\/script>/gi, ' ').replace(/<style[\\s\\S]*?<\\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim().slice(0, 4000);\n\n  const enrichSystem = 'You are the Digital Artifacts prospect-enrichment step (a Layer 2 skill). You read a small Australian business public footprint and return a tight, honest enrichment record. You NEVER invent a pain. If the footprint does not evidence a specific repetitive-ops pain, set pain_evidenced false and leave likely_pain empty. HARD RULES: no em dashes ever, Australian businesses and the three ICP archetypes only, fit_hint is advisory only. Return JSON only, no prose, no markdown fences.';\n  const enrichSchema = '{\"archetype\":\"trades|services|sales|other\",\"size_estimate\":\"micro (1-3)|small (4-20)|mid (21-50)|larger (50+)|unknown\",\"contact_role_guess\":\"owner|office manager|operations|unknown\",\"likely_pain\":\"one specific weekly repetitive task drawn from the footprint, or empty\",\"pain_evidenced\":true,\"evidence\":\"the specific footprint detail supporting the pain, or empty\",\"fit_hint\":\"strong|plausible|weak|not_fit\",\"notes\":\"one sentence for Isaiah\"}';\n  const content = '<icp>\\n' + brain['outbound-icp'] + '\\n</icp>\\n\\n'\n    + '<field_service>\\n' + brain['field-service'] + '\\n</field_service>\\n\\n'\n    + '<company>\\n' + brain['company-brief'] + '\\n</company>\\n\\n'\n    + '<business>\\nName: ' + (p.business_name || '') + '\\nCategory searched: ' + (p.category || '') + '\\nLocation: ' + (p.location || '') + '\\nGoogle rating: ' + (p.rating || '') + ' from ' + (p.review_count || '') + ' reviews\\nWebsite: ' + (p.website || '') + '\\nWebsite text (extract):\\n' + websiteText + '\\n</business>\\n\\n'\n    + 'Return strictly this JSON, nothing else:\\n' + enrichSchema;\n  const enrich_request = { model: 'claude-sonnet-4-6', max_tokens: 600, system: enrichSystem, messages: [{ role: 'user', content: content }] };\n\n  fresh.push({ json: {\n    prospect_id: 'P' + stamp + '-' + i,\n    business_name: p.business_name || '',\n    email: email,\n    email_source: p.website || '',\n    contact_name: '',\n    contact_role: '',\n    industry: p.category || '',\n    location: p.location || '',\n    size: '',\n    notes: 'Google ' + (p.rating || '?') + ' from ' + (p.review_count || '0') + ' reviews. Phone ' + (p.phone || 'n/a') + '. Sourced via Places search: \"' + (p.category || '') + ' ' + (p.location || '') + '\".',\n    sourced_at: now.toISOString(),\n    enrich_request: enrich_request,\n  } });\n}\n\nif (fresh.length === 0) {\n  // Nothing fresh and contactable this run. Emit a single no-op marker so the run ends cleanly.\n  return [{ json: { _no_fresh_prospects: true, scanned: places.length } }];\n}\nreturn fresh;\n"
+      },
+      "id": "extract-suppress",
+      "name": "Extract Email + Suppress + Dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1320, 320],
+      "notes": "The compliance heart of the workflow. GATE 1 no published email = drop. GATE 2 suppressed/unsubscribed/bounced = never contact. GATE 3+4 already in sheet = no double-touch. GATE 5 in-run de-dupe."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "has-prospect",
+              "leftValue": "={{ $json._no_fresh_prospects }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "notExists", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "filter-fresh",
+      "name": "Only Fresh Prospects",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1540, 320],
+      "notes": "Drops the no-op marker so an empty run ends without calling Claude or writing the sheet."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.enrich_request) }}",
+        "options": {}
+      },
+      "id": "claude-enrich",
+      "name": "Claude: Enrich",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 320],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OKqeqkHPNB4DhUQ9",
+          "name": "anthropicApi.default"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Parse the enrichment, merge it onto the prospect row, queue it for workflow-f.\nconst prev = $('Extract Email + Suppress + Dedupe').all();\n// Map enrichment responses back to their prospect by index (HTTP preserves order).\nconst me = $input.all();\nconst out = [];\nfor (let i = 0; i < me.length; i++) {\n  const row = (prev[i] && prev[i].json) || {};\n  const raw = (me[i] && me[i].json && me[i].json.content && me[i].json.content[0] && me[i].json.content[0].text) || '';\n  let e;\n  try { const s = raw.indexOf('{'); const x = raw.lastIndexOf('}'); e = JSON.parse(raw.slice(s, x + 1)); }\n  catch (err) { e = { archetype: row.industry || 'trades', size_estimate: 'unknown', contact_role_guess: 'unknown', likely_pain: '', pain_evidenced: false, evidence: '', fit_hint: 'plausible', notes: 'Enrichment parse failed, queued as plausible for the qualifier to grade.' }; }\n  out.push({ json: {\n    prospect_id: row.prospect_id || '',\n    business_name: row.business_name || '',\n    contact_name: row.contact_name || '',\n    contact_role: e.contact_role_guess && e.contact_role_guess !== 'unknown' ? e.contact_role_guess : '',\n    email: row.email || '',\n    email_source: row.email_source || '',\n    industry: row.industry || '',\n    location: row.location || '',\n    size: e.size_estimate || '',\n    likely_pain: e.likely_pain || '',\n    fit_hint: e.fit_hint || '',\n    notes: (row.notes || '') + (e.evidence ? ' Pain evidence: ' + e.evidence : '') + (e.notes ? ' | ' + e.notes : ''),\n    status: 'queued',\n    next_action: '',\n    sourced_at: row.sourced_at || new Date().toISOString(),\n  } });\n}\nreturn out;\n"
+      },
+      "id": "build-row",
+      "name": "Build Prospect Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, 320]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultName": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "append-prospects",
+      "name": "Append to Prospects Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [2200, 320],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      },
+      "notes": "Appends queued rows. workflow-f's 9am run picks up status 'queued', re-qualifies (the qualifier stays the authority), drafts the opener, and Telegram-gates it."
+    }
+  ],
+  "connections": {
+    "Run Sourcing": {
+      "main": [[{ "node": "Cohort Config", "type": "main", "index": 0 }]]
+    },
+    "Cohort Config": {
+      "main": [[
+        { "node": "Read Prospects Sheet", "type": "main", "index": 0 },
+        { "node": "Places: Text Search", "type": "main", "index": 0 }
+      ]]
+    },
+    "Places: Text Search": {
+      "main": [[{ "node": "Explode Places", "type": "main", "index": 0 }]]
+    },
+    "Explode Places": {
+      "main": [[{ "node": "Fetch Website", "type": "main", "index": 0 }]]
+    },
+    "Fetch Website": {
+      "main": [[{ "node": "Extract Email + Suppress + Dedupe", "type": "main", "index": 0 }]]
+    },
+    "Extract Email + Suppress + Dedupe": {
+      "main": [[{ "node": "Only Fresh Prospects", "type": "main", "index": 0 }]]
+    },
+    "Only Fresh Prospects": {
+      "main": [[{ "node": "Claude: Enrich", "type": "main", "index": 0 }]]
+    },
+    "Claude: Enrich": {
+      "main": [[{ "node": "Build Prospect Row", "type": "main", "index": 0 }]]
+    },
+    "Build Prospect Row": {
+      "main": [[{ "node": "Append to Prospects Sheet", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -16,7 +16,8 @@ In rough lifecycle order.
 
 | Status | Written by | Meaning |
 |---|---|---|
-| (blank) | Isaiah, manual | Prospect added to sheet, not yet qualified. workflow-f's qualifier picks these up. |
+| (blank) | Isaiah, manual | Prospect added to sheet by hand, not yet qualified. workflow-f's qualifier picks these up. |
+| `queued` | workflow-j (sourcing) | Prospect sourced automatically: found via Google Places, address taken from the business's own published website, enriched with an evidenced pain, then de-duplicated and suppression-checked. Treated exactly like (blank) by workflow-f, which qualifies it and drafts an opener. The qualifier stays the authority on fit. |
 | `awaiting_approval` | workflow-f, workflow-g | A draft (opener or nudge) has been written and a Telegram card is in Isaiah's chat waiting for approve / edit / reject. |
 | `opener_sent` | workflow-c (approve_opener) | Opener email has been sent. The prospect is now in the listening window for workflow-h replies and the nudging window for workflow-g. |
 | `rejected` | workflow-c (reject_opener) | Isaiah rejected the drafted opener. Nothing sent. Terminal unless manually re-queued. |
@@ -27,7 +28,18 @@ In rough lifecycle order.
 | `teardown_rejected` | workflow-c (reject_teardown) | Teardown draft rejected, not sent. |
 | `replied_review` | workflow-h | A reply arrived that the classifier could not confidently route (`unclear`, `question`, `not_now`). Flagged for Isaiah to handle manually. No automation will respond. |
 | `suppressed` | workflow-h | Reply classified as `not_interested`. Terminal. Address goes on the suppression list, never contacted again. |
-| `unsubscribed` | workflow-h, unsubscribe endpoint | Explicit opt-out (reply with "unsubscribe" or one-click unsubscribe URL). Terminal. |
+| `unsubscribed` | workflow-h, unsubscribe endpoint | Explicit opt-out (reply with "unsubscribe", the one-click link, or the RFC 8058 one-click header). Terminal. |
+
+# Suppression: how "never contact again" is actually enforced
+
+A terminal opt-out is only real if a later sourcing run cannot re-find and re-email the same
+business. That guarantee lives in workflow-j (sourcing), not in a separate list. Before queuing any
+sourced prospect, workflow-j reads the whole prospects sheet and drops a candidate if its address
+is already present under any status, and hard-drops it if the status is `unsubscribed`,
+`suppressed`, `rejected`, or `bounced`. It also drops a business already in the sheet under a
+different address. So the prospects sheet itself is the suppression list, and every terminal row in
+it permanently blocks re-contact. The unsubscribe path that writes those rows is workflow-d (the
+one-click endpoint, GET link plus POST for header one-click) and workflow-h (reply opt-outs).
 
 # `next_action` values
 

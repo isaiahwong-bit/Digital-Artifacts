@@ -9,8 +9,11 @@ The live sales-ops layer behind digitalartifacts.com.au. The inbound contact for
 | `workflow-a-lead-capture.json` | Webhook → validate → fetch brain → Claude classify → Claude draft → log → Telegram approval (in-hours) or immediate generic send (out-of-hours) | Active |
 | `workflow-b-nurture-sequence.json` | Daily 9am AEST cron. Reads Leads sheet, branches nurture cadence by `icp_class` tier, sends the right email for the lead's current `nurture_stage`, updates the stage. | **Inactive** pending copy sign-off |
 | `workflow-c-telegram-callback.json` | Handles the Approve / Edit / Reject inline-keyboard buttons from workflow-a | Active |
-| `workflow-d-unsubscribe.json` | GET webhook `/webhook/da-unsubscribe?lead_id=DA-...`. Flips sheet status to `unsubscribed` and returns a small HTML confirmation page. | Inactive, activate after workflow-b sends its first email |
+| `workflow-d-unsubscribe.json` | Webhook `/webhook/da-unsubscribe?id=...&list=outbound\|inbound`. GET (human link) and POST (RFC 8058 one-click header) both flip the sheet status to `unsubscribed` and return an HTML confirmation page. | Inactive, activate before any cold send (it is the unsubscribe target) |
 | `workflow-e-engagement-from-calendar.json` | Google Calendar event-created trigger. On a new booking, reads attendee emails, looks them up in the sheet, flips status to `engaged` so nurture drops them, pings Telegram. | Inactive, needs `googleCalendarOAuth2Api` credential before activation |
+| `workflow-j-prospect-sourcing.json` | Manual per-cohort run. Google Places Text Search → fetch each business's own website → regex the published email → suppression + de-dupe against the prospects sheet → Claude enrichment (evidenced pain) → append as `queued` for workflow-f. The defensible sourcing mouth. | Built; needs a Places API header-auth credential attached, then import + run |
+
+Outbound workflows `f` (cold opener), `g` (nudge), `h` (reply handler), and `j` (sourcing) are registered with state in `../Walter.md`.
 
 The skills these workflows invoke live in `/skills/*.md`. The context they read lives in `/brain/*.md`. Brain files are fetched at runtime via public GitHub raw URLs, so edits to `/brain` propagate without redeploying the workflow.
 

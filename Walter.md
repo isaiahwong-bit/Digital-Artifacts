@@ -40,6 +40,7 @@ website form -> workflow-a (classify + draft) -> Telegram approve (workflow-c) -
 
 **Outbound** (sourced prospect to teardown):
 ```
+workflow-j (source: Places + own-website regex + suppress/dedupe + enrich) -> Prospects sheet (queued)
 Prospects sheet -> workflow-f (qualify + draft opener) -> Telegram approve (workflow-c) -> Gmail send
    no reply 5+ days -> workflow-g (draft nudge) -> Telegram approve -> send
    reply arrives    -> workflow-h (classify) -> draft teardown / suppress / flag for review
@@ -58,12 +59,13 @@ scope notes.
 | workflow-a-lead-capture | inbound form: classify + draft reply | webhook (form) | LIVE |
 | workflow-b-nurture-sequence | tiered nurture drip | cron daily 9am AEST | BUILT, INACTIVE (copy sign-off) |
 | workflow-c-telegram-callback | Approve / Edit / Reject handler | Telegram button | LIVE |
-| workflow-d-unsubscribe | one-click opt-out | webhook GET | BUILT, INACTIVE (enable with b) |
+| workflow-d-unsubscribe | one-click opt-out (link + RFC 8058 header) | webhook GET + POST | BUILT, INACTIVE (enable with b) |
 | workflow-e-engagement-from-calendar | booking -> status engaged | Google Calendar event | BUILT, INACTIVE (needs Calendar OAuth) |
 | workflow-f-cold-opener | qualify + draft cold opener | cron weekday 9am AEST | LIVE |
 | workflow-g-followup-nudge | draft nudge after 5+ days | cron weekday 9:30am AEST | LIVE |
 | workflow-h-reply-handler | classify replies + draft teardown | Gmail reply trigger | LIVE |
 | workflow-i-inbox-monitor | triage inbox email, alert Discord | Gmail trigger (DA inbox) | PLANNED |
+| workflow-j-prospect-sourcing | source defensibly: Places + own-website regex + suppress/dedupe + enrich | manual (per cohort) | BUILT, needs Places credential |
 
 Note: the repo `.json` files are exports; the live active/inactive state is set on the n8n cloud
 instance, not in these files.
