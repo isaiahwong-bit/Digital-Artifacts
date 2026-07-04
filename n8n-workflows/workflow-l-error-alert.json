@@ -1,0 +1,72 @@
+{
+  "name": "DA - Error Alert",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ea-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "notes": "Fires when any workflow that has this workflow set as its Error Workflow fails. Error workflows do not need to be activated."
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nconst wf = (d.workflow && d.workflow.name) || 'unknown workflow';\nconst exec = d.execution || {};\nconst err = exec.error || {};\nconst node = exec.lastNodeExecuted || (err.node && err.node.name) || 'unknown node';\n\nconst when = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney', dateStyle: 'medium', timeStyle: 'short' });\n\nconst lines = [\n  '\\uD83D\\uDEA8 n8n workflow ERROR (' + when + ' AEST)',\n  'Workflow: ' + wf,\n  'Failed node: ' + node,\n  'Error: ' + (err.message || 'no message captured'),\n  exec.url ? 'Execution: ' + exec.url : (exec.id ? 'Execution id: ' + exec.id : '')\n];\n\nreturn [{ json: { message: lines.filter(Boolean).join('\\n') } }];"
+      },
+      "id": "ea-compose",
+      "name": "Compose Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "ea-telegram",
+      "name": "Telegram: Error Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [440, 0],
+      "notes": "Swap this node for a Discord #da-alerts webhook POST once that webhook exists (integrations.md, Discord migration).",
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Compose Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose Alert": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
