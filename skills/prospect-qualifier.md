@@ -3,6 +3,7 @@ name: prospect-qualifier
 reads:
   - brain/outbound-icp.md
   - brain/icp.md
+  - brain/field-service.md
 output: json
 model: claude-sonnet-4-6
 ---

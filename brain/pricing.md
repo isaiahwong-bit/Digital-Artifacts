@@ -1,6 +1,6 @@
 ---
 name: Pricing logic
-updated: 2026-04-22
+updated: 2026-05-27
 ---
 
 # How we quote
@@ -26,6 +26,28 @@ Includes:
 - One primary surface (Telegram, Slack, SMS, web dashboard, or voice)
 - Training + handover docs + admin access
 
+# Phased operating-system build (larger one-time)
+
+Typical range: **A$18,000 - A$30,000** for businesses where one operating system covers multiple surfaces and four or more named workflows. The shape: a discovery and brain phase first, then 3-5 workflow phases each delivered independently so the business can pause, accelerate or stop between any two.
+
+When this shape applies:
+- 4+ distinct workflows in scope (e.g. inbound triage, schedule monitor, crew dispatch, HR comms)
+- Multi-surface delivery (Telegram + email + dashboard, or similar)
+- A business large enough that a single 4-8 week deploy would underserve the brain
+- Buyer wants phased payment cadence (50% on phase kickoff, 50% on phase delivery, per phase) rather than one upfront commitment
+
+Delivered in 2-3 months end to end. Each phase is independent and reviewed before the next begins.
+
+Reference shape (real engagement, J Bryant Projects, May 2026):
+- Phase 0: discovery + brain - A$3,500 (2 weeks)
+- Phase 1: inbound triage - A$4,000 (2 weeks)
+- Phase 2: schedule monitor - A$3,200 (1-2 weeks)
+- Phase 3: crew dispatch from calendar - A$7,000 (2-3 weeks)
+- Phase 4: HR and safety comms - A$6,500 (1-2 weeks)
+- Total: A$24,200 over about 2 months
+
+Same inclusions as the standard deploy, multiplied across phases. Maintenance retainer (below) kicks in after Phase 1 goes live, not at end of build.
+
 # Brain + skills growth (monthly retainer)
 
 Typical range: **A$800 - A$2,500 / month** depending on scope. Minimum 3-month commitment, month-to-month after that.
@@ -36,6 +58,12 @@ Includes:
 - Brain grooming sessions (we sit with the team and extend Layer 1)
 - New n8n automations as priorities shift
 - Direct channel (Telegram/Slack) for questions, same-day response
+
+# Additional workflows during maintenance
+
+Once the brain is in place and the client is on retainer, new workflows plug in cheaply because the context is already there. Scoped one at a time.
+
+Typical range: **A$1,000 - A$2,000 per additional workflow**, built during a maintenance month and billed on delivery. Examples that fit this shape: quote follow-up nurture, service report drafting from field notes, review generation after a clean job, contract renewal nudges.
 
 # Website builds (standalone)
 

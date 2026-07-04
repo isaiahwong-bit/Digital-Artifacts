@@ -4,6 +4,7 @@ reads:
   - brain/outbound-offer.md
   - brain/tone-of-voice.md
   - brain/company-brief.md
+  - brain/field-service.md
 output: json
 model: claude-sonnet-4-6
 ---
