@@ -464,7 +464,7 @@
             <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
             <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
           </div>
-          <p class="wf-foot">Notice the AI writes exactly one thing: the draft. Every other step is fixed. Read the brain, wait for your approval, send and log. Same path, every lead.</p>
+          <p class="wf-foot">Notice the AI writes exactly one thing: the draft. Every other step is fixed. Read the brain, wait for your approval, send and log. Same path, every lead. And if a step ever fails, the failure is loud: it pages a human. It never hides in a log.</p>
         </div>
 
         <div class="cards">
@@ -521,9 +521,11 @@
             <div class="enq-field">
               <label for="service">Service</label>
               <select name="service" id="service">
-                <option value="operating-system" selected>Full 4-layer operating system</option>
+                <option value="lead-response" selected>Lead response (answer every enquiry)</option>
+                <option value="reactivation">Database reactivation</option>
+                <option value="reputation">Reviews and reputation</option>
+                <option value="operating-system">Full 4-layer operating system</option>
                 <option value="automation">A specific workflow or automation</option>
-                <option value="agent">An AI agent (Slack, voice, SMS)</option>
                 <option value="website">Website or interface work</option>
                 <option value="not-sure">Not sure yet, want to talk it through</option>
               </select>
@@ -563,12 +565,12 @@
           </div>
         </form>
 
-        <div id="formSuccess" class="enq-result" hidden>
+        <div id="formSuccess" class="enq-result" role="status" aria-live="polite" hidden>
           <div class="enq-check" aria-hidden="true">&#10003;</div>
           <h3>Got it. A draft reply is already on the way.</h3>
           <p>You just triggered the same flow shown on this page. Claude read the brain, classified the enquiry, drafted a personal reply, and pinged us to approve. Outside business hours, a holding note goes out on its own.</p>
         </div>
-        <div id="formError" class="enq-error" hidden>
+        <div id="formError" class="enq-error" role="alert" hidden>
           <p>Something went wrong. Please try again, or email hello@digitalartifacts.com.au directly.</p>
         </div>
       </div>
@@ -788,9 +790,19 @@ function frame(){
   requestAnimationFrame(frame);
 }
 
+// the enquiry form's service follows the flow being viewed, until the visitor picks one themselves
+const serviceSelect = document.getElementById('service');
+const FLOW_TO_SERVICE = { lead:'lead-response', reactivation:'reactivation', reputation:'reputation' };
+let serviceTouched = false;
+if(serviceSelect){ serviceSelect.addEventListener('change', ()=> serviceTouched = true); }
+function syncService(key){
+  if(serviceSelect && !serviceTouched && FLOW_TO_SERVICE[key]) serviceSelect.value = FLOW_TO_SERVICE[key];
+}
+
 function setFlow(key){
   pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===key)));
   buildFlow(FLOWS[key]);
+  syncService(key);
   window.scrollTo(0,0);
   target = 0; cur = 0;
 }
@@ -806,6 +818,7 @@ reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 const startKey = (k => FLOWS[k] ? k : 'lead')(new URLSearchParams(location.search).get('flow'));
 pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===startKey)));
 buildFlow(FLOWS[startKey]);
+syncService(startKey);
 
 if(reduce){
   document.documentElement.classList.add('reduced');

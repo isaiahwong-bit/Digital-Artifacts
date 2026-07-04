@@ -15,6 +15,16 @@
       "source": "/automation-journey",
       "destination": "/automations.html",
       "permanent": true
+    },
+    {
+      "source": "/downloads/The 4-Layer Blueprint _ Digital Artifacts.pdf",
+      "destination": "/downloads/4-layer-blueprint.pdf",
+      "permanent": true
+    },
+    {
+      "source": "/downloads/The 27-Point Website Checklist _ Digital Artifacts.pdf",
+      "destination": "/downloads/27-point-website-checklist.pdf",
+      "permanent": true
     }
   ]
 }

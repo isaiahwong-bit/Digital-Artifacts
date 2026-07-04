@@ -1,0 +1,139 @@
+{
+  "name": "DA - Outbound Heartbeat",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "hb-schedule",
+      "name": "Schedule: Weekday 8:30am AEST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, -100],
+      "notes": "Fires 30 minutes before workflow-f's 9am run so the queue state lands on Telegram before drafting starts. Workflow timezone must be Australia/Sydney (deploy script sets it)."
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "da-heartbeat-test-b3e91f7c",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hb-webhook-test",
+      "name": "Webhook: Manual Test",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 100],
+      "webhookId": "hb-webhook-test-b3e91f7c",
+      "notes": "On-demand heartbeat: GET /webhook/da-heartbeat-test-b3e91f7c. Same chain as the cron."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/126nIrd5RM9rvvgaAN2eKlNkQktL0BQ4p6dwKkEULKLg/values/Prospects!A1:AF500",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "options": {}
+      },
+      "id": "hb-get-sheet",
+      "name": "Get Prospects Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xyvnpCe0Is7f0c73",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const values = $input.first().json.values || [];\nif (values.length < 1) throw new Error('Prospects sheet read returned no rows');\n\nconst header = values[0].map(v => String(v).trim());\nconst idx = {};\nfor (const col of ['prospect_id', 'status', 'opener_sent_at', 'last_touch']) {\n  idx[col] = header.indexOf(col);\n  if (idx[col] === -1) throw new Error('Column missing from Prospects header: ' + col);\n}\n\nconst rows = values.slice(1).filter(r => String(r[idx.prospect_id] || '').trim().startsWith('OP-'));\nconst get = (r, c) => String(r[idx[c]] || '').trim();\n\nconst counts = {};\nlet queue = 0;\nfor (const r of rows) {\n  const s = get(r, 'status') || '(blank)';\n  counts[s] = (counts[s] || 0) + 1;\n  if (s === 'queued' || s === '(blank)') queue++;\n}\n\nconst sendDates = rows.map(r => get(r, 'opener_sent_at')).filter(Boolean).sort();\nconst lastSend = sendDates.length ? sendDates[sendDates.length - 1] : 'none recorded';\nconst touchDates = rows.map(r => get(r, 'last_touch')).filter(Boolean).sort();\nconst lastTouch = touchDates.length ? touchDates[touchDates.length - 1] : 'none recorded';\n\nconst today = new Date().toLocaleDateString('en-AU', { timeZone: 'Australia/Sydney', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });\nconst statusLines = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([k, v]) => '\\u2022 ' + k + ': ' + v).join('\\n');\n\nlet message = '\\uD83E\\uDEC0 DA outbound heartbeat (' + today + ')\\n'\n  + 'Queue going into today: ' + queue + '\\n'\n  + 'Prospects tracked: ' + rows.length + '\\n'\n  + statusLines + '\\n'\n  + 'Last opener sent: ' + lastSend + '\\n'\n  + 'Last touch: ' + lastTouch;\nif (queue === 0) message += '\\n\\u26A0\\uFE0F Queue is EMPTY: workflow-f has nothing to draft. Source or load prospects.';\n\nreturn [{ json: { message, queue, total: rows.length } }];"
+      },
+      "id": "hb-digest",
+      "name": "Compute Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "8711637937",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "hb-telegram",
+      "name": "Telegram: Heartbeat",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [660, 0],
+      "notes": "Swap this node for a Discord #da-alerts webhook POST once that webhook exists (integrations.md, Discord migration).",
+      "credentials": {
+        "telegramApi": {
+          "id": "WqZONzynV5mpkH1f",
+          "name": "tgApi.daAdmin.fresh"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Weekday 8:30am AEST": {
+      "main": [
+        [
+          {
+            "node": "Get Prospects Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Get Prospects Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Prospects Sheet": {
+      "main": [
+        [
+          {
+            "node": "Compute Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Digest": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Heartbeat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  }
+}
