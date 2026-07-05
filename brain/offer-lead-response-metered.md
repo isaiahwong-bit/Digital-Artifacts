@@ -9,6 +9,10 @@ tags: [offer, pricing]
 
 # Lead Response, metered entry offer (MVP)
 
+**Client-facing name: Kelpie.** The working dog that rounds up the strays: answers while the
+client is on the tools, chases what wanders, never clocks off. Collateral, reports, and every
+client-facing message use the name; this file and the workflows keep the internal product name.
+
 The pay-per-output front door to Lead Response. Same system as the flat offer in
 `brain/offer-lead-response.md`, different meter on the front. Built for the
 first conversation with a sceptical tradie: no retainer to swallow, no bookings means no bill,
@@ -75,7 +79,9 @@ gap simPRO and ServiceM8 leave open, not on their turf.
 3. **Forwarding**: the lead lands in the tradie's inbox and phone within a minute, formatted to
    act on.
 4. **The chase**: leads still unbooked after the grace window get a follow-up sequence from the
-   agent, which proposes times and writes confirmed bookings to a shared calendar.
+   agent, which proposes times and confirms by **calendar invite (.ics) to both sides**, landing
+   in whatever calendar the client already runs (Google, Outlook, phone). No new tool, no
+   integration project; a direct Google Calendar write is an optional extra where they use it.
 5. **The rebook engine**: completed jobs logged with service type and date (the review request
    doubles as the job-log entry); cycle-due customers get the rebook nudge.
 6. **The ledger**: every lead logged with timestamp, source, status, service, suburb, urgency.
@@ -89,7 +95,9 @@ gap simPRO and ServiceM8 leave open, not on their turf.
 ## Pricing mechanics (draft numbers for sign-off)
 
 - **Setup: A$1,500** one-off. Covers capture wiring, the client brain, ledger, acknowledgment,
-  forwarding, and the report. Credited in full against a full 4-layer build (A$5k to A$12k) if
+  forwarding, the report, and the **job-history import**: their last 18 to 24 months of jobs
+  (Xero export, FSM CSV, whatever exists) loaded into the log so rebook cycles start firing in
+  week one, not year two. Credited in full against a full 4-layer build (A$5k to A$12k) if
   they upgrade within 6 months.
 - **Meter, two rates:** **A$60 per quote visit** the agent locks in (a confirmed time in the
   calendar, machine event, no one has to log anything), and **A$150 per job** the agent secures
@@ -109,6 +117,11 @@ gap simPRO and ServiceM8 leave open, not on their turf.
 - **Graduation**: two consecutive months at or near the cap and the offer flips to flat
   A$600 a month, which is cheaper for them and predictable for DA. The flat retainer arrives as
   a discount, not a commitment.
+- **Self-diagnosis on the report**, so meter drift is caught, not guessed: the monthly report
+  tracks the **suppression rate** (leads flagged "leave it with me" as a share of chaseable
+  leads) and the **self-booked count** (chase-caused bookings the client closed directly, shown
+  as $0 rows). Two months of high suppression or high self-booking auto-flags the client for
+  the flat-retainer conversation: they are getting the value but the meter cannot see it.
 
 ## Why these numbers hold
 

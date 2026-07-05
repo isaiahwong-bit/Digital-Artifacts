@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kelpie: lead response on the meter</title>
+<title>Kelpie for fire protection: inspections on the meter</title>
 <!--
   Two-page pitch + backend collateral for brain/offer-lead-response-metered.md (draft).
   Page 1: the decision page. Page 2: how the machine works (ledger, chase, rebook, billing).
@@ -75,6 +75,15 @@
   .col-box h3{font-family:'Clash Display',sans-serif;font-weight:600;font-size:.9rem;margin-bottom:7px}
   .col-box p, .col-box li{font-size:.8rem;color:var(--muted);line-height:1.55}
   .col-box ul{padding-left:16px}
+  /* variant fit: tighten page 2 only */
+  .page + .page .content{padding-top:16px}
+  .page + .page h2{margin:13px 0 8px}
+  .page + .page .ledger-note{margin-top:6px;line-height:1.45}
+  .page + .page td{padding:6px 10px}
+  .page + .page .col-box{padding:10px 14px}
+  .page + .page .callout{margin-top:10px;padding:10px 15px}
+  .page + .page .fnode{padding:9px 8px}
+  .page + .page .footer{margin-top:8px;padding:8px 44px 12px}
 </style>
 </head>
 <body>
@@ -88,14 +97,14 @@
       </div>
       <div class="doc-label">
         <div class="kind">Kelpie &middot; lead response on the meter</div>
-        <div class="sub2">For trades and field services</div>
+        <div class="sub2">For fire protection and essential safety measures</div>
       </div>
     </div>
 
     <div class="content">
-      <h1>Pay when work lands in your calendar. <em>Not before.</em></h1>
-      <p class="lead">Meet Kelpie: the agent that answers every enquiry the moment it arrives,
-      chases the ones going cold, and brings past customers back when their next service is due.
+      <h1>Pay when an inspection lands in your calendar. <em>Not before.</em></h1>
+      <p class="lead">Meet Kelpie: the agent that answers every enquiry the moment it
+      arrives, chases quotes going cold, and books recurring inspections when they fall due.
       Your own leads stay yours, free, always. The meter runs on one thing: what Kelpie locks in
       itself.</p>
 
@@ -107,13 +116,13 @@
         </div>
         <div class="rate hero">
           <div class="n">$60</div>
-          <div class="t">Quote visit locked in</div>
-          <div class="d">A lead going cold, chased by Kelpie until a quote time is confirmed in your calendar.</div>
+          <div class="t">Site visit locked in</div>
+          <div class="d">A new enquiry going cold, chased by Kelpie until a walkthrough time is confirmed in your calendar.</div>
         </div>
         <div class="rate">
           <div class="n">$150</div>
-          <div class="t">Job booked outright</div>
-          <div class="d">A past customer rebooked for cycle work, or a sent quote accepted through Kelpie's follow-up.</div>
+          <div class="t">Inspection booked</div>
+          <div class="d">A due inspection round booked with an existing site, or a lapsed client re-engaged onto the schedule.</div>
         </div>
       </div>
 
@@ -122,9 +131,9 @@
         <tbody>
           <tr><td>An enquiry arrives through your own website, email, or answered phone</td><td style="text-align:right"><span class="free">Free, yours</span></td></tr>
           <tr><td>You book a lead yourself, however it arrived</td><td style="text-align:right"><span class="free">Free, your craft</span></td></tr>
-          <tr><td>Kelpie chases a stalled or missed enquiry and locks in a quote visit</td><td style="text-align:right"><span class="paid">$60</span></td></tr>
-          <tr><td>Kelpie books a job outright: a cycle rebook, or your quote accepted through Kelpie's follow-up</td><td style="text-align:right"><span class="paid">$150</span></td></tr>
-          <tr><td>A quote visit Kelpie secured becomes a job through your own close</td><td style="text-align:right"><span class="free">Nothing more</span></td></tr>
+          <tr><td>Kelpie chases a stalled or missed enquiry and locks in a site visit</td><td style="text-align:right"><span class="paid">$60</span></td></tr>
+          <tr><td>Kelpie books a due inspection round, or re-engages a lapsed site onto the schedule</td><td style="text-align:right"><span class="paid">$150</span></td></tr>
+          <tr><td>A site visit Kelpie secured becomes a contract through your own close</td><td style="text-align:right"><span class="free">Nothing more</span></td></tr>
         </tbody>
       </table>
 
@@ -138,10 +147,9 @@
       </div>
 
       <div class="callout">
-        <strong>The comparison that matters.</strong> A receptionist is $4,000 to $6,000 a month
-        and knocks off at 5pm. Lead directories charge $50 to $150 for a maybe they also sold to
-        your competitors. Here, a real fortnight from a Melbourne arborist on this system: 4
-        enquiries captured, forwarded, and logged. All through his own site, so the meter read $0.
+        <strong>The comparison that matters.</strong> An admin chasing inspection bookings costs
+        $4,000 to $6,000 a month, and a lapsed ESM client is a year of contract revenue gone to
+        whoever rings them first. Kelpie never lets a due date pass quietly.
       </div>
     </div>
 
@@ -185,10 +193,10 @@
       <table>
         <thead><tr><th>When</th><th>Who</th><th>Service</th><th>Source</th><th>Status</th><th>Billed</th></tr></thead>
         <tbody>
-          <tr><td>4 Aug</td><td>J. M.</td><td>Tree removal</td><td>Your website</td><td>Booked by you</td><td><span class="free">$0</span></td></tr>
-          <tr><td>6 Aug</td><td>S. K.</td><td>Hedge trim</td><td>Your website</td><td>Quote visit, agent locked in day 6</td><td><span class="paid">$60</span></td></tr>
-          <tr><td>9 Aug</td><td>R. T.</td><td>Pruning</td><td>Rebook cycle</td><td>Job rebooked, 14 months since last prune</td><td><span class="paid">$150</span></td></tr>
-          <tr><td>11 Aug</td><td class="strike">Test entry</td><td class="strike">Spam</td><td class="strike">Form</td><td class="strike">Excluded, shown so nothing is silent</td><td><span class="free">$0</span></td></tr>
+          <tr><td>4 Aug</td><td>Cafe fit-out</td><td>Extinguisher install</td><td>Missed call</td><td>Booked by you</td><td><span class="free">$0</span></td></tr>
+          <tr><td>6 Aug</td><td>Strata OC</td><td>ESM walkthrough</td><td>Your website</td><td>Site visit, Kelpie locked in day 6</td><td><span class="paid">$60</span></td></tr>
+          <tr><td>9 Aug</td><td>Warehouse</td><td>6-month extinguishers</td><td>Compliance calendar</td><td>Inspection booked on due date</td><td><span class="paid">$150</span></td></tr>
+          <tr><td>11 Aug</td><td class="strike">Test entry</td><td class="strike">Spam</td><td class="strike">Form</td><td class="strike">Excluded, never silent</td><td><span class="free">$0</span></td></tr>
         </tbody>
       </table>
       <p class="ledger-note">Every lead carries its timestamp, source, and status, machine-logged
@@ -207,19 +215,20 @@
           </ul>
         </div>
         <div class="col-box">
-          <h3>The rebook engine (last year's jobs)</h3>
+          <h3>The compliance calendar (every due date, watched)</h3>
           <ul>
-            <li>Every finished job is logged with service and date; the review request doubles as the log entry.</li>
-            <li>Cycle work comes due (pruning at 12 to 24 months, hedges yearly) and Kelpie reaches out on time, every time.</li>
-            <li>Each rebooked job seeds the next cycle. Your history becomes a booking source.</li>
+            <li>Every serviced site logged with asset classes and due dates; the completion note doubles as the log entry.</li>
+            <li>Extinguishers at six months, exit lights annually, the annual ESM statement: Kelpie reaches out ahead of every due date.</li>
+            <li>Each completed round seeds the next. Your contract base stops leaking quietly.</li>
           </ul>
         </div>
       </div>
 
       <div class="callout">
-        <strong>What this is not.</strong> Not a CRM, not job-management software, and it does not
-        compete with simPRO or ServiceM8; it works in the gap they leave open. You own the stack
-        it runs on, nothing is locked in, and every message it sends is yours to read in the log.
+        <strong>What this is not.</strong> Not your safety system of record, not a compliance
+        certifier, not job-management software. Kelpie schedules and chases; testing,
+        certification and the regulatory record stay with your qualified technicians. You own
+        the stack, and every message is yours to read in the log.
       </div>
     </div>
 
