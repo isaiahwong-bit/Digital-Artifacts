@@ -82,6 +82,9 @@ gap simPRO and ServiceM8 leave open, not on their turf.
    The ledger is the bill and the proof; both sides read the same rows.
 7. **The monthly report**: DA-branded, plain language, itemising every lead and what it likely
    represents in job value. Template: `clients/valley-arbor/reports/2026-07-lead-report.html`.
+8. **The pitch collateral**: two-page decision-then-machine PDF at
+   `one-pagers/04-lead-response-meter.html` (page 1 the offer, page 2 the ledger, chase, and
+   rebook engine).
 
 ## Pricing mechanics (draft numbers for sign-off)
 
