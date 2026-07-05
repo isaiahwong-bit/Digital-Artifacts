@@ -11,8 +11,8 @@ tags: [offer, pricing]
 
 The pay-per-output front door to Lead Response. Same system as the flat offer in
 `brain/offer-lead-response.md`, different meter on the front. Built for the
-first conversation with a sceptical tradie: no retainer to swallow, no leads means no bill, and
-every billed lead is a row they can point at.
+first conversation with a sceptical tradie: no retainer to swallow, no bookings means no bill,
+and every billed booking is a row they can point at.
 
 Status is draft until Isaiah signs off the numbers. Do not quote from this file until it is
 active.
@@ -22,23 +22,49 @@ active.
 A receptionist is $4,000 to $6,000 a month fully loaded. A tradie missing a quarter of their
 enquiries at $1,000 to $5,000 a job is losing thousands every month without seeing it happen.
 This system catches every enquiry the moment it arrives, answers it, and puts it in your hand.
-And the meter only runs on the ones you would have lost: an enquiry that comes through your own
-website is yours, free, always. You pay when the system saves one.
+An enquiry that comes through your own website is yours, free, always. The meter runs on one
+thing only: when the agent books work into your calendar that was not otherwise happening, a
+quote you had gone quiet on, a missed call it converted, a past customer it brought back.
 
 ## The billable event (the rule that makes this fair)
 
-A lead is billable only when the system **rescued** it or **created** it. A lead that merely
-**passed through** is never billed, because the client's own asset earned it.
+**The meter counts bookings the agent secures that were not otherwise happening.** Not leads,
+not enquiries: bookings. One number, one sentence to a tradie: "you pay when the agent books
+work into your calendar that you weren't going to get."
 
-| Class | Examples | Billed |
-|---|---|---|
-| Passed through | website quote form, direct email, someone calling and getting through | never |
-| Rescued | missed call caught and converted to an enquiry, after-hours enquiry answered before it went cold, an incomplete enquiry chased to completion | yes |
-| Created | reactivation booking from the dormant list, follow-up nudge that revived a quiet quote, review-driven enquiry | yes |
+| What happens | Billed |
+|---|---|
+| Enquiry arrives through the client's own website, email, or answered phone | never, theirs |
+| Client books a lead themselves, however it arrived | never, their craft |
+| A captured lead sits unbooked past the grace window, the agent chases it, and secures the booking | yes |
+| The agent converts a caught missed call or after-hours enquiry into a confirmed booking | yes |
+| The rebook engine books a past customer for cycle work (see below) | yes |
 
-Free leads still appear on the monthly report, marked $0. That line is the trust builder: the
-client watches the system decline to charge for what was already theirs, which is exactly the
-opposite of the directories.
+Mechanics that keep it clean:
+
+- **Grace window**: the client gets first go at every lead (draft: 5 business days, set per
+  client). The agent only chases leads still marked unbooked after the window. The client can
+  mark any lead "leave it with me" at any time, which is the per-lead kill switch. The agent is
+  the safety net behind their follow-up, never a competitor to it.
+- **Booking is a machine event**: billable only when the booking is confirmed through the agent
+  thread (customer accepts a time, entry written to the shared calendar). If the client books it
+  themselves after an agent nudge, it rides free. Generous, but it deletes every attribution
+  argument, and the agent secures most of them anyway because it is the one doing the chasing.
+- Free leads still appear on the monthly report, marked $0. The client watches the system
+  decline to charge for what was already theirs, which is exactly the opposite of the
+  directories.
+
+## The rebook engine (recurring work from their own history)
+
+Trades with natural service cycles (pruning on 12 to 24 months, hedges annually, gutters
+seasonally) have revenue sitting in their completed-jobs history. The agent logs every finished
+job with service type and date (the post-job review request doubles as the job-log entry, one
+flow, two outcomes), and when a cycle comes due it reaches out: "we pruned your oak in July last
+year, it will be due again around now." A confirmed rebook is a billable booking like any other.
+
+Scope clarity for the client, stated up front: this is a rebook memory on top of their job
+history, not a CRM and not job-management software. The FSM honesty rule holds; we work in the
+gap simPRO and ServiceM8 leave open, not on their turf.
 
 ## What the MVP includes
 
@@ -48,9 +74,13 @@ opposite of the directories.
    cold while the tradie is on the tools.
 3. **Forwarding**: the lead lands in the tradie's inbox and phone within a minute, formatted to
    act on.
-4. **The ledger**: every lead logged with timestamp, source, service, suburb, urgency. The ledger
-   is the bill and the proof; both sides read the same rows.
-5. **The monthly report**: DA-branded, plain language, itemising every lead and what it likely
+4. **The chase**: leads still unbooked after the grace window get a follow-up sequence from the
+   agent, which proposes times and writes confirmed bookings to a shared calendar.
+5. **The rebook engine**: completed jobs logged with service type and date (the review request
+   doubles as the job-log entry); cycle-due customers get the rebook nudge.
+6. **The ledger**: every lead logged with timestamp, source, status, service, suburb, urgency.
+   The ledger is the bill and the proof; both sides read the same rows.
+7. **The monthly report**: DA-branded, plain language, itemising every lead and what it likely
    represents in job value. Template: `clients/valley-arbor/reports/2026-07-lead-report.html`.
 
 ## Pricing mechanics (draft numbers for sign-off)
@@ -58,21 +88,19 @@ opposite of the directories.
 - **Setup: A$1,500** one-off. Covers capture wiring, the client brain, ledger, acknowledgment,
   forwarding, and the report. Credited in full against a full 4-layer build (A$5k to A$12k) if
   they upgrade within 6 months.
-- **Meter: A$75 per rescued or created lead** (A$50 to A$100 is the defensible band; pick one at
-  sign-off). Higher than the old draft's A$50 because the counterfactual is a lost job, not a
-  free form. Qualified means real contact details plus service intent, machine-logged. Spam,
-  tests, duplicates, and all passed-through leads are shown on the report at $0, visible, never
-  silently excluded.
+- **Meter: A$125 per booking the agent secures** (A$100 to A$150 is the defensible band; pick
+  one at sign-off). Priced against the job it books, typically A$1,000 to A$5,000 in tree work,
+  so the meter sits at 3 to 12% of job value where lead-gen commissions run 5 to 15% for
+  non-exclusive leads.
 - **Cap: A$750 a month.** They never pay more than the cap, whatever the volume. The cap is the
   buyer's safety rail and the graduation trigger.
-- **Floor: A$0.** No rescued leads, no bill. This is the line that makes the offer easy to say
-  yes to.
-- **Billed on rescue or creation, never on outcome, never on pass-through.** The source of every
-  lead is machine-logged (form, missed call, after-hours, reactivation, follow-up), so the
-  billable class is a fact in the ledger, not a judgment call. Whether the job closes is the
-  tradie's craft, not the meter's business.
-- **Dispute rule**: flag any lead within 7 days and it comes off the bill, no argument. The cap
-  bounds DA's exposure; goodwill is worth more than $50.
+- **Floor: A$0.** No bookings secured, no bill. This is the line that makes the offer easy to
+  say yes to.
+- **Every lead's source and status is machine-logged** (form, missed call, after-hours,
+  follow-up, rebook), so what is billable is a fact in the ledger, not a judgment call, and the
+  report shows the free ones alongside the billed ones.
+- **Dispute rule**: flag any billed booking within 7 days and it comes off the bill, no
+  argument. The cap bounds DA's exposure; goodwill is worth more than $125.
 - **Graduation**: two consecutive months at or near the cap and the offer flips to flat
   A$600 a month, which is cheaper for them and predictable for DA. The flat retainer arrives as
   a discount, not a commitment.
@@ -82,15 +110,16 @@ opposite of the directories.
 - Valley Arbor's real fortnight (24 Jun to 5 Jul): 4 genuine enquiries through his own quote
   form. Under this rule that fortnight bills **$0**, which is the honest answer and the best
   sales demo the offer has: the report shows the system declining to charge for his own leads.
-  His billable surface is what is not built yet: missed-call capture, follow-up nudges on quiet
-  quotes, review requests after jobs.
+  His billable surface is what is not built yet: the chase on his two "flexible" leads that
+  have not booked, missed-call capture, and the rebook engine over his pruning history.
 - HiPages and Bark sell tree-work leads at roughly A$50 to A$150 each, non-exclusive, to
   multiple tradies at once, and they charge for every lead regardless of where it came from.
-  Here a rescued lead is exclusive and a passed-through lead is free. A$75 for a job that would
-  otherwise be lost prices comfortably inside the comp with a categorically fairer product.
-- Consequence to accept at sign-off: rescued volume is much lower than total volume, so the
-  meter runs slower than the old draft implied. That is the honest trade. The revenue engine is
-  still the graduation to flat, reached with trust intact instead of resentment.
+  Here a passed-through lead is free and A$125 buys a confirmed, exclusive booking, not a maybe.
+  That prices comfortably inside the comp with a categorically fairer product.
+- Consequence to accept at sign-off: secured bookings are a fraction of raw lead volume, so the
+  meter runs slower than a per-lead model would. That is the honest trade. The rebook engine is
+  what compounds it (every finished job seeds a future billable booking), and the revenue engine
+  is still the graduation to flat, reached with trust intact instead of resentment.
 
 ## Boundaries
 
