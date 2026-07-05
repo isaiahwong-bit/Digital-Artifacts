@@ -28,17 +28,17 @@ quote you had gone quiet on, a missed call it converted, a past customer it brou
 
 ## The billable event (the rule that makes this fair)
 
-**The meter counts bookings the agent secures that were not otherwise happening.** Not leads,
-not enquiries: bookings. One number, one sentence to a tradie: "you pay when the agent books
-work into your calendar that you weren't going to get."
+**The meter counts what the agent puts in the calendar that was not otherwise happening**, and
+it knows the difference between a quote and a job, because a tradie certainly does. One sentence:
+"you pay when the agent locks in a quote visit you were losing, or books a job outright."
 
 | What happens | Billed |
 |---|---|
 | Enquiry arrives through the client's own website, email, or answered phone | never, theirs |
-| Client books a lead themselves, however it arrived | never, their craft |
-| A captured lead sits unbooked past the grace window, the agent chases it, and secures the booking | yes |
-| The agent converts a caught missed call or after-hours enquiry into a confirmed booking | yes |
-| The rebook engine books a past customer for cycle work (see below) | yes |
+| Client books anything themselves, however the lead arrived | never, their craft |
+| Agent chases a stalled, missed, or after-hours enquiry and locks in a confirmed **quote visit** | yes, quote rate |
+| Agent secures a **job** outright: a cycle rebook with known scope, or a sent quote accepted through the agent's follow-up thread | yes, job rate |
+| A quote visit the agent secured later becomes a job through the client's own close | nothing more, their margin |
 
 Mechanics that keep it clean:
 
@@ -88,19 +88,21 @@ gap simPRO and ServiceM8 leave open, not on their turf.
 - **Setup: A$1,500** one-off. Covers capture wiring, the client brain, ledger, acknowledgment,
   forwarding, and the report. Credited in full against a full 4-layer build (A$5k to A$12k) if
   they upgrade within 6 months.
-- **Meter: A$125 per booking the agent secures** (A$100 to A$150 is the defensible band; pick
-  one at sign-off). Priced against the job it books, typically A$1,000 to A$5,000 in tree work,
-  so the meter sits at 3 to 12% of job value where lead-gen commissions run 5 to 15% for
-  non-exclusive leads.
+- **Meter, two rates:** **A$60 per quote visit** the agent locks in (a confirmed time in the
+  calendar, machine event, no one has to log anything), and **A$150 per job** the agent secures
+  outright (cycle rebooks, or quote acceptance that lands through the agent thread). Draft
+  numbers; bands A$50 to A$75 and A$125 to A$175 for sign-off. At a typical 50 to 70% quote-to-
+  job close rate, A$60 a visit is an effective A$85 to A$120 per won job, on jobs worth A$1,000
+  to A$5,000. Directories take A$50 to A$150 for a non-exclusive maybe.
 - **Cap: A$750 a month.** They never pay more than the cap, whatever the volume. The cap is the
   buyer's safety rail and the graduation trigger.
-- **Floor: A$0.** No bookings secured, no bill. This is the line that makes the offer easy to
-  say yes to.
+- **Floor: A$0.** Nothing secured, no bill. This is the line that makes the offer easy to say
+  yes to.
 - **Every lead's source and status is machine-logged** (form, missed call, after-hours,
   follow-up, rebook), so what is billable is a fact in the ledger, not a judgment call, and the
   report shows the free ones alongside the billed ones.
 - **Dispute rule**: flag any billed booking within 7 days and it comes off the bill, no
-  argument. The cap bounds DA's exposure; goodwill is worth more than $125.
+  argument. The cap bounds DA's exposure; goodwill is worth more than any single meter line.
 - **Graduation**: two consecutive months at or near the cap and the offer flips to flat
   A$600 a month, which is cheaper for them and predictable for DA. The flat retainer arrives as
   a discount, not a commitment.
@@ -116,10 +118,11 @@ gap simPRO and ServiceM8 leave open, not on their turf.
   multiple tradies at once, and they charge for every lead regardless of where it came from.
   Here a passed-through lead is free and A$125 buys a confirmed, exclusive booking, not a maybe.
   That prices comfortably inside the comp with a categorically fairer product.
-- Consequence to accept at sign-off: secured bookings are a fraction of raw lead volume, so the
-  meter runs slower than a per-lead model would. That is the honest trade. The rebook engine is
-  what compounds it (every finished job seeds a future billable booking), and the revenue engine
-  is still the graduation to flat, reached with trust intact instead of resentment.
+- Consequence to accept at sign-off: secured quote visits and jobs are a fraction of raw lead
+  volume, so the meter runs slower than a per-lead model would. That is the honest trade. The
+  rebook engine is what compounds it (every finished job seeds a future billable job, often with
+  no quote step at all), and the revenue engine is still the graduation to flat, reached with
+  trust intact instead of resentment.
 
 ## Boundaries
 
