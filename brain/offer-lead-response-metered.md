@@ -1,9 +1,9 @@
 ---
 name: Lead Response, metered entry offer
-status: draft
+status: active
 owner: Isaiah Wong
 created: 2026-07-05
-updated: 2026-07-05
+updated: 2026-07-07
 tags: [offer, pricing]
 ---
 
@@ -18,8 +18,7 @@ The pay-per-output front door to Lead Response. Same system as the flat offer in
 first conversation with a sceptical tradie: no retainer to swallow, no bookings means no bill,
 and every billed booking is a row they can point at.
 
-Status is draft until Isaiah signs off the numbers. Do not quote from this file until it is
-active.
+Rates v1 signed off 2026-07-07 with the launch decision. This is the live offer; quote it.
 
 ## The pitch, in the customer's terms
 
@@ -46,8 +45,8 @@ it knows the difference between a quote and a job, because a tradie certainly do
 
 Mechanics that keep it clean:
 
-- **Grace window**: the client gets first go at every lead (draft: 5 business days, set per
-  client). The agent only chases leads still marked unbooked after the window. The client can
+- **Grace window**: the client gets first go at every lead (5 business days default, set
+  per client). The agent only chases leads still marked unbooked after the window. The client can
   mark any lead "leave it with me" at any time, which is the per-lead kill switch. The agent is
   the safety net behind their follow-up, never a competitor to it.
 - **Booking is a machine event**: billable only when the booking is confirmed through the agent
@@ -92,7 +91,7 @@ gap simPRO and ServiceM8 leave open, not on their turf.
    `one-pagers/04-lead-response-meter.html` (page 1 the offer, page 2 the ledger, chase, and
    rebook engine).
 
-## Pricing mechanics (draft numbers for sign-off)
+## Pricing mechanics (v1, signed off 2026-07-07)
 
 - **Setup: A$1,500** one-off. Covers capture wiring, the client brain, ledger, acknowledgment,
   forwarding, the report, and the **job-history import**: their last 18 to 24 months of jobs
@@ -101,8 +100,8 @@ gap simPRO and ServiceM8 leave open, not on their turf.
   they upgrade within 6 months.
 - **Meter, two rates:** **A$60 per quote visit** the agent locks in (a confirmed time in the
   calendar, machine event, no one has to log anything), and **A$150 per job** the agent secures
-  outright (cycle rebooks, or quote acceptance that lands through the agent thread). Draft
-  numbers; bands A$50 to A$75 and A$125 to A$175 for sign-off. At a typical 50 to 70% quote-to-
+  outright (cycle rebooks, or quote acceptance that lands through the agent thread). Review
+  bands if the market pushes: A$50 to A$75 and A$125 to A$175. At a typical 50 to 70% quote-to-
   job close rate, A$60 a visit is an effective A$85 to A$120 per won job, on jobs worth A$1,000
   to A$5,000. Directories take A$50 to A$150 for a non-exclusive maybe.
 - **Cap: A$750 a month.** They never pay more than the cap, whatever the volume. The cap is the
@@ -134,7 +133,7 @@ gap simPRO and ServiceM8 leave open, not on their turf.
   multiple tradies at once, and they charge for every lead regardless of where it came from.
   Here a passed-through lead is free and A$125 buys a confirmed, exclusive booking, not a maybe.
   That prices comfortably inside the comp with a categorically fairer product.
-- Consequence to accept at sign-off: secured quote visits and jobs are a fraction of raw lead
+- Consequence accepted at sign-off: secured quote visits and jobs are a fraction of raw lead
   volume, so the meter runs slower than a per-lead model would. That is the honest trade. The
   rebook engine is what compounds it (every finished job seeds a future billable job, often with
   no quote step at all), and the revenue engine is still the graduation to flat, reached with
