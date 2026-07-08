@@ -69,3 +69,8 @@ sell honestly and sequence delivery per client.
 
 Still open behind the scenes, unchanged: batch-2 paste, `deploy-monitoring.sh`, the ClickSend
 ACMA check before any SMS promise, and the PAT before the repo flips private.
+
+One ask to fold into Matt's onboarding when he says yes: add Isaiah as a manager on the Valley
+Arbor Google Business Profile. It unlocks the Business Profile API, which is the only way to
+show his genuinely newest 5-star reviews on the site (the Places API ceiling was hit 8 July,
+see `clients/valley-arbor/REVIEWS.md`), and Kelpie's review-request loop wants the same access.
