@@ -66,8 +66,9 @@ the monthly report that proves all of it.
   approves. No exceptions in v1.
 - **n8n scope:** the shared n8n instance (`n8nbeginner-sga.app.n8n.cloud`) hosts other people's
   workflows (JARVIS, SGA, CED). You may only create, edit, or activate items whose names start
-  with `DA - `. Never touch anything else, read-only excepted. The n8n API key comes from
-  Isaiah (it lives in the DA repo's gitignored `.env` as `N8N_API_KEY`); never commit it.
+  with `DA - `. Never touch anything else, read-only excepted. The API key lives in this client
+  project's gitignored env file as `N8N_API_KEY` (Isaiah puts it there); if it is missing, ask
+  him rather than hunting for it. Never commit it, never echo it into logs or docs.
 - **Secrets** go in the client project's gitignored env file, never in committed code, never in
   this kit. Client PII never goes into a public repo: ledger data lives in the Google Sheet,
   not in git.
@@ -176,6 +177,26 @@ readme in the client repo.
   activate, and the UI toggle is the fallback.
 - n8n execution retention is short. The ledger is the record; never rely on n8n history for
   lead data.
+
+### API quick reference
+
+There is no n8n CLI for cloud; curl against the REST API is the tool. Base URL and key come
+from the project env file (`N8N_API_URL`, `N8N_API_KEY`); every call sends the header
+`X-N8N-API-KEY: $N8N_API_KEY`.
+
+```
+List:        GET  $N8N_API_URL/workflows            (touch only names starting "DA - ")
+Read:        GET  $N8N_API_URL/workflows/{id}
+Create:      POST $N8N_API_URL/workflows            body: {name,nodes,connections,settings} ONLY
+Update:      PUT  $N8N_API_URL/workflows/{id}       same four fields ONLY, full replacement
+Activate:    POST $N8N_API_URL/workflows/{id}/activate     (or .../deactivate)
+Executions:  GET  $N8N_API_URL/executions?workflowId={id}  (short retention)
+Live hooks:  https://n8nbeginner-sga.app.n8n.cloud/webhook/{path}
+```
+
+Update really is full replacement: GET the workflow, modify the JSON, PUT the whole thing
+back stripped to the four accepted fields. Saving never activates; activation is its own call,
+and the UI toggle is the fallback when the API refuses.
 
 ## Monthly report
 
