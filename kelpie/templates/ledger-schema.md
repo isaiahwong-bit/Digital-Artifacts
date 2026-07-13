@@ -1,9 +1,14 @@
 # Kelpie ledger schema
 
-One Google Sheet per client, one row per lead. The ledger is the bill and the proof: both
-sides read the same rows, and the monthly report and invoice are generated from it, never by
-hand. Column keys are exact; the n8n Normalise Lead node must emit them verbatim (they become
-the header row via autoMapInputData).
+One Google Sheet per client, one row per lead. The ledger is the proof behind the flat fee:
+both sides read the same rows, and the monthly report is generated from it, never by hand.
+Column keys are exact; the n8n Normalise Lead node must emit them verbatim (they become the
+header row via autoMapInputData).
+
+Note on the billing columns (`billable_event`, `amount`, `billed_month`, `disputed`): Kelpie
+sells flat (pivoted 2026-07-09), so these stay dormant. They remain in the schema because they
+cost nothing, keep every instance's ledger identical, and back the metered variant if a future
+client (one whose funnel DA did not build) ever runs it.
 
 ## Columns, in order
 
@@ -40,18 +45,18 @@ the header row via autoMapInputData).
 | client_handling | owner is on it (their craft, never billed) |
 | leave_it_with_me | the per-lead kill switch; Kelpie never chases this row |
 | chase_queued | grace window passed, unbooked, Kelpie may chase (phase 2) |
-| quote_visit_booked | Kelpie locked in a confirmed quote visit: billable, A$60 |
-| job_booked | Kelpie secured the job outright: billable, A$150 |
-| self_booked | Kelpie's nudge caused it but the owner closed it: $0 row, by rule |
+| quote_visit_booked | Kelpie locked in a confirmed quote visit |
+| job_booked | the job itself was secured through Kelpie's thread (rare by design: jobs are the owner's phone call) |
+| self_booked | Kelpie's nudge caused it but the owner closed it directly |
 | lost | dead lead or test row; excluded from everything |
 | complete | work done; set job_completed_at and service_cycle_months |
 
-## Billing rules the ledger encodes
+## What the report reads off these rows
 
-- Billing tally = sum of `amount` for rows in the month, capped at A$750.
-- A row is billable only if `billable_event` is set AND the booking was confirmed through
-  Kelpie's own thread (machine event). If in doubt, it is $0.
-- `disputed` within 7 days of billing: amount comes off, no argument.
-- Report diagnostics: suppression rate = `leave_it_with_me` / (rows past grace_ends);
-  self-booked count = `self_booked` rows in month. Two consecutive high months of either
-  flags the flat-retainer conversation.
+- Volume and speed: leads in the month, and time from `received_at` to first reply.
+- Outcomes: `quote_visit_booked` and `job_booked` counts, plus `self_booked` (Kelpie caused
+  it even though the owner closed it; still value, say so).
+- The reactivation pipeline: rows with `job_completed_at` + `service_cycle_months` are future
+  nudges; the report can show how many are seeded and when the next ones fire.
+- Estimated job value per lead makes the flat fee's maths land: one saved job covers months.
+- The dormant billing columns only come alive if a client is ever on the metered variant.

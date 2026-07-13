@@ -18,7 +18,7 @@ If a value is unknown, ask Isaiah; do not guess.
 | Webhook path | kelpie-{slug}-lead |
 | Ledger sheet name | {Client name} - Kelpie Ledger |
 | Grace window | 5 business days (default) |
-| Rates | standard v1 (per KELPIE-SETUP.md); overrides are Isaiah's call only |
+| Rates | flat rack: A$350/mo (per KELPIE-SETUP.md); every number is Isaiah's call, confirm before quoting |
 | Setup fee | A$1,500 unless Isaiah says otherwise |
 | Phase 2 approved? | no (default; chase/ics/rebook/SMS stay unbuilt until yes) |
 

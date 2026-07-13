@@ -12,13 +12,13 @@ tell Isaiah so the change flows back to the master; do not let instances drift s
 
 ## What Kelpie is
 
-Kelpie is Digital Artifacts' metered lead-response agent for trades. It catches every enquiry
-the moment it arrives, acknowledges it, forwards it to the owner's phone and inbox, logs it in
-a ledger both sides can read, and (phase 2) chases the leads the owner never got to, booking
-quote visits and jobs by calendar invite. The client pays only when Kelpie locks something in
-itself. An enquiry through their own website is theirs, free, always, and shows on the report
-as a $0 row. That $0 row is the differentiator against HiPages and Bark: the client watches the
-system decline to charge for what was already theirs.
+Kelpie is Digital Artifacts' lead-response agent for trades, sold as **"the receptionist that
+never clocks off"** on a flat monthly rate. It catches every enquiry the moment it arrives,
+replies within about a minute, forwards it to the owner's phone and inbox, logs it in a ledger
+both sides can read, and (phase 2) auto-books quote visits into the owner's calendar and runs
+a reactivation timer over their finished jobs. Two boundaries define it: Kelpie never books
+the JOB itself (that stays the owner's phone call, their craft), and it is never the system of
+record (it works in the gap ServiceM8 and simPRO leave open, not on their turf).
 
 **v1 scope (what you are setting up now):**
 1. Capture: the client site's quote form forwards every lead to a Kelpie webhook.
@@ -28,33 +28,31 @@ system decline to charge for what was already theirs.
 4. Monthly report: rendered from the ledger with `templates/report-template.html`.
 
 **Phase 2 (do NOT build or promise unless Isaiah explicitly says so):**
-the chase sequence, .ics booking confirmations, the job-history import, the rebook engine,
-and SMS. SMS in particular is hard-gated: no SMS promise to anyone until Isaiah confirms the
-ClickSend/ACMA sender-ID position. Nothing in v1 promises a delivery timeline for phase 2.
+the chase sequence, calendar auto-booking of quote visits, the job-history (backlog) import,
+the reactivation timer, and SMS. SMS in particular is hard-gated: no SMS promise to anyone
+until Isaiah confirms the ClickSend/ACMA sender-ID position. Nothing in v1 promises a delivery
+timeline for phase 2.
 
-## The deal (rates v1, signed off 2026-07-07)
+## The deal (flat model, pivoted 2026-07-09; confirm numbers with Isaiah before quoting)
 
-The ledger must encode these rules; billing is generated from ledger rows, never by hand.
+Kelpie is flat-rate, no meter. An earlier pay-per-booking model was stress-tested and
+reversed: when DA builds the client's funnel, almost every lead arrives through their own
+site, and a meter that exempts own-site leads measures an empty set. Flat is simpler to say
+and fairer both ways. Rates are Isaiah's call on every deal; these are the reference points:
 
 | Term | Value |
 |---|---|
-| Setup | A$1,500 one-off (includes the job-history import when phase 2 lands) |
-| Quote visit Kelpie locks in | A$60 |
-| Job Kelpie secures outright (rebook, or quote accepted through Kelpie's thread) | A$150 |
-| Monthly cap | A$750 |
-| Floor | A$0 (nothing secured, no bill) |
-| Grace window | 5 business days (per-client, see CLIENT.md) before Kelpie may chase |
-| Kill switch | owner can mark any lead "leave it with me" at any time |
-| Dispute | any billed row flagged within 7 days comes off the bill, no argument |
-| Graduation | 2 consecutive months at or near cap flips to flat A$600/mo |
+| Rack rate (client two onward) | A$350 per month, no lock-in |
+| Setup | A$1,500 one-off, includes the backlog (job-history) import |
+| Pilot foundation rate | A$300 per month (Valley Arbor only, setup waived) |
+| Seasonal "muster" reactivation run | A$300 paid add-on |
+| Enterprise bespoke | from A$5,000 per month |
 
-Billable-event rules, in one place:
-- Enquiry via the client's own website, email, or answered phone: never billed.
-- Client books anything themselves, however the lead arrived: never billed. If Kelpie's nudge
-  caused it but the client closed it, it is a $0 row marked `self_booked`.
-- Kelpie locks in a confirmed quote visit: A$60, machine event (a confirmed time, logged).
-- Kelpie secures a job outright: A$150.
-- A Kelpie-secured quote visit that the client later converts: nothing more.
+The four pillars the client is buying: instant reply (about 60 seconds, straight to logistics
+because their form already qualifies the lead), auto-booked quote visits into a mapped Google
+Calendar (standing windows the owner sets; the invite is a heads-up and one tap bumps it),
+a compounding reactivation timer (every finished job seeds a "you're due back" nudge), and
+the monthly report that proves all of it.
 
 ## House rules (non-negotiable)
 
@@ -156,8 +154,7 @@ expression shows raw code like `$json.body.name`, the field is missing its `{{ }
 (see gotchas below). Mark the test row `status=lost` in the ledger so it never counts.
 
 **6. Share the ledger.** The sheet is owned by hello@digitalartifacts.com.au. Share it with
-the client read-only (their view of the meter is a feature, not a risk). Isaiah sends the
-share.
+the client read-only (transparency is a feature, not a risk). Isaiah sends the share.
 
 **7. Log completion.** Report back what was created (workflow id, webhook path, sheet id,
 env vars touched) so Isaiah can record it in the DA repo. Do not record any of it in a public
@@ -180,11 +177,13 @@ readme in the client repo.
 - n8n execution retention is short. The ledger is the record; never rely on n8n history for
   lead data.
 
-## Monthly report and invoice
+## Monthly report
 
-Render from the ledger, not memory: every lead of the month, one line each, billed rows with
-amounts, free rows explicitly $0. `templates/report-template.html` is the working example
-(adapt names, dates, rows). Render to PDF with headless Chrome:
+The report is the flat fee's proof of value, rendered from the ledger, not memory: every lead
+of the month, one line each, with response times, what got booked, and what the reactivation
+timer surfaced (once phase 2 exists). Estimated job value per lead makes the maths land: one
+saved job usually covers months of the fee. `templates/report-template.html` is the working
+example (adapt names, dates, rows). Render to PDF with headless Chrome:
 
 ```
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
@@ -192,6 +191,4 @@ amounts, free rows explicitly $0. `templates/report-template.html` is the workin
 ```
 
 Check the page count before sending (grep the PDF for `/Count`); the template is built to hold
-one page. The report must also surface the two self-diagnostics: suppression rate (share of
-chaseable leads marked "leave it with me") and self-booked count ($0 rows Kelpie caused but the
-client closed). Two high months of either flags the flat-retainer conversation for Isaiah.
+one page.
