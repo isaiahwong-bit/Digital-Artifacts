@@ -61,8 +61,8 @@
       "position": [200, 0],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xyvnpCe0Is7f0c73",
-          "name": "Google Sheets account 3"
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
         }
       }
     },
@@ -83,8 +83,8 @@
       "position": [420, 0],
       "credentials": {
         "gmailOAuth2": {
-          "id": "bMWObGun24xoeJyN",
-          "name": "Gmail account"
+          "id": "iFH9WnGm7MgLdiI3",
+          "name": "Gmail hello@ (DA)"
         }
       }
     },
@@ -107,8 +107,8 @@
       "position": [-20, 220],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xyvnpCe0Is7f0c73",
-          "name": "Google Sheets account 3"
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
         }
       }
     },
@@ -149,8 +149,8 @@
       "position": [420, 220],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xyvnpCe0Is7f0c73",
-          "name": "Google Sheets account 3"
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
         }
       }
     }

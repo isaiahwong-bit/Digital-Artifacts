@@ -64,11 +64,14 @@ the monthly report that proves all of it.
   deliverable, stakeholder. No "I hope this finds you well". One exclamation mark per email max.
 - **Every customer-facing outbound message passes Isaiah before it sends.** You prepare, he
   approves. No exceptions in v1.
-- **n8n scope:** the shared n8n instance (`n8nbeginner-sga.app.n8n.cloud`) hosts other people's
-  workflows (JARVIS, SGA, CED). You may only create, edit, or activate items whose names start
-  with `DA - `. Never touch anything else, read-only excepted. The API key lives in this client
-  project's gitignored env file as `N8N_API_KEY` (Isaiah puts it there); if it is missing, ask
-  him rather than hunting for it. Never commit it, never echo it into logs or docs.
+- **n8n:** DA runs its own n8n Cloud instance, `digitalartifacts.app.n8n.cloud` (the hello@
+  account). All Kelpie workflows go there, named `DA - {Client} ...`, and Isaiah files each
+  into the client's folder in the UI afterwards (folder assignment is UI-only on this
+  instance; the API cannot move workflows into folders, do not fight it). Do NOT use the old
+  shared instance (`n8nbeginner-sga.app.n8n.cloud`); it is SGA's box and DA work has migrated
+  off it. The API key lives in this client project's gitignored env file as `N8N_API_KEY`
+  (Isaiah puts it there); if it is missing, ask him rather than hunting for it. Never commit
+  it, never echo it into logs or docs.
 - **Secrets** go in the client project's gitignored env file, never in committed code, never in
   this kit. Client PII never goes into a public repo: ledger data lives in the Google Sheet,
   not in git.
@@ -126,7 +129,7 @@ must be `DA - {Client name} Kelpie Lead Log`.
 **3. Import to n8n.** Create via API (or hand Isaiah the command if auto-mode blocks it):
 
 ```
-curl -X POST "https://n8nbeginner-sga.app.n8n.cloud/api/v1/workflows" \
+curl -X POST "$N8N_API_URL/workflows" \
   -H "X-N8N-API-KEY: $N8N_API_KEY" -H "Content-Type: application/json" \
   -d @workflow.json
 ```
@@ -140,11 +143,10 @@ Read the new `spreadsheetId` from the execution output, paste it into the `Appen
 node (replacing `PASTE_SHEET_ID_AFTER_SETUP`), then activate the workflow:
 
 ```
-curl -X POST "https://n8nbeginner-sga.app.n8n.cloud/api/v1/workflows/{id}/activate" \
-  -H "X-N8N-API-KEY: $N8N_API_KEY"
+curl -X POST "$N8N_API_URL/workflows/{id}/activate" -H "X-N8N-API-KEY: $N8N_API_KEY"
 ```
 
-Now set `KELPIE_WEBHOOK_URL=https://n8nbeginner-sga.app.n8n.cloud/webhook/kelpie-{slug}-lead`
+Now set `KELPIE_WEBHOOK_URL=https://digitalartifacts.app.n8n.cloud/webhook/kelpie-{slug}-lead`
 in the site's hosting env and redeploy (Isaiah approves production deploys).
 
 **5. Test end-to-end.** Submit the live form with an obvious test marker (name "KELPIE TEST",
@@ -168,9 +170,9 @@ readme in the client repo.
 - Google Sheets append: `mappingMode: autoMapInputData` matches incoming JSON keys to the
   header row by name. The Normalise Lead code node must emit keys exactly matching
   `templates/ledger-schema.md`, and nothing else (no nested objects).
-- Credentials on the shared instance, referenced by id in the template: Google Sheets
-  `xyvnpCe0Is7f0c73` (Google Sheets account 3), Gmail `bMWObGun24xoeJyN` (Gmail account,
-  sends as hello@digitalartifacts.com.au). Both belong to the DA Google account.
+- Credentials on the DA instance, referenced by id in the template: Google Sheets
+  `sPyc8afgZX7ggtDo` and Gmail `iFH9WnGm7MgLdiI3`, both the hello@digitalartifacts.com.au
+  Google account (authed 2026-07-08).
 - Webhook paths must be unique across the whole instance; the `kelpie-{slug}-lead` convention
   guarantees that.
 - Workflow activation is a separate POST to `/workflows/{id}/activate`; saving does not
@@ -191,7 +193,7 @@ Create:      POST $N8N_API_URL/workflows            body: {name,nodes,connection
 Update:      PUT  $N8N_API_URL/workflows/{id}       same four fields ONLY, full replacement
 Activate:    POST $N8N_API_URL/workflows/{id}/activate     (or .../deactivate)
 Executions:  GET  $N8N_API_URL/executions?workflowId={id}  (short retention)
-Live hooks:  https://n8nbeginner-sga.app.n8n.cloud/webhook/{path}
+Live hooks:  https://digitalartifacts.app.n8n.cloud/webhook/{path}
 ```
 
 Update really is full replacement: GET the workflow, modify the JSON, PUT the whole thing
