@@ -58,11 +58,12 @@ which are a separate set of prompt recipes for the sales operation.
 | Valley Arbor | valleyarbor.com.au | client (active) | [valley-arbor](../clients/valley-arbor/valley-arbor.md) |
 | Foliole Tree Management | foliole-tree-management.vercel.app | client | TODO |
 | BaySolar UK | baysolar-uk.vercel.app | client | TODO |
-| Lumberjord | TODO (not yet in repo) | client | TODO |
+| LumberJord | lumberjord.com.au | client (active, own repo + Claude project) | TODO |
 | Templates (Yaz, Stoa, Robert Green, Eastern Suburbs Painting, Tom's Firewood) | various .vercel.app | template library | not a client project |
 
 ## Status and next
 
 - **Stage:** portfolio captured for the three documented client sites.
-- **Next:** confirm Lumberjord's details, and decide whether Foliole and BaySolar UK get their own
-  spokes or stay listed here.
+- **Next:** decide whether Foliole and BaySolar UK get their own spokes or stay listed here.
+  LumberJord replaced Foliole on the site portfolio cards (2026-07-15); Foliole's vercel build
+  still exists but is no longer featured.
