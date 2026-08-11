@@ -1,0 +1,182 @@
+{
+  "name": "DA - __CLIENT_NAME__ Kelpie Lead Log",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "KELPIE TEMPLATE. Before import, replace:\n__CLIENT_NAME__ (e.g. LumberJord)\n__CLIENT_SLUG__ (e.g. lumberjord)\n__CLIENT_EMAIL__ (owner notify inbox)\n__CLIENT_DOMAIN__ (e.g. lumberjord.com.au)\n\nAfter import: run the Setup branch once in the UI, paste the new spreadsheetId into Append Ledger Row (replacing PASTE_SHEET_ID_AFTER_SETUP), then activate.\n\nAPI create/update accepts ONLY name, nodes, connections, settings.",
+        "height": 300,
+        "width": 340
+      },
+      "name": "Read Me",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-620, -80]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "kelpie-__CLIENT_SLUG__-lead",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook - Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise the incoming quote-form payload into exactly one ledger row.\n// Keys must match templates/ledger-schema.md verbatim: the Sheets append\n// maps them to the header row by name, so extra or nested keys break it.\nconst b = $json.body || {};\nconst now = new Date();\nconst mel = { timeZone: 'Australia/Melbourne' };\nconst received = now.toLocaleString('en-AU', { ...mel, hour12: false });\nconst leadId = 'KL-' + Math.floor(now.getTime() / 1000).toString(36).toUpperCase();\n// Grace window: the owner gets first go. Business days only.\nconst GRACE_DAYS = 5;\nconst d = new Date(now);\nlet added = 0;\nwhile (added < GRACE_DAYS) {\n  d.setDate(d.getDate() + 1);\n  const day = d.getDay();\n  if (day !== 0 && day !== 6) added++;\n}\nconst graceEnds = d.toLocaleDateString('en-AU', mel);\nconst s = (v) => (v == null ? '' : String(v).slice(0, 2000));\nreturn [{ json: {\n  lead_id: leadId,\n  received_at: received,\n  source: s(b.source) || 'form',\n  name: s(b.name),\n  phone: s(b.phone),\n  email: s(b.email),\n  suburb: s(b.suburb),\n  service: s(b.service),\n  trees: s(b.trees),\n  urgency: s(b.urgency),\n  notes: s(b.notes),\n  photos: s(b.photoCount || 0),\n  page: s(b.page),\n  status: 'new',\n  grace_ends: graceEnds,\n  billable_event: '',\n  amount: '',\n  billed_month: '',\n  disputed: '',\n  job_completed_at: '',\n  service_cycle_months: '',\n  last_touch: received\n} }];"
+      },
+      "name": "Normalise Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-20, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_SHEET_ID_AFTER_SETUP"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "name": "Append Ledger Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [200, 0],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "__CLIENT_EMAIL__",
+        "subject": "=Kelpie lead: {{ $('Normalise Lead').item.json.service || \"tree work\" }}{{ $('Normalise Lead').item.json.suburb ? \" in \" + $('Normalise Lead').item.json.suburb : \"\" }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,Helvetica,sans-serif;color:#1e2730;font-size:15px;line-height:1.55\"><h2 style=\"color:#36432b;margin:0 0 14px\">New enquiry from __CLIENT_DOMAIN__</h2><p style=\"margin:0 0 14px\"><b>Name:</b> {{ $('Normalise Lead').item.json.name }}<br><b>Phone:</b> {{ $('Normalise Lead').item.json.phone }}<br><b>Email:</b> {{ $('Normalise Lead').item.json.email }}<br><b>Suburb:</b> {{ $('Normalise Lead').item.json.suburb }}<br><b>Service:</b> {{ $('Normalise Lead').item.json.service }}<br><b>Size:</b> {{ $('Normalise Lead').item.json.trees }}<br><b>How soon:</b> {{ $('Normalise Lead').item.json.urgency }}</p><p style=\"margin:0 0 14px\"><b>Notes:</b><br>{{ $('Normalise Lead').item.json.notes || \"(none)\" }}</p><p style=\"margin:0;color:#6e746d;font-size:13px\">Photos on the site email: {{ $('Normalise Lead').item.json.photos }} &middot; Lead {{ $('Normalise Lead').item.json.lead_id }} &middot; logged to your Kelpie ledger &middot; {{ $('Normalise Lead').item.json.received_at }}</p></div>",
+        "options": {
+          "appendAttribution": false,
+          "replyTo": "={{ $('Normalise Lead').item.json.email }}"
+        }
+      },
+      "name": "Notify Owner",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [420, 0],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iFH9WnGm7MgLdiI3",
+          "name": "Gmail hello@ (DA)"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "name": "Setup (run once)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-240, 220]
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "__CLIENT_NAME__ - Kelpie Ledger",
+        "options": {}
+      },
+      "name": "Create Ledger Spreadsheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [-20, 220],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// One sample row whose KEYS become the ledger header via autoMapInputData.\n// Order and spelling must match templates/ledger-schema.md exactly.\nreturn [{ json: {\n  lead_id: 'KL-SAMPLE',\n  received_at: '',\n  source: '',\n  name: '',\n  phone: '',\n  email: '',\n  suburb: '',\n  service: '',\n  trees: '',\n  urgency: '',\n  notes: '',\n  photos: '',\n  page: '',\n  status: '',\n  grace_ends: '',\n  billable_event: '',\n  amount: '',\n  billed_month: '',\n  disputed: '',\n  job_completed_at: '',\n  service_cycle_months: '',\n  last_touch: ''\n} }];"
+      },
+      "name": "Header Sample Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [200, 220]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Create Ledger Spreadsheet').item.json.spreadsheetId }}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "name": "Write Headers",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [420, 220],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sPyc8afgZX7ggtDo",
+          "name": "Google Sheets hello@ (DA)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - Lead": {
+      "main": [[{ "node": "Normalise Lead", "type": "main", "index": 0 }]]
+    },
+    "Normalise Lead": {
+      "main": [[{ "node": "Append Ledger Row", "type": "main", "index": 0 }]]
+    },
+    "Append Ledger Row": {
+      "main": [[{ "node": "Notify Owner", "type": "main", "index": 0 }]]
+    },
+    "Setup (run once)": {
+      "main": [[{ "node": "Create Ledger Spreadsheet", "type": "main", "index": 0 }]]
+    },
+    "Create Ledger Spreadsheet": {
+      "main": [[{ "node": "Header Sample Row", "type": "main", "index": 0 }]]
+    },
+    "Header Sample Row": {
+      "main": [[{ "node": "Write Headers", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Australia/Sydney"
+  }
+}

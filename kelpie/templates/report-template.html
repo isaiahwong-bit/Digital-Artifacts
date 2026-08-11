@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valley Arbor: monthly lead report, June to July 2026</title>
+<!--
+  MVP template for the metered Lead Response report (brain/offer-lead-response-metered.md).
+  This copy carries Valley Arbor's REAL 24 Jun to 5 Jul fortnight, customer names reduced to
+  initials and contact details omitted because this repo is public. The live version is
+  generated from the client's lead-log sheet each month.
+  PDF render: headless Chrome --print-to-pdf --no-pdf-header-footer (full-bleed header via
+  @page margin 0 + padded .content, per the INV014 / website-summary recipe).
+-->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2838; --navy2:#15202D; --cream:#F7F6F3; --green:#00C853;
+    --ink:#1B2838; --muted:#6B6B63; --line:#E8E6E1;
+    --mono:'SF Mono','Fira Code',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{margin:0}
+  body{font-family:'General Sans',sans-serif;background:#fff;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .header{background:var(--navy);color:var(--cream);padding:22px 44px;display:flex;justify-content:space-between;align-items:center}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{width:44px;height:44px;border-radius:10px}
+  .brand-name{font-family:'Clash Display',sans-serif;font-weight:600;font-size:1.15rem}
+  .brand-name span{color:var(--green)}
+  .header .doc-label{text-align:right}
+  .doc-label .kind{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green)}
+  .doc-label .period{font-size:.9rem;color:rgba(247,246,243,.75);margin-top:6px}
+  .content{padding:24px 44px 12px}
+  h1{font-family:'Clash Display',sans-serif;font-weight:700;font-size:1.55rem;letter-spacing:-.02em;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:.92rem;max-width:64ch;line-height:1.5}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+  .stat{border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .stat .n{font-family:'Clash Display',sans-serif;font-weight:700;font-size:1.7rem;color:var(--navy)}
+  .stat .n em{font-style:normal;color:var(--green)}
+  .stat .l{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  h2{font-family:'Clash Display',sans-serif;font-weight:600;font-size:1.05rem;margin:18px 0 10px;padding-left:12px;border-left:3px solid var(--green)}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .urgent{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#BA7517;background:#FAEEDA;border-radius:100px;padding:3px 9px}
+  .std{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6B6B63;background:#F1EFE8;border-radius:100px;padding:3px 9px}
+  .callout{background:#E1F5EE;border:1px solid rgba(0,200,83,.35);border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.88rem;line-height:1.5}
+  .callout strong{color:#0E7A46}
+  .anchor{display:flex;gap:14px;margin-top:6px}
+  .anchor .box{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.82rem;line-height:1.5;color:var(--muted)}
+  .anchor .box b{color:var(--ink)}
+  .footer{margin-top:12px;padding:10px 44px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+  .footer .right{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <img src="../../../brand/da-mark-tile.png" alt="Digital Artifacts">
+      <div class="brand-name">Digital Artifacts<span>.</span></div>
+    </div>
+    <div class="doc-label">
+      <div class="kind">Monthly lead report</div>
+      <div class="period">Valley Arbor &middot; 24 June to 5 July 2026</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1>Every enquiry, caught and in your hand.</h1>
+    <p class="sub">This is what your website and lead system did while you were on the tools. Every
+    enquiry below was captured the moment it arrived, logged, and forwarded to your phone. None of
+    them waited, and none of them slipped.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="n"><em>4</em></div><div class="l">Enquiries captured</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">Marked "this month"</div></div>
+      <div class="stat"><div class="n">$2k&ndash;9k</div><div class="l">Est. combined job value</div></div>
+    </div>
+
+    <h2>The leads</h2>
+    <table>
+      <thead><tr><th>Date</th><th>Customer</th><th>Suburb</th><th>Service</th><th>Size</th><th>Timing</th></tr></thead>
+      <tbody>
+        <tr><td>28 Jun</td><td>B. C.</td><td>Research</td><td>Tree removal</td><td>2&ndash;3 trees</td><td><span class="std">Flexible</span></td></tr>
+        <tr><td>28 Jun</td><td>C. A.</td><td>Research</td><td>Stump grinding</td><td>2&ndash;3 stumps</td><td><span class="std">Flexible</span></td></tr>
+        <tr><td>29 Jun</td><td>N.</td><td>Lower Plenty</td><td>Tree removal</td><td>1 tree</td><td><span class="urgent">This month</span></td></tr>
+        <tr><td>3 Jul</td><td>D. D.</td><td>Lower Plenty</td><td>Tree removal</td><td>2&ndash;3 trees</td><td><span class="urgent">This month</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>What ran automatically</h2>
+    <p class="sub">Each enquiry followed the same path: captured from the quote form, logged with
+    its details, and forwarded to your inbox formatted to act on. Same path, every lead, day or
+    night. Full contact details for every lead are in the forwarded emails and your lead log.</p>
+
+    <div class="callout">
+      <strong>What this fortnight is worth.</strong> Two of these four asked for work this month.
+    Tree removal jobs in this area typically run $1,000 to $5,000. If even one of the four
+    becomes a job, the system has paid for itself many times over.
+    </div>
+
+    <h2>The maths, kept honest</h2>
+    <div class="anchor">
+      <div class="box">A receptionist to answer these costs <b>$4,000 to $6,000 a month</b> fully loaded, and still knocks off at 5pm.</div>
+      <div class="box">Lead directories sell tree-work leads at <b>$50 to $150 each</b>, sell the same lead to your competitors, and charge no matter where it came from.</div>
+      <div class="box">All 4 came through your own website, so they're yours: <b>$0</b>. The meter counts only what the agent locks in itself: quote visits from leads going cold, and jobs it rebooks on cycle.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>isaiah@digitalartifacts.com.au &middot; digitalartifacts.com.au</span>
+    <span class="right">AI operating systems, built in 4 layers</span>
+  </div>
+</body>
+</html>

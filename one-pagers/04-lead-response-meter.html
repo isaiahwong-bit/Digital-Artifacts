@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelpie: lead response on the meter</title>
+<!--
+  Two-page pitch + backend collateral for brain/offer-lead-response-metered.md (active, rates v1).
+  Page 1: the decision page. Page 2: how the machine works (ledger, chase, rebook, billing).
+  Render: headless Chrome print-to-pdf, no header/footer (INV014 recipe). Valley Arbor numbers
+  are the real 24 Jun to 5 Jul fortnight.
+-->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2838; --cream:#F7F6F3; --green:#00C853; --green-dk:#0E7A46;
+    --ink:#1B2838; --muted:#6B6B63; --line:#E8E6E1; --amber:#BA7517; --amber-bg:#FAEEDA;
+    --mono:'SF Mono','Fira Code',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{margin:0}
+  body{font-family:'General Sans',sans-serif;background:#fff;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .page{page-break-after:always;position:relative;min-height:10.4in;display:flex;flex-direction:column}
+  .page:last-child{page-break-after:auto}
+  .header{background:var(--navy);color:var(--cream);padding:22px 44px;display:flex;justify-content:space-between;align-items:center}
+  .brand{display:flex;align-items:center;gap:13px}
+  .brand img{width:42px;height:42px;border-radius:10px}
+  .brand-name{font-family:'Clash Display',sans-serif;font-weight:600;font-size:1.1rem}
+  .brand-name span{color:var(--green)}
+  .doc-label{text-align:right}
+  .doc-label .kind{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green)}
+  .doc-label .sub2{font-size:.85rem;color:rgba(247,246,243,.72);margin-top:5px}
+  .content{padding:26px 44px 10px;flex:1}
+  h1{font-family:'Clash Display',sans-serif;font-weight:700;font-size:1.6rem;letter-spacing:-.02em;margin-bottom:8px}
+  h1 em{font-style:normal;color:var(--green-dk)}
+  .lead{color:var(--muted);font-size:.93rem;line-height:1.55;max-width:66ch}
+  h2{font-family:'Clash Display',sans-serif;font-weight:600;font-size:1rem;margin:20px 0 10px;padding-left:12px;border-left:3px solid var(--green)}
+  .rates{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 4px}
+  .rate{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .rate.hero{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+  .rate .n{font-family:'Clash Display',sans-serif;font-weight:700;font-size:1.85rem}
+  .rate.hero .n{color:var(--green)}
+  .rate .t{font-weight:600;font-size:.85rem;margin-top:4px}
+  .rate .d{font-size:.78rem;color:var(--muted);margin-top:5px;line-height:1.45}
+  .rate.hero .d{color:rgba(247,246,243,.72)}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+  .free{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:#F1EFE8;border-radius:100px;padding:3px 10px;white-space:nowrap}
+  .paid{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--green-dk);background:#E1F5EE;border-radius:100px;padding:3px 10px;white-space:nowrap}
+  .rails{display:flex;gap:10px;margin-top:6px}
+  .rail{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center}
+  .rail .rn{font-family:'Clash Display',sans-serif;font-weight:600;font-size:.95rem}
+  .rail .rl{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .callout{background:#E1F5EE;border:1px solid rgba(0,200,83,.35);border-radius:12px;padding:13px 17px;margin:16px 0 0;font-size:.86rem;line-height:1.5}
+  .callout strong{color:var(--green-dk)}
+  .footer{padding:12px 44px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+  .footer .right{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase}
+
+  /* page 2: the machine */
+  .flow{display:flex;align-items:stretch;gap:6px;margin:6px 0 2px}
+  .fnode{flex:1;border:1px solid var(--line);border-radius:10px;padding:11px 10px;text-align:center}
+  .fnode .chip{width:30px;height:30px;border-radius:8px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.72rem;font-weight:700}
+  .chip.grey{background:#F1EFE8;color:#6B6B63;border:1px solid #DDD9CF}
+  .chip.green{background:rgba(0,200,83,.1);color:var(--green-dk);border:1px solid rgba(0,200,83,.4)}
+  .chip.solid{background:var(--green);color:#0A1A12;border:1px solid var(--green)}
+  .chip.amber{background:var(--amber-bg);color:var(--amber);border:1px solid #E8CFA4}
+  .fnode .fl{font-weight:600;font-size:.74rem;line-height:1.3}
+  .fnode .fs{font-family:var(--mono);font-size:.54rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:4px;line-height:1.4}
+  .farrow{display:flex;align-items:center;color:rgba(0,200,83,.55);font-size:.9rem}
+  .ledger-note{font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:8px;max-width:70ch}
+  .strike{color:#B0AEA4;text-decoration:line-through}
+  .two-col{display:flex;gap:16px;margin-top:6px}
+  .col-box{flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .col-box h3{font-family:'Clash Display',sans-serif;font-weight:600;font-size:.9rem;margin-bottom:7px}
+  .col-box p, .col-box li{font-size:.8rem;color:var(--muted);line-height:1.55}
+  .col-box ul{padding-left:16px}
+</style>
+</head>
+<body>
+
+  <!-- ================= PAGE 1: THE DECISION ================= -->
+  <div class="page">
+    <div class="header">
+      <div class="brand">
+        <img src="../brand/da-mark-tile.png" alt="Digital Artifacts">
+        <div class="brand-name">Digital Artifacts<span>.</span></div>
+      </div>
+      <div class="doc-label">
+        <div class="kind">Kelpie &middot; lead response on the meter</div>
+        <div class="sub2">For trades and field services</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1>Pay when work lands in your calendar. <em>Not before.</em></h1>
+      <p class="lead">Meet Kelpie: the agent that answers every enquiry the moment it arrives,
+      chases the ones going cold, and brings past customers back when their next service is due.
+      Your own leads stay yours, free, always. The meter runs on one thing: what Kelpie locks in
+      itself.</p>
+
+      <div class="rates">
+        <div class="rate">
+          <div class="n">$0</div>
+          <div class="t">Your own leads</div>
+          <div class="d">Enquiries through your website, email, or answered phone. Anything you book yourself. Never billed.</div>
+        </div>
+        <div class="rate hero">
+          <div class="n">$60</div>
+          <div class="t">Quote visit locked in</div>
+          <div class="d">A lead going cold, chased by Kelpie until a quote time is confirmed in your calendar.</div>
+        </div>
+        <div class="rate">
+          <div class="n">$150</div>
+          <div class="t">Job booked outright</div>
+          <div class="d">A past customer rebooked for cycle work, or a sent quote accepted through Kelpie's follow-up.</div>
+        </div>
+      </div>
+
+      <h2>Who pays for what</h2>
+      <table>
+        <tbody>
+          <tr><td>An enquiry arrives through your own website, email, or answered phone</td><td style="text-align:right"><span class="free">Free, yours</span></td></tr>
+          <tr><td>You book a lead yourself, however it arrived</td><td style="text-align:right"><span class="free">Free, your craft</span></td></tr>
+          <tr><td>Kelpie chases a stalled or missed enquiry and locks in a quote visit</td><td style="text-align:right"><span class="paid">$60</span></td></tr>
+          <tr><td>Kelpie books a job outright: a cycle rebook, or your quote accepted through Kelpie's follow-up</td><td style="text-align:right"><span class="paid">$150</span></td></tr>
+          <tr><td>A quote visit Kelpie secured becomes a job through your own close</td><td style="text-align:right"><span class="free">Nothing more</span></td></tr>
+        </tbody>
+      </table>
+
+      <h2>The safety rails</h2>
+      <div class="rails">
+        <div class="rail"><div class="rn">$750</div><div class="rl">Monthly cap, never more</div></div>
+        <div class="rail"><div class="rn">$0</div><div class="rl">Floor: nothing secured, no bill</div></div>
+        <div class="rail"><div class="rn">5 days</div><div class="rl">Your go first, every lead</div></div>
+        <div class="rail"><div class="rn">Any lead</div><div class="rl">"Leave it with me" switch</div></div>
+        <div class="rail"><div class="rn">7 days</div><div class="rl">Dispute it, it comes off</div></div>
+      </div>
+
+      <div class="callout">
+        <strong>The comparison that matters.</strong> A receptionist is $4,000 to $6,000 a month
+        and knocks off at 5pm. Lead directories charge $50 to $150 for a maybe they also sold to
+        your competitors. Here, a real fortnight from a Melbourne arborist on this system: 4
+        enquiries captured, forwarded, and logged. All through his own site, so the meter read $0.
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Setup $1,500, credited in full against a bigger build within 6 months &middot; isaiah@digitalartifacts.com.au</span>
+      <span class="right">Page 1: the decision</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 2: THE MACHINE ================= -->
+  <div class="page">
+    <div class="header">
+      <div class="brand">
+        <img src="../brand/da-mark-tile.png" alt="Digital Artifacts">
+        <div class="brand-name">Digital Artifacts<span>.</span></div>
+      </div>
+      <div class="doc-label">
+        <div class="kind">Under the hood</div>
+        <div class="sub2">The machine behind the meter</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h2 style="margin-top:4px">Every lead walks the same path</h2>
+      <div class="flow">
+        <div class="fnode"><div class="chip grey">1</div><div class="fl">Enquiry arrives</div><div class="fs">form &middot; email &middot; missed call</div></div>
+        <div class="farrow">&#8594;</div>
+        <div class="fnode"><div class="chip green">2</div><div class="fl">Caught + answered</div><div class="fs">instant ack, logged, forwarded to you</div></div>
+        <div class="farrow">&#8594;</div>
+        <div class="fnode"><div class="chip amber">3</div><div class="fl">Your go first</div><div class="fs">5-day grace window</div></div>
+        <div class="farrow">&#8594;</div>
+        <div class="fnode"><div class="chip green">4</div><div class="fl">The chase</div><div class="fs">still unbooked? Kelpie follows up, proposes times</div></div>
+        <div class="farrow">&#8594;</div>
+        <div class="fnode"><div class="chip solid">5</div><div class="fl">In the calendar</div><div class="fs">confirmed + logged, this is the billable moment</div></div>
+      </div>
+      <p class="ledger-note">Kelpie never decides what happens next; the flow does. AI drafts
+      the messages, and every step either side of that is fixed: same path for every lead, day or
+      night. If any step fails, the failure pages a human. It never hides in a log.</p>
+
+      <h2>The ledger: one set of rows, both of us read it (a worked example)</h2>
+      <table>
+        <thead><tr><th>When</th><th>Who</th><th>Service</th><th>Source</th><th>Status</th><th>Billed</th></tr></thead>
+        <tbody>
+          <tr><td>4 Aug</td><td>J. M.</td><td>Tree removal</td><td>Your website</td><td>Booked by you</td><td><span class="free">$0</span></td></tr>
+          <tr><td>6 Aug</td><td>S. K.</td><td>Hedge trim</td><td>Your website</td><td>Quote visit, agent locked in day 6</td><td><span class="paid">$60</span></td></tr>
+          <tr><td>9 Aug</td><td>R. T.</td><td>Pruning</td><td>Rebook cycle</td><td>Job rebooked, 14 months since last prune</td><td><span class="paid">$150</span></td></tr>
+          <tr><td>11 Aug</td><td class="strike">Test entry</td><td class="strike">Spam</td><td class="strike">Form</td><td class="strike">Excluded, shown so nothing is silent</td><td><span class="free">$0</span></td></tr>
+        </tbody>
+      </table>
+      <p class="ledger-note">Every lead carries its timestamp, source, and status, machine-logged
+      at each step. What is billable is a fact in the rows, not a judgment call. The monthly
+      report itemises all of it, free rows included, and the invoice is generated from the same
+      ledger. If the count ever needed manual work, the system would be broken.</p>
+
+      <h2>Re-engagement: the part that compounds</h2>
+      <div class="two-col">
+        <div class="col-box">
+          <h3>The chase (this month's leads)</h3>
+          <ul>
+            <li>Unbooked after your grace window, Kelpie follows up: polite, branded as your business, never pushy.</li>
+            <li>It proposes real times and writes the confirmed visit to a shared calendar.</li>
+            <li>Flag any lead "leave it with me" and Kelpie never touches it.</li>
+          </ul>
+        </div>
+        <div class="col-box">
+          <h3>The rebook engine (last year's jobs)</h3>
+          <ul>
+            <li>Every finished job is logged with service and date; the review request doubles as the log entry.</li>
+            <li>Cycle work comes due (pruning at 12 to 24 months, hedges yearly) and Kelpie reaches out on time, every time.</li>
+            <li>Each rebooked job seeds the next cycle. Your history becomes a booking source.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>What this is not.</strong> Not a CRM, not job-management software, and it does not
+        compete with simPRO or ServiceM8; it works in the gap they leave open. You own the stack
+        it runs on, nothing is locked in, and every message it sends is yours to read in the log.
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>isaiah@digitalartifacts.com.au &middot; digitalartifacts.com.au</span>
+      <span class="right">Page 2: the machine</span>
+    </div>
+  </div>
+
+</body>
+</html>
