@@ -1,2474 +1,595 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
-  <script>document.documentElement.classList.add('js');</script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-FGKKW3ERQ5');
-  </script>
-
-  <title>Digital Artifacts | AI Operating Systems for Small Business</title>
-  <link rel="icon" type="image/png" href="/brand/da-mark-tile.png">
-  <link rel="apple-touch-icon" href="/brand/da-mark-tile.png">
-  <meta name="description" content="Digital Artifacts builds AI operating systems for small business. A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Digital Artifacts | AI Operating Systems for Small Business">
-  <meta property="og:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
-  <meta property="og:url" content="https://digitalartifacts.com.au">
-  <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Digital Artifacts | AI Operating Systems for Small Business">
-  <meta name="twitter:description" content="A 4-layer framework: Context, Skills, Automation, Agent. Deployed for whatever your team needs an operating system to do.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <link rel="canonical" href="https://digitalartifacts.com.au/">
-
-  <!-- Fonts: Clash Display + General Sans from Fontshare -->
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#1B2838',
-            cream: '#F7F6F3',
-            warm: '#8A8A80',
-            divider: '#E8E6E1',
-            accent: '#00C853',
-            surface: '#FFFFFF',
-            mint: '#E8F5E9',
-          },
-          fontFamily: {
-            display: ['"Clash Display"', 'sans-serif'],
-            body: ['"General Sans"', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
-
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <!-- Lenis Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
-
-  <style>
-    /* === Base Reset === */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      background: #F7F6F3;
-      color: #1B2838;
-      font-family: 'General Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html.lenis, html.lenis body { height: auto; }
-    .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-    .lenis.lenis-stopped { overflow: hidden; }
-
-    /* === Typography === */
-    .font-display { font-family: 'Clash Display', sans-serif; }
-    .font-body { font-family: 'General Sans', sans-serif; }
-
-    .heading-xl {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-    }
-
-    .heading-lg {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-    }
-
-    .heading-md {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-
-    .body-text {
-      font-family: 'General Sans', sans-serif;
-      font-weight: 400;
-      line-height: 1.7;
-      color: #8A8A80;
-    }
-
-    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
-    .bg-navy [class*="text-warm"],
-    .bg-navy .body-text { color: #A8A89E; }
-
-    /* === Portfolio gallery (Selected work) === */
-    .pf-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-    .pf-filter {
-      padding: 0.45rem 1.1rem; border-radius: 9999px; border: 1px solid #E8E6E1;
-      background: transparent; color: #8A8A80; font-family: 'General Sans', sans-serif;
-      font-weight: 500; font-size: 0.8rem; cursor: pointer;
-      transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-    }
-    .pf-filter:hover { color: #1B2838; border-color: #1B2838; }
-    .pf-filter.is-active { color: #F7F6F3; background: #1B2838; border-color: #1B2838; }
-    .pf-filter:focus-visible { outline: 2px solid #00C853; outline-offset: 2px; }
-
-    .pf-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
-    @media (min-width: 640px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .pf-grid { grid-template-columns: repeat(3, 1fr); } }
-
-    .pf-card {
-      display: block; border: 1px solid #E8E6E1; border-radius: 0.9rem; overflow: hidden;
-      background: #FFFFFF; text-decoration: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .pf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(27, 40, 56, 0.12); border-color: rgba(0, 200, 83, 0.4); }
-    .pf-card.is-hidden { display: none; }
-    .pf-card__shot { aspect-ratio: 16 / 10; overflow: hidden; background: #F1EFE8; position: relative; }
-    .pf-card__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
-    .pf-card:hover .pf-card__shot img { transform: scale(1.03); }
-    .pf-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(0, 200, 83, 0.92); color: #0A1A12; padding: 0.2rem 0.55rem; border-radius: 9999px; }
-    .pf-card__meta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem; }
-    .pf-card__name { font-family: 'Clash Display', sans-serif; font-weight: 600; color: #1B2838; font-size: 0.95rem; display: block; line-height: 1.2; }
-    .pf-card__tag { color: #8A8A80; font-size: 0.74rem; }
-    .pf-card__icon { width: 1.1rem; height: 1.1rem; color: #8A8A80; margin-left: auto; flex-shrink: 0; transition: color 0.3s ease, transform 0.3s ease; }
-    .pf-card:hover .pf-card__icon { color: #00C853; transform: translate(2px, -2px); }
-
-    /* === Founder block === */
-    .founder-avatar {
-      width: clamp(7rem, 16vw, 11rem); height: clamp(7rem, 16vw, 11rem); border-radius: 1.25rem;
-      background: linear-gradient(145deg, rgba(0, 200, 83, 0.18), rgba(27, 40, 56, 0.06));
-      border: 1px solid rgba(0, 200, 83, 0.3); display: flex; align-items: center; justify-content: center;
-      font-family: 'Clash Display', sans-serif; font-weight: 600; color: #00C853; font-size: clamp(2rem, 5vw, 3.25rem);
-      flex-shrink: 0; letter-spacing: -0.02em;
-    }
-
-    /* === Nav === */
-    .nav-fixed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      transition: background-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .nav-fixed.scrolled {
-      background: rgba(247, 246, 243, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 1px 0 0 #E8E6E1;
-    }
-
-    .nav-link {
-      position: relative;
-      color: #1B2838;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 500;
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 0.25rem 0;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0%;
-      height: 1.5px;
-      background: #00C853;
-      transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .nav-link:hover::after,
-    .nav-link:focus-visible::after {
-      width: 100%;
-    }
-
-    .nav-link:active {
-      opacity: 0.7;
-    }
-
-    .nav-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    /* === Hero === */
-    .hero-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 5rem;
-    }
-
-    .hero-line {
-      overflow: hidden;
-    }
-
-    .hero-char {
-      display: inline-block;
-      transform: translateY(110%);
-      opacity: 0;
-    }
-
-    .hero-subtitle {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    /* === Scroll Indicator === */
-    .scroll-indicator {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 48px;
-      background: #E8E6E1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .scroll-line::after {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #1B2838;
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0% { top: -100%; }
-      50% { top: 0%; }
-      100% { top: 100%; }
-    }
-
-    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
-    html.js .reveal-up {
-      opacity: 0;
-      transform: translateY(60px);
-    }
-
-    .reveal-word {
-      display: inline-block;
-      overflow: hidden;
-    }
-
-    html.js .reveal-word-inner {
-      display: inline-block;
-      transform: translateY(100%);
-      opacity: 0;
-    }
-
-    /* === Respect reduced-motion: reveal everything, stop animation === */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Websites & Enquiry Automation | Digital Artifacts</title>
+    <meta
+      name="description"
+      content="Custom websites and enquiry follow-up for service businesses. Work directly with Isaiah Wong. Start with a website, one workflow, or both."
+    />
+    <link rel="canonical" href="https://www.digitalartifacts.com.au/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Websites &amp; Enquiry Automation | Digital Artifacts" />
+    <meta
+      property="og:description"
+      content="Custom websites and enquiry follow-up for service businesses. Work directly with Isaiah Wong. Start with a website, one workflow, or both."
+    />
+    <meta property="og:url" content="https://www.digitalartifacts.com.au/" />
+    <meta property="og:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Websites &amp; Enquiry Automation | Digital Artifacts" />
+    <meta
+      name="twitter:description"
+      content="Custom websites and enquiry follow-up for service businesses. Work directly with Isaiah Wong. Start with a website, one workflow, or both."
+    />
+    <meta name="twitter:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="theme-color" content="#1b2838" />
+    <link rel="icon" href="/brand/da-mark-tile.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="stylesheet" href="/assets/site.css" />
+    <script defer src="/assets/site.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Digital Artifacts",
+        "url": "https://www.digitalartifacts.com.au/",
+        "logo": "https://www.digitalartifacts.com.au/brand/da-mark-tile.png",
+        "email": "hello@digitalartifacts.com.au"
       }
-      .reveal-up, .reveal-word-inner {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-
-    /* === Project Row === */
-    .project-row {
-      border-top: 1px solid #E8E6E1;
-      transition: background-color 0.3s ease;
-    }
-
-    .project-row:last-child {
-      border-bottom: 1px solid #E8E6E1;
-    }
-
-    .project-row:hover {
-      background: rgba(0, 200, 83, 0.03);
-    }
-
-    .project-row:hover .project-name {
-      color: #00C853;
-    }
-
-    .project-name {
-      transition: color 0.3s ease;
-    }
-
-    /* === Tag Pills === */
-    .tag-pill {
-      display: inline-block;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      background: rgba(0, 200, 83, 0.08);
-      color: #00C853;
-      letter-spacing: 0.02em;
-    }
-
-    /* === Service Card === */
-    .service-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(27, 40, 56, 0.08);
-    }
-
-    /* === Pricing Card === */
-    .pricing-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(27, 40, 56, 0.1);
-    }
-
-    .pricing-card.featured {
-      border: 2px solid #00C853;
-    }
-
-    /* === Marquee === */
-    .marquee-track {
-      display: flex;
-      gap: 3rem;
-      animation: marqueeScroll 25s linear infinite;
-      will-change: transform;
-    }
-
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes marqueeScroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-
-    .marquee-item {
-      white-space: nowrap;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .marquee-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #00C853;
-      flex-shrink: 0;
-      align-self: center;
-    }
-
-    /* === CTA Shimmer Button === */
-    .cta-btn {
-      --shimmer-color: rgba(255, 255, 255, 0.6);
-      --bg: #00C853;
-      --radius: 100px;
-      --speed: 3s;
-      --cut: 0.05em;
-      --spread: 90deg;
-      position: relative;
-      z-index: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem 2.25rem;
-      background: var(--bg);
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.875rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      overflow: hidden;
-      transform: translateZ(0);
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover {
-      transform: scale(1.04);
-    }
-
-    .cta-btn:active {
-      transform: scale(0.98) translateY(1px);
-    }
-
-    .cta-btn:focus-visible {
-      outline: 2px solid #F7F6F3;
-      outline-offset: 4px;
-    }
-
-    .cta-btn-dark {
-      --bg: #1B2838;
-      --shimmer-color: rgba(0, 200, 83, 0.5);
-    }
-
-    .cta-btn .shimmer-spark {
-      position: absolute;
-      inset: 0;
-      z-index: -3;
-      overflow: visible;
-      filter: blur(2px);
-    }
-
-    .cta-btn .shimmer-slide {
-      position: absolute;
-      inset: 0;
-      aspect-ratio: 1;
-      height: 100cqh;
-      animation: shimmerSlide var(--speed) ease-in-out infinite;
-    }
-
-    .cta-btn .shimmer-spin {
-      position: absolute;
-      inset: -100%;
-      width: auto;
-      background: conic-gradient(
-        from calc(270deg - (var(--spread) * 0.5)),
-        transparent 0,
-        var(--shimmer-color) var(--spread),
-        transparent var(--spread)
-      );
-      animation: shimmerSpin 2s linear infinite;
-    }
-
-    .cta-btn .shimmer-highlight {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      box-shadow: inset 0 -8px 10px rgba(255, 255, 255, 0.12);
-      transition: box-shadow 0.3s ease;
-      pointer-events: none;
-    }
-
-    .cta-btn:hover .shimmer-highlight {
-      box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn:active .shimmer-highlight {
-      box-shadow: inset 0 -10px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn .shimmer-backdrop {
-      position: absolute;
-      inset: var(--cut);
-      z-index: -2;
-      background: var(--bg);
-      border-radius: var(--radius);
-    }
-
-    @keyframes shimmerSlide {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-    }
-
-    @keyframes shimmerSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* === Arrow Icon === */
-    .arrow-icon {
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover .arrow-icon {
-      transform: translateX(4px);
-    }
-
-    /* === Mobile Menu === */
-    .mobile-menu {
-      position: fixed;
-      inset: 0;
-      z-index: 99;
-      background: #F7F6F3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .mobile-menu.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .mobile-menu-link {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      color: #1B2838;
-      text-decoration: none;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: color 0.3s ease;
-    }
-
-    .mobile-menu.open .mobile-menu-link {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .mobile-menu-link:hover {
-      color: #00C853;
-    }
-
-    .mobile-menu-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-    }
-
-    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(5) { transition-delay: 0.3s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(6) { transition-delay: 0.35s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-
-    /* === Hamburger === */
-    .hamburger {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      z-index: 101;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 1.5px;
-      background: #1B2838;
-      display: block;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: translateY(7.5px) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: translateY(-7.5px) rotate(-45deg);
-    }
-
-    /* === Footer Links === */
-    .footer-link {
-      color: #8A8A80;
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.3s ease;
-    }
-
-    .footer-link:hover {
-      color: #F7F6F3;
-    }
-
-    .footer-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    /* === Grain Texture Overlay === */
-    .grain-overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-    }
-
-    /* === Selection === */
-    ::selection {
-      background: rgba(0, 200, 83, 0.12);
-      color: #1B2838;
-    }
-
-    /* === Tech Label === */
-    .tech-label {
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .tech-label::before {
-      content: '// ';
-      opacity: 0.4;
-    }
-
-    /* === Terminal cursor blink === */
-    .cursor-blink {
-      animation: cursorBlink 1.2s step-end infinite;
-    }
-
-    @keyframes cursorBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* === Tech grid background === */
-    .tech-grid-bg {
-      background-image:
-        linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* === Form Styles === */
-    .form-input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 0.5rem;
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-size: 0.9rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-input::placeholder {
-      color: rgba(247, 246, 243, 0.4);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #00C853;
-      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
-    }
-
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238A8A80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
-    }
-
-    .form-select option {
-      background: #1B2838;
-      color: #F7F6F3;
-    }
-
-    /* === Why Us Card === */
-    .why-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .why-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(27, 40, 56, 0.06);
-    }
-
-    .why-card:hover .why-icon {
-      background: rgba(0, 200, 83, 0.15);
-      color: #00C853;
-    }
-
-    .why-icon {
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* === 4-Layer Stack Diagram === */
-    .layer-stack {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .layer-stack::before {
-      content: '';
-      position: absolute;
-      left: 48px;
-      top: 72px;
-      bottom: 72px;
-      width: 1.5px;
-      background: linear-gradient(to bottom, rgba(0,200,83,0) 0%, rgba(0,200,83,0.4) 15%, rgba(0,200,83,0.4) 85%, rgba(0,200,83,0) 100%);
-      pointer-events: none;
-    }
-
-    @media (max-width: 768px) {
-      .layer-stack {
-        gap: 0.75rem;
-      }
-      .layer-stack::before {
-        left: 18px;
-        top: 40px;
-        bottom: 40px;
-      }
-    }
-
-    .layer-band {
-      position: relative;
-      background: #1B2838;
-      border-radius: 1rem;
-      padding: 2rem 2.5rem 2rem 2.5rem;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 2rem;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-left: 2px solid transparent;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: border-left-color 0.5s ease, box-shadow 0.5s ease;
-    }
-
-    .layer-band.is-active {
-      border-left-color: #00C853;
-      box-shadow: 0 0 0 1px rgba(0, 200, 83, 0.18), 0 24px 60px -30px rgba(0, 200, 83, 0.4);
-    }
-
-    .layer-band__num {
-      font-family: 'Clash Display', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 3.75rem);
-      font-weight: 600;
-      color: rgba(0, 200, 83, 0.5);
-      letter-spacing: -0.04em;
-      line-height: 1;
-      min-width: 3.5rem;
-    }
-
-    .layer-band__body {
-      min-width: 0;
-    }
-
-    .layer-band__name {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: clamp(1.25rem, 2vw, 1.625rem);
-      color: #F7F6F3;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-
-    .layer-band__desc {
-      color: rgba(247, 246, 243, 0.6);
-      font-family: 'General Sans', sans-serif;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      max-width: 46ch;
-    }
-
-    .layer-band__chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      max-width: 280px;
-      justify-content: flex-end;
-    }
-
-    .layer-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.35rem 0.7rem;
-      background: rgba(0, 200, 83, 0.08);
-      color: #00C853;
-      border: 1px solid rgba(0, 200, 83, 0.22);
-      border-radius: 6px;
-      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .layer-band.is-active .layer-chip {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .layer-band.is-active .layer-chip:nth-child(1) { transition-delay: 0.1s; }
-    .layer-band.is-active .layer-chip:nth-child(2) { transition-delay: 0.2s; }
-    .layer-band.is-active .layer-chip:nth-child(3) { transition-delay: 0.3s; }
-    .layer-band.is-active .layer-chip:nth-child(4) { transition-delay: 0.4s; }
-    .layer-band.is-active .layer-chip:nth-child(5) { transition-delay: 0.5s; }
-
-    @media (max-width: 768px) {
-      .layer-band {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-        gap: 0.75rem 1rem;
-        padding: 1.5rem 1.5rem 1.75rem 2.75rem;
-      }
-      .layer-band__num {
-        font-size: 2rem;
-      }
-      .layer-band__chips {
-        grid-column: 1 / -1;
-        max-width: none;
-        justify-content: flex-start;
-      }
-    }
-
-    /* === Industry Tabs === */
-    .industry-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      border-bottom: 1px solid #E8E6E1;
-      padding-bottom: 0;
-      margin-bottom: 2.5rem;
-    }
-
-    .industry-tab {
-      position: relative;
-      padding: 0.75rem 1.25rem;
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: #8A8A80;
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      transition: color 0.25s ease, border-color 0.25s ease;
-      margin-bottom: -1px;
-    }
-
-    .industry-tab:hover {
-      color: #1B2838;
-    }
-
-    .industry-tab.is-active {
-      color: #1B2838;
-      border-bottom-color: #00C853;
-    }
-
-    .industry-tab:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-
-    .industry-panel {
-      display: none;
-    }
-
-    .industry-panel.is-active {
-      display: grid;
-      animation: fadeInUp 0.4s ease;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .industry-col {
-      border-left: 2px solid rgba(0, 200, 83, 0.35);
-      padding: 0.25rem 0 0.25rem 1.25rem;
-    }
-
-    .industry-col__label {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #00C853;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .industry-col__list {
-      color: #1B2838;
-      font-size: 0.9rem;
-      line-height: 1.75;
-    }
-
-    .industry-col__list li {
-      list-style: none;
-    }
-
-    .industry-col__list code {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.78rem;
-      background: rgba(0, 200, 83, 0.07);
-      color: #007F3A;
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
-    }
-
-    /* === Trust / Governing Rule === */
-    .trust-paths {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 2rem;
-      align-items: stretch;
-    }
-
-    .trust-path {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-      padding: 2rem;
-    }
-
-    .trust-path--write {
-      border-top: 2px solid rgba(0, 200, 83, 0.6);
-    }
-
-    .trust-path--read {
-      border-top: 2px solid rgba(247, 246, 243, 0.3);
-    }
-
-    .trust-path__label {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(247, 246, 243, 0.5);
-      margin-bottom: 1rem;
-    }
-
-    .trust-path__title {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: 1.125rem;
-      color: #F7F6F3;
-      margin-bottom: 1.25rem;
-      letter-spacing: -0.01em;
-    }
-
-    .trust-flow {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .trust-flow__node {
-      padding: 0.4rem 0.8rem;
-      background: rgba(0, 200, 83, 0.08);
-      border: 1px solid rgba(0, 200, 83, 0.25);
-      color: #00C853;
-      border-radius: 0.5rem;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.78rem;
-    }
-
-    .trust-flow__node--muted {
-      background: rgba(247, 246, 243, 0.06);
-      border-color: rgba(247, 246, 243, 0.15);
-      color: rgba(247, 246, 243, 0.75);
-    }
-
-    .trust-flow__arrow {
-      color: rgba(247, 246, 243, 0.4);
-      font-family: 'SF Mono', monospace;
-    }
-
-    .trust-divider {
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(0, 200, 83, 0.3), transparent);
-    }
-
-    @media (max-width: 900px) {
-      .trust-paths {
-        grid-template-columns: 1fr;
-      }
-      .trust-divider {
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(to right, transparent, rgba(0, 200, 83, 0.3), transparent);
-      }
-    }
-
-    /* === Outcome rows === */
-    .outcome-row {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.5rem;
-      padding: 1.75rem 0;
-      border-top: 1px solid #E8E6E1;
-      align-items: baseline;
-    }
-
-    .outcome-row:last-child {
-      border-bottom: 1px solid #E8E6E1;
-    }
-
-    .outcome-row__num {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      color: #00C853;
-      text-transform: uppercase;
-      padding-top: 0.5rem;
-    }
-
-    .outcome-row__text {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
-      color: #1B2838;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-    }
-  </style>
-  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
-  <!-- Structured data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Digital Artifacts",
-    "url": "https://digitalartifacts.com.au/",
-    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
-    "image": "https://digitalartifacts.com.au/og/og-image.png",
-    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
-    "email": "hello@digitalartifacts.com.au",
-    "founder": { "@type": "Person", "name": "Isaiah Wong" },
-    "areaServed": "AU",
-    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
-    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
-  }
-  </script>
-</head>
-
-<body class="bg-cream text-navy font-body overflow-x-hidden">
-
-  <!-- Grain Overlay -->
-  <div class="grain-overlay"></div>
-
-  <!-- ============================== -->
-  <!-- NAVIGATION -->
-  <!-- ============================== -->
-  <nav class="nav-fixed" id="mainNav">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
-        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-10 w-10">
-        <span id="navBrandText" class="font-display font-semibold text-navy text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
-      </a>
-
-      <div class="hidden md:flex items-center gap-10">
-        <a href="/automations.html" class="nav-link">Automation</a>
-        <a href="/websites.html" class="nav-link">Websites</a>
-        <a href="#how" class="nav-link">How it works</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-
-      <button class="hamburger md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automation</a>
-    <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
-    <a href="#how" class="mobile-menu-link" onclick="closeMobileMenu()">How it works</a>
-    <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
-  </div>
-
-  <!-- ============================== -->
-  <!-- HERO SECTION -->
-  <!-- ============================== -->
-  <section class="hero-section bg-cream relative px-6 md:px-12 lg:px-16">
-    <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-
-      <!-- Left: Type-led pitch -->
-      <div class="lg:col-span-7 order-2 lg:order-1">
-        <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
-          <span class="tech-label text-accent font-medium mb-6 block">AI operating systems</span>
-          <h1 class="heading-xl text-navy" style="font-size: clamp(2rem, 4.2vw, 3.25rem);">
-            A custom AI system that runs<br class="hidden sm:inline">the parts of your business<br class="hidden sm:inline">that repeat<span class="text-accent cursor-blink">_</span>
-          </h1>
-          <p class="body-text mt-6 max-w-xl" style="font-size: clamp(1rem, 1.3vw, 1.125rem); color: #1B2838; opacity: 0.75;">
-            Leads, quotes, follow-ups: we build the repeat work into software that runs on your files, in n8n you can open and fix. Not a chatbot you rent. <strong class="text-navy">A system you own.</strong> The form on this page is one, working.
-          </p>
-        </div>
-
-        <!-- Hero CTAs -->
-        <div class="hero-cta mt-8 flex flex-col sm:flex-row items-start gap-4" style="opacity: 0; transform: translateY(20px);">
-          <a href="#layers" class="cta-btn">
-            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-            <div class="shimmer-backdrop"></div>
-            <div class="shimmer-highlight"></div>
-            <span>See the 4-layer system</span>
-            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="#contact" class="cta-btn cta-btn-dark">
-            <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-            <div class="shimmer-backdrop"></div>
-            <div class="shimmer-highlight"></div>
-            <span>Book a call</span>
-            <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-
-        <!-- Byline -->
-        <p class="text-warm text-xs mt-8 tracking-wide hero-cta" style="opacity: 0; transform: translateY(10px);">Digital Artifacts &bull; AI &amp; automation studio &bull; Australia</p>
-      </div>
-
-      <!-- Right: Dithered Sphere (secondary motif) -->
-      <div class="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
-        <div class="hero-sphere" style="opacity: 0; transform: translateY(20px);">
-          <canvas id="sphereCanvas" style="display: block; border-radius: 50%; width: min(420px, 68vw); height: min(420px, 68vw);"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator flex flex-col items-center gap-3 mt-14 md:mt-20">
-      <span class="text-warm text-xs uppercase tracking-widest font-body font-medium">Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- THE PROMISE -->
-  <!-- ============================== -->
-  <section id="promise" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-16">
-        <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">01 The promise</span>
-        </div>
-        <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy mb-6" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            <span class="about-reveal-text">What changes when your team has an operating system</span>
-          </h2>
-          <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            Your business runs on inbox, memory, and the five people who know everything. One of them quits Friday. We build the thing that remembers instead: files your team edits by day, and an AI that reads them on a schedule you set (6am, say), so Monday doesn't depend on who's in.
-          </p>
-        </div>
-      </div>
-
-      <!-- Outcome rows -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-20">
-        <div class="lg:col-span-3"></div>
-        <div class="lg:col-span-9">
-          <div class="outcome-row reveal-up">
-            <div class="outcome-row__num">&rarr; Outcome 01</div>
-            <div class="outcome-row__text">Your team operates on current reality, not two-day-old state buried in someone's inbox.</div>
-          </div>
-          <div class="outcome-row reveal-up">
-            <div class="outcome-row__num">&rarr; Outcome 02</div>
-            <div class="outcome-row__text">A lead lands at 11pm. By 11:01 they have a reply in your voice, and the full answer is waiting on your phone for the morning.</div>
-          </div>
-          <div class="outcome-row reveal-up">
-            <div class="outcome-row__num">&rarr; Outcome 03</div>
-            <div class="outcome-row__text">Every output is traceable to a file in your brain. No black box, no "where did that come from".</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHY PROMPT-ONLY AI FAILS -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-14 md:mb-20">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-6 block reveal-up">02 Why one prompt isn't enough</span>
-          <h2 class="heading-lg text-cream reveal-up" style="font-size: clamp(2rem, 3.5vw, 3rem);">
-            Prompt-only AI<br>is a black box.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="text-warm text-base md:text-lg reveal-up max-w-2xl" style="line-height: 1.7;">
-            You pay for ChatGPT and hope. One box, no memory, no record of why it said what it said. It drifts, it invents, and six months in nobody trusts it.
-          </p>
-          <p class="text-cream text-base md:text-lg reveal-up max-w-2xl mt-4" style="line-height: 1.7;">
-            So we split that box into four parts you can each open and fix.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
-          <div class="tech-label text-accent mb-3">Pain 01</div>
-          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Manual morning briefings</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Someone spends the first hour of every day assembling what happened yesterday. It's not strategic work. It's secretarial.</p>
-        </div>
-
-        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
-          <div class="tech-label text-accent mb-3">Pain 02</div>
-          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Drafts from a blank page</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">Proposals, follow-ups, meeting notes, all written from scratch, all drawing on the same 80% of shared context the team already has.</p>
-        </div>
-
-        <div class="bg-white/5 rounded-xl p-7 border border-white/10 reveal-up">
-          <div class="tech-label text-accent mb-3">Pain 03</div>
-          <h3 class="font-display font-semibold text-cream text-lg mb-2" style="letter-spacing: -0.01em;">Knowledge lives in heads</h3>
-          <p class="text-warm text-sm" style="line-height: 1.7;">One person leaves and three months of institutional memory walks out the door. Nothing was written down where the rest of the system could use it.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- THE 4 LAYERS -->
-  <!-- ============================== -->
-  <section id="layers" class="py-24 md:py-36 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-20">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-6 block reveal-up">03 The framework</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 4vw, 3.25rem);">
-            Four layers.<br>One operating system.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            This is the framework behind every build. It's reusable because it separates what your business <em>knows</em> from what the AI <em>does</em>. Swap the model, add a new surface, extend the brain. The stack holds.
-          </p>
-        </div>
-      </div>
-
-      <!-- The stack -->
-      <div class="layer-stack" id="layerStack">
-
-        <!-- Layer 1 — Context -->
-        <div class="layer-band reveal-up" data-layer="1">
-          <div class="layer-band__num">01</div>
-          <div class="layer-band__body">
-            <div class="layer-band__name">Context <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the brain</span></div>
-            <div class="layer-band__desc">Your business, written down. Positioning, clients, pipeline, SOPs, tone of voice. Structured markdown in a Git repo you own. Human-editable, AI-readable, version-controlled forever.</div>
-          </div>
-          <div class="layer-band__chips">
-            <span class="layer-chip">company-brief.md</span>
-            <span class="layer-chip">clients/</span>
-            <span class="layer-chip">pipeline/</span>
-            <span class="layer-chip">tone-of-voice.md</span>
-          </div>
-        </div>
-
-        <!-- Layer 2 — Skills -->
-        <div class="layer-band reveal-up" data-layer="2">
-          <div class="layer-band__num">02</div>
-          <div class="layer-band__body">
-            <div class="layer-band__name">Skills <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the how</span></div>
-            <div class="layer-band__desc">Reusable prompt recipes for the jobs your team does every week. "Draft proposal." "Prep for meeting." "Triage inbound." Each skill knows which parts of Layer 1 to read and what to produce.</div>
-          </div>
-          <div class="layer-band__chips">
-            <span class="layer-chip">proposal-writer</span>
-            <span class="layer-chip">meeting-prep</span>
-            <span class="layer-chip">lead-qualifier</span>
-            <span class="layer-chip">follow-up</span>
-          </div>
-        </div>
-
-        <!-- Layer 3 — Automation -->
-        <div class="layer-band reveal-up" data-layer="3">
-          <div class="layer-band__num">03</div>
-          <div class="layer-band__body">
-            <div class="layer-band__name">Automation <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the triggers</span></div>
-            <div class="layer-band__desc">The steps that fire without you: a lead hits the form, a draft goes out; an invoice tips 7 days overdue, the chase begins. Whatever your triggers are, they're built in n8n, so every step has a name you can open, test, and fix.</div>
-          </div>
-          <div class="layer-band__chips">
-            <span class="layer-chip">cron: daily 08:30</span>
-            <span class="layer-chip">webhook: lead</span>
-            <span class="layer-chip">trigger: email</span>
-            <span class="layer-chip">sync: CRM</span>
-          </div>
-        </div>
-
-        <!-- Layer 4 — Agent -->
-        <div class="layer-band reveal-up" data-layer="4">
-          <div class="layer-band__num">04</div>
-          <div class="layer-band__body">
-            <div class="layer-band__name">Agent <span class="text-warm font-normal text-sm ml-2" style="letter-spacing: 0;">/ the face</span></div>
-            <div class="layer-band__desc">How your team talks to the system and how the system talks back. Slack, SMS, voice, dashboards, email. Wherever your people already work. One brain, many surfaces.</div>
-          </div>
-          <div class="layer-band__chips">
-            <span class="layer-chip">Slack DM</span>
-            <span class="layer-chip">SMS</span>
-            <span class="layer-chip">Voice (ElevenLabs)</span>
-            <span class="layer-chip">Dashboard</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- CTA row -->
-      <div class="mt-14 md:mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-4 reveal-up">
-        <a href="/automations.html" class="cta-btn cta-btn-dark">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>See each layer in depth</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </script>
+  <link rel="stylesheet" href="/assets/journey.css"><script src="/assets/journey.js" defer></script></head>
+  <body data-page="home">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Digital Artifacts home">
+          <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+          <span>Digital Artifacts<span class="brand-dot">.</span> </span>
         </a>
-        <span class="text-warm text-xs max-w-sm" style="line-height: 1.6;">Deep-dive on each layer, with a sample file, a real n8n workflow, and three worked examples.</span>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="siteNav"
+          hidden
+        >
+          Menu
+        </button>
+        <nav class="nav-links" id="siteNav" aria-label="Main navigation">
+          <a href="/websites.html">Websites</a>
+          <a href="/automations.html">Automation</a>
+          <a href="/websites.html#portfolio">Client work</a>
+          <a href="/#how">How it works</a>
+          <a class="button" href="#contact"
+            >Discuss your project<span class="button-arrow" aria-hidden="true">↗</span>
+          </a>
+        </nav>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WORKED EXAMPLES (INDUSTRY TABS) -->
-  <!-- ============================== -->
-  <section id="how" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-14 md:mb-16">
-        <div class="lg:col-span-4">
-          <span class="tech-label text-accent font-medium mb-6 block reveal-up">04 In practice</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">
-            Same framework.<br>Different deployment.
-          </h2>
-        </div>
-        <div class="lg:col-span-8">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            The four layers don't care what industry you're in. Only what your team actually does each day. Here's the same stack, populated three different ways.
-          </p>
-        </div>
-      </div>
-
-      <!-- Tabs -->
-      <div class="industry-tabs reveal-up" role="tablist" aria-label="Worked examples">
-        <button class="industry-tab is-active" role="tab" aria-selected="true" data-panel="services">Professional services firm</button>
-        <button class="industry-tab" role="tab" aria-selected="false" data-panel="trades">Trades &amp; field services</button>
-        <button class="industry-tab" role="tab" aria-selected="false" data-panel="sales">B2B sales team</button>
-      </div>
-
-      <!-- Panels -->
-      <div class="industry-panels reveal-up">
-
-        <!-- Panel: Services -->
-        <div class="industry-panel is-active grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="services">
-          <div class="industry-col">
-            <span class="industry-col__label">01 &middot; Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Client histories &amp; matter files</li>
-              <li>Proposal templates</li>
-              <li>Billing rates &amp; scope rules</li>
-              <li>Conflict-of-interest register</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 &middot; Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>proposal-writer</code></li>
-              <li><code>meeting-prep</code></li>
-              <li><code>client-update</code></li>
-              <li><code>scope-change-memo</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 &middot; Automation</span>
-            <ul class="industry-col__list space-y-1">
-              <li>8:30am daily matters brief</li>
-              <li>Meeting transcript &rarr; draft note</li>
-              <li>RFP inbound &rarr; proposal scaffold</li>
-              <li>Weekly partner pipeline summary</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 &middot; Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Slack <code>@ops</code> for anything</li>
-              <li>Daily brief in DM</li>
-              <li>Voice call from the car</li>
-              <li>Partner dashboard (web)</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Panel: Trades -->
-        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="trades">
-          <div class="industry-col">
-            <span class="industry-col__label">01 &middot; Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Supplier pricelists</li>
-              <li>Crew schedules &amp; skills matrix</li>
-              <li>Job templates by trade</li>
-              <li>Site safety &amp; SWMS rules</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 &middot; Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>quote-builder</code></li>
-              <li><code>job-wrap-up-note</code></li>
-              <li><code>supplier-reorder</code></li>
-              <li><code>overdue-chaser</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 &middot; Automation</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Quote request &rarr; draft sent for review</li>
-              <li>Invoice 7 days overdue &rarr; SMS sequence</li>
-              <li>Job complete &rarr; review request</li>
-              <li>6am crew schedule &rarr; SMS</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 &middot; Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>SMS-first for crew</li>
-              <li>Office dashboard (simple web)</li>
-              <li>Voice intake for missed calls</li>
-              <li>Owner daily email at 6pm</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Panel: Sales -->
-        <div class="industry-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10" data-panel="sales">
-          <div class="industry-col">
-            <span class="industry-col__label">01 &middot; Context</span>
-            <ul class="industry-col__list space-y-1">
-              <li>ICP definitions</li>
-              <li>Pipeline stages &amp; exit criteria</li>
-              <li>Competitor battlecards</li>
-              <li>Objection-handling library</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">02 &middot; Skills</span>
-            <ul class="industry-col__list space-y-1">
-              <li><code>lead-qualifier</code></li>
-              <li><code>discovery-summary</code></li>
-              <li><code>pipeline-movement</code></li>
-              <li><code>deal-risk-flag</code></li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">03 &middot; Automation</span>
-            <ul class="industry-col__list space-y-1">
-              <li>New lead &rarr; AI classify + your CRM + your team</li>
-              <li>Deal stuck 14 days &rarr; risk memo</li>
-              <li>Monday 7am pipeline brief</li>
-              <li>Discovery call &rarr; logged next steps</li>
-            </ul>
-          </div>
-          <div class="industry-col">
-            <span class="industry-col__label">04 &middot; Agent</span>
-            <ul class="industry-col__list space-y-1">
-              <li>Team Slack channel</li>
-              <li>Inline CRM notes</li>
-              <li>Daily email brief at 7am</li>
-              <li>Rep asks <code>@ops</code> anything</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- GOVERNING RULE / TRUST -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-navy">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-14 md:mb-20">
-        <span class="tech-label text-accent font-medium mb-4 block reveal-up">05 The governing rule</span>
-        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2rem, 4.5vw, 3.75rem);">
-          Humans write.<br>AI reads.
-        </h2>
-        <p class="text-warm text-base md:text-lg reveal-up max-w-2xl mx-auto" style="line-height: 1.75;">
-          The brain (Layer 1) is only edited by humans, through a review step. The AI reads it at runtime but never writes to it. Correct a fact once. Every future output is right. No drift, no hallucinated history, no black box.
-        </p>
-      </div>
-
-      <div class="trust-paths reveal-up">
-        <div class="trust-path trust-path--write">
-          <div class="trust-path__label">Write path / humans only</div>
-          <div class="trust-path__title">You correct the brain.</div>
-          <div class="trust-flow">
-            <span class="trust-flow__node">Human</span>
-            <span class="trust-flow__arrow">&rarr;</span>
-            <span class="trust-flow__node">Review</span>
-            <span class="trust-flow__arrow">&rarr;</span>
-            <span class="trust-flow__node">Git commit</span>
-            <span class="trust-flow__arrow">&rarr;</span>
-            <span class="trust-flow__node">Brain</span>
-          </div>
-        </div>
-        <div class="trust-divider"></div>
-        <div class="trust-path trust-path--read">
-          <div class="trust-path__label">Read path / AI runtime</div>
-          <div class="trust-path__title">The system uses the brain.</div>
-          <div class="trust-flow">
-            <span class="trust-flow__node trust-flow__node--muted">Brain</span>
-            <span class="trust-flow__arrow">&rarr;</span>
-            <span class="trust-flow__node trust-flow__node--muted">AI (reads only)</span>
-            <span class="trust-flow__arrow">&rarr;</span>
-            <span class="trust-flow__node trust-flow__node--muted">Output</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WE ALSO BUILD THE INTERFACE -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-24 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <a href="/websites.html" class="group block border border-divider rounded-2xl p-8 md:p-10 bg-surface hover:border-accent/40 transition-colors reveal-up">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
-          <div class="md:col-span-8">
-            <span class="tech-label text-warm font-medium mb-3 block">06 Also</span>
-            <h3 class="heading-md text-navy mb-3" style="font-size: clamp(1.5rem, 2.2vw, 1.875rem); letter-spacing: -0.02em;">
-              We also build the interfaces your operating system shows the world.
-            </h3>
-            <p class="body-text text-sm md:text-base max-w-2xl">
-              Marketing sites, client portals, internal dashboards, job-tracking tools. Layer 4, rendered as a front-end, so the same system your team talks to is the one your customers see.
+    </header>
+    <main id="main">
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <span class="eyebrow">Websites & automation / Australia</span>
+            <h1>A better website.<br />A better way to <span class="accent">follow up.</span></h1>
+            <p class="lead">
+              Help people understand your business, get in touch, and hear back. I build the website
+              and the workflows that keep enquiries moving.
+            </p>
+            <div class="actions">
+              <a class="button" href="#services"
+                >Find your starting point<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="button secondary" href="#work"
+                >See client work<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="hero-note">
+              Work directly with Isaiah Wong. Start with a website, one workflow, or both.
             </p>
           </div>
-          <div class="md:col-span-4 md:text-right">
-            <span class="inline-flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all">
-              See the website work
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
+          <div>
+            <div class="journey-visual">
+              <div class="journey-top">
+                <span>The connected journey</span>
+                <span class="signal">Website + follow-up</span>
+              </div>
+              <ol class="journey-list">
+                <li>
+                  <span class="step-mark">01</span>
+                  <div>
+                    <h3>Someone finds you.</h3>
+                    <p>A website that makes your work and services clear.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="step-mark">02</span>
+                  <div>
+                    <h3>They get in touch.</h3>
+                    <p>An enquiry with the details you need.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="step-mark">03</span>
+                  <div>
+                    <h3>The next step is ready.</h3>
+                    <p>Capture the details, prepare a reply and notify you.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="step-mark">04</span>
+                  <div>
+                    <h3>You take it from here.</h3>
+                    <p>A useful conversation, with less chasing.</p>
+                  </div>
+                </li>
+              </ol>
+              <div class="journey-bottom">
+                <strong>Start with the part you need.</strong>
+                <span>Connect more later. ↗</span>
+              </div>
+            </div>
+            <p class="visual-label">An example journey, shaped around your business.</p>
           </div>
         </div>
-      </a>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- 07 — SELECTED WORK (real, live client sites) -->
-  <!-- ============================== -->
-  <section id="work" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 mb-12 md:mb-16">
-        <div class="lg:col-span-5">
-          <span class="tech-label text-accent font-medium mb-4 block reveal-up">07 Selected work</span>
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(2rem, 3.8vw, 3rem);">Real businesses,<br>live and shipped.</h2>
-        </div>
-        <div class="lg:col-span-7 flex items-end">
-          <p class="body-text text-base md:text-lg max-w-2xl reveal-up">
-            A selection of client work, every one live online right now. Across design studios, solar, tree care, and local services, in Australia and the UK. Click any of them and see for yourself.
-          </p>
-        </div>
+      </section>
+      <div class="wrap hero-summary">
+        <span>Custom websites</span>
+        <span>Enquiry follow-up</span>
+        <span>Less repeat admin</span>
+        <span>You own the custom work</span>
       </div>
-
-      <!-- Filters -->
-      <div class="pf-filters reveal-up" role="group" aria-label="Filter work by industry">
-        <button type="button" class="pf-filter is-active" data-filter="all" aria-pressed="true">All</button>
-        <button type="button" class="pf-filter" data-filter="design" aria-pressed="false">Design</button>
-        <button type="button" class="pf-filter" data-filter="trades" aria-pressed="false">Trades</button>
-        <button type="button" class="pf-filter" data-filter="services" aria-pressed="false">Services</button>
-      </div>
-
-      <!-- Gallery -->
-      <div class="pf-grid reveal-up" id="pfGrid">
-        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="design">
-          <div class="pf-card__shot"><img src="/assets/portfolio/cee-ess.jpg" alt="Cee Ess Designs website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Cee Ess Designs</span><span class="pf-card__tag">Design studio</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="#valley-arbor" class="pf-card" data-cat="trades">
-          <div class="pf-card__shot"><span class="pf-badge">Case study</span><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Valley Arbor</span><span class="pf-card__tag">Arborist, site + quote automation</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://lumberjord.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="trades">
-          <div class="pf-card__shot"><img src="/assets/portfolio/lumberjord.jpg" alt="LumberJord arborist website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">LumberJord</span><span class="pf-card__tag">Arborist, bayside Melbourne</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
-          <div class="pf-card__shot"><img src="/assets/portfolio/fullcircle.jpg" alt="Full Circle Solutions website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Full Circle Solutions</span><span class="pf-card__tag">Business solutions</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
-          <div class="pf-card__shot"><img src="/assets/portfolio/baysolar.jpg" alt="BaySolar UK website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">BaySolar UK</span><span class="pf-card__tag">Solar energy, United Kingdom</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://peninsula-makers-hub.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="services">
-          <div class="pf-card__shot"><img src="/assets/portfolio/pmh.jpg" alt="Peninsula Makers Hub website homepage" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Peninsula Makers Hub</span><span class="pf-card__tag">Makerspace, Mornington Peninsula</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-      </div>
-
-      <div class="mt-10 reveal-up">
-        <a href="/websites.html#portfolio" class="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all">See all work and website packages <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- VALLEY ARBOR CASE STUDY -->
-  <!-- ============================== -->
-  <section id="valley-arbor" class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider" style="scroll-margin-top: 5rem;">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div class="lg:col-span-6 reveal-up">
-          <div class="rounded-2xl overflow-hidden border border-divider shadow-xl">
-            <img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor arborist website" class="w-full block" width="800" height="500" loading="lazy">
+      <section class="section" id="services">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">What would help most?</span>
+              <h2>Choose your starting point.</h2>
+            </div>
+            <p>Each can stand on its own. We can connect them when your business needs more.</p>
           </div>
-        </div>
-        <div class="lg:col-span-6 reveal-up">
-          <span class="tech-label text-accent font-medium mb-4 block">Case study</span>
-          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">A website that answers, on a system that follows up.</h2>
-          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Matt climbs trees for a living. He was losing jobs to his own voicemail: enquiries came in while he was 20 metres up a gum tree, and the follow-up happened whenever he got down. Or didn't.</p>
-          <div class="space-y-3 border-t border-divider pt-6">
-            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The build.</strong> A fast custom site in his brand with his real work photos, per-suburb pages for local search, and his live Google reviews wired straight in.</p></div>
-            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The system behind it.</strong> A quote form that drops every enquiry straight into his inbox through an automation, so nothing slips. Layer 4 (the site) sitting on Layer 3 (the follow-up).</p></div>
-            <div class="flex items-start gap-3"><i data-lucide="check" class="w-4 h-4 text-accent flex-shrink-0 mt-1"></i><p class="text-sm text-navy" style="line-height: 1.6;"><strong>The point.</strong> The same operating-system idea, scaled down to a sole trader. One brain, one surface, one less thing to chase.</p></div>
+          <div class="cards">
+            <article class="route-card">
+              <span class="card-number">01 / Get found</span>
+              <h3>I need a better website.</h3>
+              <p>
+                A clear, considered site that shows your work and makes it easy for people to
+                enquire.
+              </p>
+              <div class="card-foot">
+                <a class="text-link" href="/websites.html"
+                  >Explore websites & pricing <span aria-hidden="true">↗</span>
+                </a>
+                <p>Single-page and multi-page builds.</p>
+              </div>
+            </article>
+            <article class="route-card featured">
+              <span class="card-number">02 / Follow through</span>
+              <h3>I’m losing track of enquiries.</h3>
+              <p>
+                Capture the details, prepare the response, and give every enquiry a clear next step.
+              </p>
+              <div class="card-foot">
+                <a class="text-link" href="/automations.html?flow=lead#flows"
+                  >See enquiry follow-up <span aria-hidden="true">↗</span>
+                </a>
+                <p>Works with a new or existing website.</p>
+              </div>
+            </article>
+            <article class="route-card">
+              <span class="card-number">03 / Make room</span>
+              <h3>I spend too long on admin.</h3>
+              <p>
+                Connect the tools you already use for repeat jobs like daily briefs, reminders and
+                handovers.
+              </p>
+              <div class="card-foot">
+                <a class="text-link" href="/automations.html#custom"
+                  >Explore custom workflows <span aria-hidden="true">↗</span>
+                </a>
+                <p>Start with one recurring job.</p>
+              </div>
+            </article>
           </div>
-          <!-- TODO(Isaiah): pull the real month-one count from the "DA - Valley Arbor Lead Log" sheet
-               (month one = 20 Jun to 20 Jul 2026), replace N below, delete the fallback line, and uncomment:
-          <p class="text-navy text-sm mt-6 font-medium">Result: N quote requests in month one, zero missed.</p>
-          -->
-          <p class="text-warm text-xs mt-6" style="line-height: 1.6;">Outcome numbers to follow as the new site beds in.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- MEET THE FOUNDER -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div class="lg:col-span-4 flex justify-center lg:justify-start reveal-up">
-          <!-- Swap this monogram for a headshot any time: replace with <img src="..." class="founder-avatar" style="object-fit:cover"> -->
-          <div class="founder-avatar">IW</div>
-        </div>
-        <div class="lg:col-span-8 reveal-up">
-          <span class="tech-label text-accent font-medium mb-4 block">The studio</span>
-          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">One person. You always know who built it.</h2>
-          <p class="body-text text-base md:text-lg mb-6" style="color: #1B2838;">Digital Artifacts is Isaiah Wong, working direct. No account managers, no handoffs, no junior doing the real work. You talk to the person who builds your system, you own every file and workflow, and the brain only changes through a human review step.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="tag-pill">Single operator</span>
-            <span class="tag-pill">Direct work</span>
-            <span class="tag-pill">You own the stack</span>
-            <span class="tag-pill">Based in Australia</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- 08 — REFER A BUSINESS -->
-  <!-- ============================== -->
-  <section class="py-16 md:py-20 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="rounded-2xl bg-navy p-8 md:p-12 reveal-up">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
-          <div class="md:col-span-8">
-            <span class="tech-label text-accent font-medium mb-3 block">Refer a business</span>
-            <h3 class="heading-md text-cream mb-3" style="font-size: clamp(1.5rem, 2.4vw, 2rem); letter-spacing: -0.02em;">Know a business drowning in admin?</h3>
-            <p class="text-warm text-sm md:text-base max-w-2xl" style="line-height: 1.7;">
-              Most of our work starts with a quiet word between people who trust each other. Send someone our way, and if they build with us there is a thank-you in it for both of you.
-              <!-- TODO confirm referral incentive wording before publishing. Current offer: 10% off the referred client's first retainer month. -->
+          <div class="proof-strip">
+            <p>
+              Not sure which one fits? Tell me where things get stuck. We can work out the useful
+              first step together.
             </p>
-          </div>
-          <div class="md:col-span-4 md:text-right">
-            <a href="#contact" class="inline-flex items-center gap-2 bg-accent text-cream font-semibold text-sm uppercase tracking-wide px-7 py-3.5 rounded-full hover:scale-[1.03] transition-transform">
-              Refer someone
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <a class="text-link" href="#contact"
+              >Discuss your project <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- LEAD MAGNET SECTION -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[900px] mx-auto">
-      <div class="bg-navy rounded-2xl p-8 md:p-12 relative overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background: radial-gradient(120% 90% at 85% 0%, rgba(0,200,83,0.10), transparent 55%);"></div>
-        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 relative">
-          <!-- Left: Content -->
-          <div class="flex-1 text-center md:text-left">
-            <span class="tech-label text-accent font-medium mb-4 inline-flex items-center gap-2">
-              <i data-lucide="download" class="w-4 h-4"></i> Free download
-            </span>
-            <h2 class="heading-md text-cream text-xl md:text-2xl mb-3" style="line-height: 1.3;">The 4-Layer Blueprint</h2>
-            <p class="text-cream/70 text-sm mb-6" style="line-height: 1.7;">A one-page framework you can sketch onto your own business this afternoon. Map what you already have, find the gaps, scope the first build.</p>
-            <ul class="text-xs text-cream/60 space-y-2 mb-6">
-              <li class="flex items-center gap-2 justify-center md:justify-start"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> What lives in each layer, with prompts</li>
-              <li class="flex items-center gap-2 justify-center md:justify-start"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Three worked examples by industry</li>
-              <li class="flex items-center gap-2 justify-center md:justify-start"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i> Works for any business with repetitive ops</li>
-            </ul>
+      </section>
+      <section class="section" id="work">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Selected client work</span>
+              <h2>Real businesses.<br />Real work, online.</h2>
+            </div>
+            <a class="text-link" href="/websites.html#portfolio"
+              >More client work <span aria-hidden="true">↗</span>
+            </a>
           </div>
-          <!-- Right: Form -->
-          <div class="w-full md:w-[320px] flex-shrink-0">
-            <form id="leadMagnetForm" class="space-y-3">
-              <div>
-                <label for="lm-name" class="sr-only">Your name</label>
-                <input type="text" id="lm-name" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-lg border border-cream/15 bg-cream/5 text-cream text-sm placeholder:text-cream/35 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
+          <div class="work-grid">
+            <a class="work-card" href="/#valley-arbor">
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/valley-arbor.jpg"
+                  alt="Valley Arbor website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
               </div>
-              <div>
-                <label for="lm-email" class="sr-only">Your email</label>
-                <input type="email" id="lm-email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-lg border border-cream/15 bg-cream/5 text-cream text-sm placeholder:text-cream/35 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors">
-              </div>
-              <button type="submit" class="w-full px-6 py-3 bg-accent text-navy text-sm font-semibold rounded-lg hover:brightness-105 transition-all flex items-center justify-center gap-2">
-                <span>Get the Blueprint</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-              <p class="text-cream/40 text-[10px] text-center">No spam, ever. Your blueprint downloads instantly.</p>
-            </form>
-            <div id="leadMagnetSuccess" class="hidden text-center py-4" role="status" aria-live="polite">
-              <div class="flex flex-col items-center gap-2 text-accent text-sm font-medium">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="check-circle" class="w-5 h-5"></i>
-                  <span>Your Blueprint is downloading!</span>
+              <div class="work-caption">
+                <div>
+                  <h3>Valley Arbor</h3>
+                  <p>Website + quote enquiry delivery</p>
                 </div>
-                <a href="/downloads/4-layer-blueprint.pdf" download class="text-accent/70 hover:text-accent text-xs underline mt-1">Click here if it didn't start</a>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://lumberjord.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/lumberjord.jpg"
+                  alt="LumberJord website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>LumberJord</h3>
+                  <p>Arborist, bayside Melbourne</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://cee-essdesigns.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/cee-ess.jpg"
+                  alt="Cee Ess Designs website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>Cee Ess Designs</h3>
+                  <p>Graphic design studio, Melbourne</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+      <section class="section mint" id="valley-arbor">
+        <div class="wrap case-grid">
+          <div class="case-image">
+            <img
+              src="/assets/portfolio/valley-arbor.jpg"
+              width="800"
+              height="500"
+              loading="lazy"
+              alt="Valley Arbor website showing tree services and a quote enquiry button"
+            />
+          </div>
+          <div class="case-copy">
+            <span class="eyebrow">In practice / Valley Arbor</span>
+            <h2>A website with a next step built in.</h2>
+            <p class="lead">
+              Matt runs a climbing arborist business in Melbourne. The build brings his services,
+              real work and customer reviews together, with a quote form connected to enquiry
+              delivery.
+            </p>
+            <ul class="case-points">
+              <li>
+                <strong>The job:</strong> help a local customer understand the tree service and request a quote.
+              </li>
+              <li>
+                <strong>The build:</strong> service-area pages, real project imagery, customer reviews and a connected quote form.
+              </li>
+              <li>
+                <strong>The handoff:</strong> the enquiry lands in Matt’s inbox. He handles the quote and the customer conversation.
+              </li>
+            </ul>
+            <a class="text-link" href="/websites.html#contact" data-interest="both"
+              >Plan my website and enquiry path <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+<section class="section" id="see-the-journey"><div class="wrap preview-story"><div><span class="eyebrow">From interest to a useful next step</span><h2>The enquiry came in.<br>What happens next?</h2><p class="lead">Your website has done its job. Now give the enquiry somewhere to go, a reply to review and a person to follow through.</p><a class="button" href="/automations.html#demo">See the 15-second example <span aria-hidden="true">↗</span></a><p class="inline-note">Start with a website, a workflow, or both.</p></div><a class="story-thumbnail" href="/automations.html#demo" aria-label="See an example enquiry journey"><img src="/assets/journey/opening.jpg" alt="Illustrative workshop scene with a phone beside a business owner’s tools" width="1376" height="768" loading="lazy"><span class="play-disc" aria-hidden="true">▶</span><span class="thumbnail-caption">An enquiry arrives while you’re busy.<small>Illustrative scene · 15-second example</small></span></a></div></section>
+      <section class="section dark" id="how">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">From first conversation to working system</span>
+              <h2>Start with one useful improvement.</h2>
+            </div>
+            <p>A clear scope, a build you can review, and a handover you can use.</p>
+          </div>
+          <div class="process-grid">
+            <article class="process-step">
+              <span class="eyebrow">01 / Understand</span>
+              <h3>Find the sticking point.</h3>
+              <p>
+                We look at what happens today and agree on the first thing worth improving. You
+                receive a scope and fixed project price.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="eyebrow">02 / Build & test</span>
+              <h3>See it before it goes live.</h3>
+              <p>
+                You review the design or workflow. We check real scenarios, including what happens
+                when something goes wrong.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="eyebrow">03 / Handover</span>
+              <h3>Know what you own.</h3>
+              <p>
+                You get access to the custom code and workflows, with a walkthrough. Ongoing care
+                and third-party costs are agreed separately.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="studio">
+        <div class="wrap">
+          <div class="founder-grid">
+            <div>
+              <span class="eyebrow">The person behind the work</span>
+              <h2>One person.<br />From first chat to handover.</h2>
+              <p class="lead">
+                I’m Isaiah. I design and build Digital Artifacts projects directly, so you can talk
+                to the person doing the work. We start with what your business needs, then choose
+                the right tools.
+              </p>
+              <div class="founder-signature">
+                <span class="initials" aria-hidden="true">IW</span>
+                <div>
+                  <strong>Isaiah Wong</strong>
+                  <p>Digital Artifacts · Australia</p>
+                </div>
               </div>
             </div>
+            <div class="details-list">
+              <details>
+                <summary>Do I need a website and automation?</summary>
+                <p>
+                  No. You can start with either. If your current site works well, we can look at the
+                  enquiry handling behind it. If you only need a website, that is fine too.
+                </p>
+              </details>
+              <details>
+                <summary>Will I need to learn technical tools?</summary>
+                <p>
+                  We agree on a practical handover for the way you work. You get access to the
+                  custom work and a walkthrough. Managed care can be scoped if you want ongoing
+                  help.
+                </p>
+              </details>
+              <details id="layers">
+                <summary>What is the four-layer framework?</summary>
+                <p>
+                  It is how I organise more involved automation builds: business context,
+                  instructions for each task, workflow triggers, and the interface you use. It keeps
+                  the parts easier to inspect and change. You do not need to learn the framework to
+                  start a project.
+                </p>
+              </details>
+              <details>
+                <summary>What does ownership include?</summary>
+                <p>
+                  You own the custom code, content and workflows built for your project. Hosting,
+                  model usage, messaging and other third-party services may have separate running
+                  costs. Those are covered in your scope.
+                </p>
+              </details>
+            </div>
+          </div>
+          <div class="resource">
+            <div>
+              <h3>Want to sketch out a workflow first?</h3>
+              <p>
+                The free, two-page 4-Layer Blueprint includes an overview and a worksheet for
+                mapping a repeat task.
+              </p>
+            </div>
+            <a
+              class="text-link"
+              href="/downloads/4-layer-blueprint.pdf"
+              download
+              data-download="blueprint"
+              >Download the worksheet <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- MARQUEE BAND -->
-  <!-- ============================== -->
-  <section class="py-10 md:py-14 border-t border-b border-divider overflow-hidden bg-cream">
-    <div class="marquee-track">
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AI Operating Systems</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Daily Briefs</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Meeting Notes</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Approval Flows</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Lead Triage</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Voice Agents</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Dashboards</span>
-      <span class="marquee-dot"></span>
-      <!-- Duplicate for seamless loop -->
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AI Operating Systems</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Daily Briefs</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Meeting Notes</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Approval Flows</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Lead Triage</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Voice Agents</span>
-      <span class="marquee-dot"></span>
-      <span class="marquee-item text-navy" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">Custom Dashboards</span>
-      <span class="marquee-dot"></span>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- CONTACT / CTA SECTION -->
-  <!-- ============================== -->
-  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
-    <!-- Decorative circles -->
-    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
-    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
-
-    <div class="max-w-[1440px] mx-auto relative z-10">
-      <div class="text-center mb-14">
-        <span class="tech-label text-warm font-medium reveal-up block mb-8">07 Contact</span>
-        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
-          What would you have<br>your operating system do?<span class="text-accent cursor-blink">_</span>
-        </h2>
-        <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          A 30-minute call. We'll map the first layer for free and send you back a one-pager of what the build would look like.
-        </p>
-      </div>
-
-      <!-- Lead Capture Form -->
-      <div class="max-w-2xl mx-auto reveal-up">
-        <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
-          <input type="hidden" name="lead_magnet" value="false">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
-              <input type="text" name="name" id="name" required placeholder="Your name" class="form-input">
-            </div>
-            <div>
-              <label for="email" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Email *</label>
-              <input type="email" name="email" id="email" required placeholder="you@company.com" class="form-input">
-            </div>
+      </section>
+      <section class="section dark" id="contact">
+        <div class="wrap contact-grid">
+          <div class="contact-copy">
+            <span class="eyebrow">A useful first conversation</span>
+            <h2>What needs to work better?</h2>
+            <p class="lead">
+              Tell me what you have and what is getting in the way. You do not need a technical
+              brief.
+            </p>
+            <ol class="next-steps">
+              <li><span>01</span> I’ll reply within one business day.</li>
+              <li><span>02</span> We’ll talk through what would help first.</li>
+              <li><span>03</span> You’ll get a clear scope and price before committing.</li>
+            </ol>
+            <a href="mailto:hello@digitalartifacts.com.au"
+              >Prefer email? hello@digitalartifacts.com.au</a
+            >
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="phone" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Phone Number</label>
-              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX" class="form-input">
-            </div>
-            <div>
-              <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
-              <select name="service" id="service" class="form-input form-select">
-                <option value="" disabled selected>What are you after?</option>
-                <option value="operating-system">Full 4-layer operating system</option>
-                <option value="automation">A specific workflow / automation</option>
-                <option value="agent">An AI agent (Slack, voice, SMS)</option>
-                <option value="website">Website / interface work</option>
-                <option value="not-sure">Not sure yet, want to talk it through</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
-              <select name="budget" id="budget" class="form-input form-select">
-                <option value="" disabled selected>Select your budget</option>
-                <option value="2500-5000">$2,500 – $5,000</option>
-                <option value="5000-10000">$5,000 – $10,000</option>
-                <option value="10000-15000">$10,000 – $15,000</option>
-                <option value="15000+">$15,000+</option>
-                <option value="not-sure">Not sure yet</option>
-              </select>
-            </div>
-            <div>
-              <label for="how-heard" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">How did you find us?</label>
-              <select name="how-heard" id="how-heard" class="form-input form-select">
-                <option value="" disabled selected>Select an option</option>
-                <option value="google">Google Search</option>
-                <option value="social-media">Social Media</option>
-                <option value="referral">Referral</option>
-                <option value="etsy">Etsy</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-
           <div>
-            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Tell us about your project</label>
-            <textarea name="message" id="message" rows="4" placeholder="What are you looking for? Any details help..." class="form-input" style="resize: vertical;"></textarea>
+            <p class="selection-note" id="selectionNote" hidden></p>
+            <form
+              class="contact-form"
+              id="contactForm"
+              action="https://formspree.io/f/mreypwgk"
+              method="POST"
+              data-page="home"
+            >
+              <input type="hidden" name="lead_magnet" value="false" />
+              <input type="hidden" name="page" value="home" />
+              <input type="hidden" name="package" value="" />
+              <div class="form-row">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input
+                    id="name"
+                    name="name"
+                    autocomplete="name"
+                    required
+                    placeholder="Your name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="you@business.com.au"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label for="service">I’m interested in</label>
+                <select id="service" name="service">
+                  <option value="not-sure" selected>Help choosing where to start</option>
+                  <option value="website">A website</option>
+                  <option value="lead-response">Enquiry follow-up</option>
+                  <option value="both">Website + follow-up</option>
+                  <option value="reactivation">Past-client follow-up</option>
+                  <option value="reputation">Review requests</option>
+                  <option value="automation">Repeat admin or a custom workflow</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="message">What would you like to improve?</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows="4"
+                  placeholder="A new website, enquiries going quiet, admin taking up your evenings…"
+                ></textarea>
+              </div>
+              <details class="form-extra">
+                <summary>
+                  Add a phone number or budget <span class="optional">Optional</span>
+                </summary>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="phone">Phone <span class="optional">Optional</span> </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      placeholder="04XX XXX XXX"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="budget">Budget <span class="optional">Optional</span> </label>
+                    <select id="budget" name="budget">
+                      <option value="not-sure">Not sure yet</option>
+                      <option value="800-1500">A$800 to A$1,500</option>
+                      <option value="2000-4000">A$2,000 to A$4,000</option>
+                      <option value="4500-8000">A$4,500 to A$8,000</option>
+                      <option value="8000+">A$8,000+</option>
+                    </select>
+                  </div>
+                </div>
+              </details>
+              <p class="form-error" id="formError" role="alert" hidden></p>
+              <button class="button" type="submit">
+                <span data-submit-label>Send my brief</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+              <p class="form-note">
+                An enquiry starts a conversation. It does not book a call or commit you to a
+                project. <a href="#data-use">How your details are used</a>.
+              </p>
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+            <div class="form-result" id="formSuccess" tabindex="-1" hidden>
+              <span class="eyebrow">Brief received</span>
+              <h3>Thanks. I’ll take a look.</h3>
+              <p>
+                Your brief has been received. I’ll reply within one business day to talk through the
+                next step.
+              </p>
+              <p class="small">
+                If you need to add anything, email
+                <a href="mailto:hello@digitalartifacts.com.au">hello@digitalartifacts.com.au</a>.
+              </p>
+            </div>
+            <details class="data-note" id="data-use">
+              <summary>How your details are used</summary>
+              <p>
+                Your brief is sent to our enquiry workflow and Formspree, a backup delivery service.
+                It may be processed with AI to help draft a response, which Isaiah reviews. Your
+                details are used to respond to your enquiry. Please leave out passwords and
+                sensitive client information. Email hello@digitalartifacts.com.au with questions
+                about your details.
+              </p>
+            </details>
           </div>
-
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
-            <button type="submit" class="cta-btn w-full sm:w-auto">
-              <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-              <div class="shimmer-backdrop"></div>
-              <div class="shimmer-highlight"></div>
-              <span>Send Message</span>
-              <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
-            <span class="text-warm/50 text-xs flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-3 h-3"></i> Based in Australia
-            </span>
-          </div>
-        </form>
-
-        <!-- Success/Error Messages -->
-        <div id="formSuccess" class="hidden text-center py-12" role="status" aria-live="polite">
-          <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
-            <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Got it. You just watched the product work.</h3>
-          <p class="text-warm text-sm max-w-md mx-auto" style="line-height: 1.7;">
-            Claude read six files about our business, classified your enquiry, and drafted a reply in our voice. Inside business hours Isaiah approves it on Telegram and it lands in your inbox shortly. Outside hours, a holding note goes out on its own and he follows up in the morning.
-          </p>
         </div>
-        <div id="formError" class="hidden text-center py-6" role="alert">
-          <p class="text-red-400 text-sm flex items-center justify-center gap-2">
-            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-            Something went wrong. Please try again or email us directly.
-          </p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-main">
+          <div>
+            <a class="brand" href="/">
+              <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+              <span>Digital Artifacts<span class="brand-dot">.</span> </span>
+            </a>
+            <p>Websites and automation for the way your business actually works.</p>
+          </div>
+          <nav class="footer-links" aria-label="Footer">
+            <a href="/websites.html">Websites</a>
+            <a href="/automations.html">Automation</a>
+            <a href="mailto:hello@digitalartifacts.com.au">Email Isaiah</a>
+            <a href="/#contact" data-interest="referral">Refer a business</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Digital Artifacts. Isaiah Wong, Australia.</span>
+          <span>Direct work. Clear scope. You own the custom work.</span>
         </div>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FOOTER -->
-  <!-- ============================== -->
-  <footer class="bg-navy py-16 md:py-20 px-6 md:px-12 lg:px-16 border-t border-white/10">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
-        <!-- Logo + Tagline -->
-        <div class="md:col-span-4">
-          <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-12 w-12 mb-6">
-          <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
-          </p>
-        </div>
-
-        <!-- Navigation -->
-        <div class="md:col-span-2 md:col-start-7">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
-          <div class="flex flex-col gap-3">
-            <a href="/" class="footer-link">Home</a>
-            <a href="/automations.html" class="footer-link">Automation</a>
-            <a href="/websites.html" class="footer-link">Websites</a>
-            <a href="#work" class="footer-link">Selected work</a>
-            <a href="#layers" class="footer-link">The 4 layers</a>
-            <a href="#contact" class="footer-link">Contact</a>
-          </div>
-        </div>
-
-        <!-- Connect -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Connect</h4>
-          <div class="flex flex-col gap-3">
-            <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
-            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
-          </div>
-        </div>
-
-        <!-- Branding -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
-          <p class="text-warm text-sm">Digital Artifacts</p>
-          <p class="text-warm/50 text-xs mt-2">Run by Isaiah Wong. Single operator, direct work, you own the stack.</p>
-          <p class="text-warm/50 text-xs mt-2">Australia</p>
-        </div>
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <p class="text-warm/50 text-xs">&copy; 2026 Digital Artifacts. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-
-  <!-- ============================== -->
-  <!-- SCRIPTS -->
-  <!-- ============================== -->
-  <script>
-    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
-    try { lucide.createIcons(); } catch (e) {}
-    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
-    if (!window.gsap) { document.documentElement.classList.remove('js'); }
-
-    // === Mobile Menu ===
-    const hamburger = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
-
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    // === Lenis Smooth Scroll ===
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    // Sync GSAP ScrollTrigger with Lenis
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-
-    // === Nav Scroll State ===
-    const nav = document.getElementById('mainNav');
-    const navBrandText = document.getElementById('navBrandText');
-    ScrollTrigger.create({
-      start: 'top -80',
-      onUpdate: (self) => {
-        if (self.scroll() > 80) {
-          nav.classList.add('scrolled');
-          navBrandText.style.opacity = '0';
-          navBrandText.style.transform = 'translateX(-8px)';
-          navBrandText.style.pointerEvents = 'none';
-        } else {
-          nav.classList.remove('scrolled');
-          navBrandText.style.opacity = '1';
-          navBrandText.style.transform = 'translateX(0)';
-          navBrandText.style.pointerEvents = '';
-        }
-      }
-    });
-
-    // === Hero Animation ===
-    gsap.to('.hero-sphere', {
-      y: 0,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
-
-    gsap.to('.hero-headline', {
-      y: 0,
-      opacity: 1,
-      duration: 1,
-      ease: 'power3.out',
-      delay: 0.8,
-    });
-
-    gsap.to('.hero-cta', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 1.1,
-      stagger: 0.15,
-    });
-
-    gsap.to('.scroll-indicator', {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: 1.4,
-    });
-
-    // === Dithered Sphere (WebGL2) ===
-    (function initSphere() {
-      const canvas = document.getElementById('sphereCanvas');
-      if (!canvas) return;
-
-      const size = 1040;
-      canvas.width = size;
-      canvas.height = size;
-
-      const gl = canvas.getContext('webgl2');
-      if (!gl) { console.error('WebGL2 not supported'); return; }
-
-      const vertSrc = `#version 300 es
-        precision mediump float;
-        layout(location=0) in vec4 a_position;
-        void main(){ gl_Position = a_position; }`;
-
-      const fragSrc = `#version 300 es
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-        uniform vec4 u_colorBack;
-        uniform vec4 u_colorFront;
-        uniform float u_pxSize;
-        out vec4 fragColor;
-
-        #define TWO_PI 6.28318530718
-        #define PI 3.14159265358979323846
-
-        const int bayer8x8[64] = int[64](
-          0,32,8,40,2,34,10,42,
-          48,16,56,24,50,18,58,26,
-          12,44,4,36,14,46,6,38,
-          60,28,52,20,62,30,54,22,
-          3,35,11,43,1,33,9,41,
-          51,19,59,27,49,17,57,25,
-          15,47,7,39,13,45,5,37,
-          63,31,55,23,61,29,53,21
-        );
-
-        float getBayerValue(vec2 uv){
-          ivec2 pos = ivec2(mod(uv, 8.0));
-          int index = pos.y * 8 + pos.x;
-          return float(bayer8x8[index]) / 64.0;
-        }
-
-        void main(){
-          float t = 0.5 * u_time;
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv -= 0.5;
-
-          float pxSize = u_pxSize;
-          vec2 pxSizeUv = gl_FragCoord.xy;
-          pxSizeUv -= 0.5 * u_resolution;
-          pxSizeUv /= pxSize;
-          vec2 pixelizedUv = floor(pxSizeUv) * pxSize / u_resolution.xy;
-          pixelizedUv += 0.5;
-          pixelizedUv -= 0.5;
-
-          vec2 shape_uv = pixelizedUv * 2.0;
-          vec2 dithering_uv = pxSizeUv;
-
-          float d = 1.0 - pow(length(shape_uv), 2.0);
-          vec3 pos = vec3(shape_uv, sqrt(max(d, 0.0)));
-          vec3 lightPos = normalize(vec3(cos(1.5 * t), 0.8, sin(1.25 * t)));
-          float shape = 0.5 + 0.5 * dot(lightPos, pos);
-          shape *= step(0.0, d);
-
-          float dithering = getBayerValue(dithering_uv);
-          dithering -= 0.5;
-          float res = step(0.5, shape + dithering);
-
-          vec3 fgColor = u_colorFront.rgb * u_colorFront.a;
-          float fgOpacity = u_colorFront.a;
-          vec3 bgColor = u_colorBack.rgb * u_colorBack.a;
-          float bgOpacity = u_colorBack.a;
-
-          vec3 color = fgColor * res;
-          float opacity = fgOpacity * res;
-          color += bgColor * (1.0 - opacity);
-          opacity += bgOpacity * (1.0 - opacity);
-
-          fragColor = vec4(color, opacity);
-        }`;
-
-      function createShader(type, source) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, source);
-        gl.compileShader(s);
-        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-          console.error(gl.getShaderInfoLog(s));
-          gl.deleteShader(s);
-          return null;
-        }
-        return s;
-      }
-
-      const vs = createShader(gl.VERTEX_SHADER, vertSrc);
-      const fs = createShader(gl.FRAGMENT_SHADER, fragSrc);
-      const program = gl.createProgram();
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error(gl.getProgramInfoLog(program));
-        return;
-      }
-
-      const posLoc = gl.getAttribLocation(program, 'a_position');
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
-      gl.enableVertexAttribArray(posLoc);
-      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-      gl.viewport(0, 0, size, size);
-
-      const uTime = gl.getUniformLocation(program, 'u_time');
-      const uRes = gl.getUniformLocation(program, 'u_resolution');
-      const uBack = gl.getUniformLocation(program, 'u_colorBack');
-      const uFront = gl.getUniformLocation(program, 'u_colorFront');
-      const uPx = gl.getUniformLocation(program, 'u_pxSize');
-
-      const brandColors = [
-        [0/255, 200/255, 83/255],
-        [27/255, 40/255, 56/255],
-        [138/255, 138/255, 128/255],
-      ];
-      const back = [247/255, 246/255, 243/255, 0.0];
-
-      const holdDuration = 3.0;
-      const fadeDuration = 2.0;
-      const cycleDuration = holdDuration + fadeDuration;
-
-      function lerpColor(a, b, t) {
-        return [
-          a[0] + (b[0] - a[0]) * t,
-          a[1] + (b[1] - a[1]) * t,
-          a[2] + (b[2] - a[2]) * t,
-        ];
-      }
-
-      function getCurrentColor(elapsed) {
-        const total = cycleDuration * brandColors.length;
-        const looped = elapsed % total;
-        const index = Math.floor(looped / cycleDuration);
-        const within = looped - index * cycleDuration;
-
-        if (within < holdDuration) {
-          return brandColors[index];
-        }
-        const progress = (within - holdDuration) / fadeDuration;
-        const eased = progress < 0.5
-          ? 2 * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-        const next = (index + 1) % brandColors.length;
-        return lerpColor(brandColors[index], brandColors[next], eased);
-      }
-
-      const startTime = Date.now();
-
-      function render() {
-        const t = (Date.now() - startTime) * 0.001;
-        const col = getCurrentColor(t);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.useProgram(program);
-        gl.uniform1f(uTime, t);
-        gl.uniform2f(uRes, size, size);
-        gl.uniform4fv(uBack, back);
-        gl.uniform4fv(uFront, [col[0], col[1], col[2], 1.0]);
-        gl.uniform1f(uPx, 5);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        requestAnimationFrame(render);
-      }
-      render();
-    })();
-
-    // === Scroll Reveal Animations ===
-    gsap.utils.toArray('.reveal-up').forEach(el => {
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: 'power3.out',
-      });
-    });
-
-    // === 4-Layer Diagram: staggered reveal + active-state on scroll ===
-    gsap.utils.toArray('#layerStack .layer-band').forEach((band, i) => {
-      gsap.to(band, {
-        scrollTrigger: {
-          trigger: band,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        delay: i * 0.12,
-        ease: 'power3.out',
-      });
-
-      ScrollTrigger.create({
-        trigger: band,
-        start: 'top 70%',
-        end: 'bottom 30%',
-        onToggle: (self) => band.classList.toggle('is-active', self.isActive),
-      });
-    });
-
-    // === Industry Tabs ===
-    const tabs = document.querySelectorAll('.industry-tab');
-    const panels = document.querySelectorAll('.industry-panel');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.panel;
-        tabs.forEach(t => {
-          const active = t === tab;
-          t.classList.toggle('is-active', active);
-          t.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        panels.forEach(p => {
-          p.classList.toggle('is-active', p.dataset.panel === target);
-        });
-      });
-    });
-
-    // === Portfolio filter (Selected work) ===
-    const pfFilters = document.querySelectorAll('.pf-filter');
-    const pfCards = document.querySelectorAll('#pfGrid .pf-card');
-    pfFilters.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter;
-        pfFilters.forEach(b => {
-          const on = b === btn;
-          b.classList.toggle('is-active', on);
-          b.setAttribute('aria-pressed', on ? 'true' : 'false');
-        });
-        pfCards.forEach(card => {
-          const show = filter === 'all' || card.dataset.cat === filter;
-          card.classList.toggle('is-hidden', !show);
-        });
-      });
-    });
-
-    // === About Section: Word-by-word reveal ===
-    const aboutText = document.querySelector('.about-reveal-text');
-    if (aboutText) {
-      const words = aboutText.textContent.trim().split(/\s+/);
-      aboutText.innerHTML = words.map(word =>
-        `<span class="reveal-word"><span class="reveal-word-inner">${word}</span></span>`
-      ).join(' ');
-
-      const wordInners = aboutText.querySelectorAll('.reveal-word-inner');
-      gsap.to(wordInners, {
-        scrollTrigger: {
-          trigger: aboutText,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.03,
-        ease: 'power3.out',
-      });
-    }
-
-    // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
-    const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
-    const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
-
-    function handleFormSubmit(form, isLeadMagnet) {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      data.lead_magnet = isLeadMagnet;
-      data.submitted_at = new Date().toISOString();
-      data.source_page = 'home';
-      data.source_url = window.location.href;
-
-      const promises = [];
-
-      // Send to n8n webhook (if configured)
-      if (N8N_WEBHOOK_URL) {
-        promises.push(
-          fetch(N8N_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          }).catch(() => null) // Fail silently, Formspree is the backup
-        );
-      }
-
-      // Send to Formspree (if configured and not a placeholder)
-      if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
-        promises.push(
-          fetch(FORMSPREE_URL, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: formData,
-          }).catch(() => null)
-        );
-      }
-
-      return Promise.allSettled(promises);
-    }
-
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = contactForm.querySelector('button[type="submit"]');
-        const originalText = btn.querySelector('span').textContent;
-        btn.querySelector('span').textContent = 'Sending...';
-        btn.disabled = true;
-
-        try {
-          await handleFormSubmit(contactForm, false);
-          contactForm.classList.add('hidden');
-          document.getElementById('formSuccess').classList.remove('hidden');
-          lucide.createIcons();
-        } catch (err) {
-          document.getElementById('formError').classList.remove('hidden');
-        } finally {
-          btn.querySelector('span').textContent = originalText;
-          btn.disabled = false;
-        }
-      });
-    }
-
-    // Lead magnet form — 4-Layer Blueprint
-    const leadMagnetForm = document.getElementById('leadMagnetForm');
-    if (leadMagnetForm) {
-      leadMagnetForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = leadMagnetForm.querySelector('button[type="submit"]');
-        btn.querySelector('span').textContent = 'Sending...';
-        btn.disabled = true;
-
-        try {
-          await handleFormSubmit(leadMagnetForm, true);
-          // Trigger PDF download
-          const dlLink = document.createElement('a');
-          dlLink.href = '/downloads/4-layer-blueprint.pdf';
-          dlLink.download = '4-Layer-Blueprint-Digital-Artifacts.pdf';
-          document.body.appendChild(dlLink);
-          dlLink.click();
-          document.body.removeChild(dlLink);
-          // Show success message
-          leadMagnetForm.classList.add('hidden');
-          document.getElementById('leadMagnetSuccess').classList.remove('hidden');
-          lucide.createIcons();
-        } catch (err) {
-          btn.querySelector('span').textContent = 'Get the Blueprint';
-          btn.disabled = false;
-        }
-      });
-    }
-  </script>
-</body>
+    </footer>
+  </body>
 </html>

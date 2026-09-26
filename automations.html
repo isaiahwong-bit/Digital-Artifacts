@@ -1,889 +1,624 @@
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- progressive-enhancement flag: flip to .js before paint so the journey only engages when JS runs -->
-<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
-<title>Automation that runs your whole customer journey | Digital Artifacts</title>
-<meta name="description" content="Digital Artifacts builds automation flows that run your whole customer journey, from first enquiry to booked work. Real, deterministic systems, not a chatbot guessing." />
-<meta property="og:title" content="Automation that runs your whole customer journey | Digital Artifacts" />
-<meta property="og:description" content="Travel a real automation flow, then see what runs under the hood. Deterministic systems you own, not an LLM you hope behaves." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://digitalartifacts.com.au/automations.html" />
-<link rel="canonical" href="https://digitalartifacts.com.au/automations.html" />
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<!-- Fonts: Clash Display + General Sans from Fontshare, matching the Digital Artifacts brand -->
-<link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#1B2838;                      /* brand navy */
-    --bg2:#15202D;                     /* deeper navy for under-the-hood + footer */
-    --ink:#F7F6F3;                     /* brand cream */
-    --muted:rgba(247,246,243,.52);     /* faded cream for secondary text */
-    --cool:#4C7E8C;                    /* signal start: muted steel-teal, reads cool on navy */
-    --warm:#00C853;                    /* brand accent green: the value end of the signal, CTAs, lit state */
-    --line:#2A3A49;                    /* dim path on navy */
-    --mono:'SF Mono','Fira Code','Cascadia Code','JetBrains Mono',monospace;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:auto}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:"General Sans",sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit}
-
-  /* skip link */
-  .skip{
-    position:absolute;left:-9999px;top:0;z-index:60;
-    background:var(--warm);color:var(--bg);padding:12px 18px;border-radius:0 0 10px 0;
-    font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-decoration:none;
-  }
-  .skip:focus{left:0}
-
-  /* ---- the scroll track gives us distance to travel (taller = slower journey) ---- */
-  .track{height:680vh;position:relative}
-
-  /* ---- the pinned window we look through ---- */
-  .stage{
-    position:sticky;top:0;height:100vh;width:100%;
-    overflow:hidden;
-    background:
-      radial-gradient(120% 90% at 70% 0%, rgba(0,200,83,0.10), transparent 55%),
-      radial-gradient(130% 100% at 20% 100%, rgba(0,200,83,0.06), transparent 55%),
-      var(--bg);
-  }
-
-  /* faint drifting dot field for a sense of travelling through space */
-  .field{
-    position:absolute;inset:-40% -40%;
-    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.4px);
-    background-size:46px 46px;
-    will-change:transform;
-    pointer-events:none;
-  }
-
-  /* the world that the camera pans across */
-  .world{position:absolute;left:0;top:0;width:100%;height:100%;will-change:transform,opacity}
-
-  svg.paths{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
-  .path-dim{fill:none;stroke:var(--line);stroke-width:2.5}
-  .path-live{fill:none;stroke:url(#flow);stroke-width:3.5;stroke-linecap:round;
-    filter:drop-shadow(0 0 10px rgba(0,200,83,0.35))}
-
-  .node{
-    position:absolute;
-    width:min(82vw,560px);
-    transform:translate(-50%,-50%);
-    will-change:transform,opacity;
-  }
-  .node .dot{
-    display:block;
-    width:14px;height:14px;border-radius:50%;
-    background:var(--ink);
-    box-shadow:0 0 0 6px rgba(247,246,243,0.06), 0 0 24px rgba(0,200,83,0.0);
-    margin-bottom:26px;
-  }
-  .node.lit .dot{box-shadow:0 0 0 7px rgba(0,200,83,0.12), 0 0 30px rgba(0,200,83,0.55)}
-  .tag{
-    font-family:var(--mono);
-    font-size:.72rem;letter-spacing:.22em;
-    color:var(--warm);
-    margin-bottom:18px;
-  }
-  .kicker{
-    font-size:.95rem;font-weight:500;color:var(--muted);
-    letter-spacing:.01em;margin-bottom:14px;
-  }
-  .title{
-    font-family:"Clash Display",sans-serif;
-    font-weight:700;
-    font-size:clamp(2.3rem,8.4vw,6.8rem);
-    line-height:.96;
-    letter-spacing:-.03em;
-  }
-  .note{
-    margin-top:22px;
-    font-weight:300;
-    font-size:clamp(1rem,2.4vw,1.35rem);
-    line-height:1.45;
-    color:rgba(247,246,243,.74);
-    max-width:30ch;
-  }
-  .cta{
-    margin-top:34px;display:inline-flex;align-items:center;gap:12px;
-    font-family:var(--mono);font-size:.82rem;letter-spacing:.12em;
-    color:var(--bg);background:var(--warm);
-    padding:16px 26px;border-radius:100px;border:none;cursor:pointer;
-    font-weight:700;text-decoration:none;
-  }
-  .cta:hover{filter:brightness(1.06)}
-  .cta:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
-
-  /* hero framing, fades out as the journey begins */
-  .hero{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    justify-content:center;padding:0 8vw;z-index:5;will-change:opacity,transform;
-  }
-  .hero .eyebrow{
-    font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;
-    color:var(--muted);margin-bottom:26px;
-  }
-  .hero h1{
-    font-family:"Clash Display",sans-serif;
-    font-weight:700;letter-spacing:-.035em;line-height:.98;
-    font-size:clamp(2.6rem,9vw,7.2rem);max-width:14ch;
-  }
-  .hero h1 em{font-style:normal;color:var(--warm)}
-  .scrollcue{
-    position:absolute;left:8vw;bottom:7vh;display:flex;align-items:center;gap:14px;
-    font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;
-    color:var(--muted);
-  }
-  .scrollcue .arrow{
-    width:26px;height:26px;border-right:2px solid var(--muted);
-    border-bottom:2px solid var(--muted);transform:rotate(45deg);
-    animation:nudge 1.8s ease-in-out infinite;
-  }
-  @keyframes nudge{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}
-    50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
-
-  /* site nav */
-  .site-nav{
-    position:fixed;top:0;left:0;right:0;z-index:40;
-    display:flex;align-items:center;justify-content:space-between;
-    height:72px;padding:0 6vw;
-  }
-  .nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-  .nav-mark{width:38px;height:38px;border-radius:9px;display:block}
-  .nav-word{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.05rem;color:var(--ink);letter-spacing:-.01em}
-  .nav-dot{color:var(--warm)}
-  .nav-links{display:flex;align-items:center;gap:32px}
-  .nav-link{
-    font-family:"General Sans",sans-serif;font-weight:500;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;
-    color:var(--ink);text-decoration:none;transition:color .3s ease;
-  }
-  .nav-link:hover,.nav-link.is-active{color:var(--warm)}
-  .nav-cta{
-    text-transform:none;letter-spacing:.02em;
-    border:1px solid rgba(247,246,243,.28);padding:9px 18px;border-radius:100px;
-    transition:background .2s,color .2s,border-color .2s;
-  }
-  .nav-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-  .nav-link:focus-visible,.nav-brand:focus-visible{outline:2px solid var(--warm);outline-offset:3px}
-  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;z-index:50}
-  .hamburger span{width:24px;height:2px;background:var(--ink);transition:transform .3s,opacity .3s}
-  .hamburger.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-  .hamburger.is-open span:nth-child(2){opacity:0}
-  .hamburger.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-  .mobile-menu{
-    position:fixed;inset:0;z-index:45;background:var(--bg2);
-    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;
-    opacity:0;pointer-events:none;transition:opacity .35s ease;
-  }
-  .mobile-menu.is-open{opacity:1;pointer-events:auto}
-  .mobile-link{font-family:"Clash Display",sans-serif;font-weight:500;font-size:1.6rem;color:var(--ink);text-decoration:none}
-  .mobile-link:hover{color:var(--warm)}
-
-  /* flow switcher: same engine, a different journey per product */
-  .flows{
-    position:fixed;top:80px;left:0;right:0;z-index:39;
-    display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;padding:0 6vw;
-    transition:opacity .3s;
-  }
-  .count{position:absolute;right:6vw;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;color:var(--muted);transition:opacity .3s}
-  @media(max-width:820px){.nav-links{display:none}.hamburger{display:flex}}
-  .pill{
-    font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--muted);background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);padding:8px 14px;border-radius:100px;cursor:pointer;
-    transition:color .2s,background .2s,border-color .2s;
-  }
-  .pill:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
-  .pill[aria-pressed="true"]{color:var(--bg);background:var(--warm);border-color:var(--warm)}
-  .pill:focus-visible{outline:2px solid var(--cool);outline-offset:3px}
-
-  .progress{position:fixed;left:0;top:0;height:3px;background:var(--warm);width:0;z-index:21;transition:opacity .3s}
-
-  /* once the journey has been scrolled past, get the journey chrome out of the way */
-  .past-journey .flows,.past-journey .progress,.past-journey .count{opacity:0;pointer-events:none}
-
-  /* ============ UNDER THE HOOD ============ */
-  .hood{
-    position:relative;z-index:2;background:var(--bg2);
-    border-top:1px solid rgba(255,255,255,.06);
-    padding:16vh 6vw;
-  }
-  .hood-inner{max-width:1140px;margin:0 auto}
-  .hood .eyebrow2{
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;
-    color:var(--warm);margin-bottom:22px;
-  }
-  .hood h2{
-    font-family:"Clash Display",sans-serif;
-    font-weight:700;font-size:clamp(2rem,5.2vw,3.6rem);line-height:1.02;
-    letter-spacing:-.03em;max-width:18ch;
-  }
-  .hood .lead{
-    margin-top:26px;font-weight:300;font-size:clamp(1.05rem,2vw,1.35rem);
-    line-height:1.55;color:rgba(247,246,243,.74);max-width:60ch;
-  }
-  /* under-the-hood flow, in the site's own wf-node style (matches the // 06 In Production section) */
-  .wf-card{
-    margin-top:7vh;
-    background:rgba(247,246,243,.03);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:1rem;padding:1.65rem;
-  }
-  .wf-card__head{display:flex;align-items:center;gap:.9rem;margin-bottom:1.6rem}
-  .wf-badge{
-    width:2.25rem;height:2.25rem;flex:0 0 auto;border-radius:.6rem;
-    background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.3);color:#00C853;
-    font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.05rem;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .wf-card__title{font-family:"Clash Display",sans-serif;font-weight:500;color:#F7F6F3;font-size:1.1rem;letter-spacing:-.01em}
-  .wf-card__sub{color:rgba(247,246,243,.45);font-size:.75rem;margin-top:.1rem}
-  .wf-live{
-    margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;
-    font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
-    color:#5FE39B;padding:.25rem .6rem;border-radius:9999px;
-    background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);flex:0 0 auto;
-  }
-  .wf-live__dot{width:6px;height:6px;border-radius:50%;background:#00C853;animation:wfPulse 2s ease-out infinite}
-  @keyframes wfPulse{0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}70%{box-shadow:0 0 0 6px rgba(0,200,83,0)}100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}}
-  .wf-flow{display:flex;flex-direction:column;gap:.5rem}
-  @media (min-width:768px){.wf-flow{flex-direction:row;align-items:flex-start;gap:.25rem}}
-  .wf-node{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.45rem;flex:1 1 0;min-width:0;padding:.25rem}
-  .wf-node__chip{width:2.9rem;height:2.9rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;border:1px solid transparent}
-  .wf-node__chip svg{width:1.15rem;height:1.15rem}
-  .wf-node__chip[data-kind="trigger"]{background:rgba(138,138,128,.12);border-color:rgba(138,138,128,.35);color:#B5B5AC}
-  .wf-node__chip[data-kind="brain"]{background:rgba(0,200,83,.1);border-color:rgba(0,200,83,.35);color:#00C853}
-  .wf-node__chip[data-kind="ai"]{background:rgba(0,200,83,.16);border-color:rgba(0,200,83,.45);color:#5FE39B}
-  .wf-node__chip[data-kind="human"]{background:rgba(0,200,83,.06);border-color:rgba(0,200,83,.6);color:#00C853;box-shadow:0 0 0 4px rgba(0,200,83,.1)}
-  .wf-node__chip[data-kind="send"]{background:#00C853;border-color:#00C853;color:#0A1A12}
-  .wf-node__label{font-size:.72rem;font-weight:600;color:#F7F6F3;line-height:1.25;letter-spacing:-.01em}
-  .wf-node__sub{font-family:var(--mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(247,246,243,.4)}
-  .wf-arrow{display:flex;align-items:center;justify-content:center;color:rgba(0,200,83,.45);flex:0 0 auto;align-self:center;padding-top:.6rem}
-  .wf-arrow svg{width:1.1rem;height:1.1rem}
-  @media (max-width:767px){.wf-node{flex-direction:row;justify-content:flex-start;gap:.85rem;text-align:left;width:100%}.wf-arrow{transform:rotate(90deg);padding:0;margin-left:1.45rem;align-self:flex-start}}
-  .wf-foot{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.07);color:rgba(247,246,243,.55);font-size:.82rem;line-height:1.65}
-  .cards{margin-top:9vh;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  .card{
-    border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:30px;
-    background:rgba(255,255,255,.02);
-  }
-  .card .n{
-    font-family:var(--mono);font-size:.7rem;color:var(--warm);
-    letter-spacing:.18em;margin-bottom:16px;
-  }
-  .card h3{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.3rem;line-height:1.15;margin-bottom:12px;letter-spacing:-.01em}
-  .card p{font-weight:300;font-size:1rem;line-height:1.55;color:rgba(247,246,243,.66)}
-  .pullquote{
-    font-family:"Clash Display",sans-serif;
-    margin:11vh auto 0;max-width:24ch;text-align:center;
-    font-weight:500;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.25;letter-spacing:-.02em;
-  }
-  .pullquote em{font-style:normal;color:var(--warm)}
-  .hood-cta-wrap{margin-top:7vh;text-align:center}
-
-  .site-foot{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:64px 6vw 40px}
-  .foot-grid{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1.5fr 1fr;gap:40px}
-  .foot-mark{width:46px;height:46px;border-radius:10px;margin-bottom:20px;display:block}
-  .foot-tag{color:rgba(247,246,243,.55);font-size:.9rem;line-height:1.7;max-width:30ch}
-  .foot-col{display:flex;flex-direction:column;gap:12px}
-  .foot-col h4{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,246,243,.5);margin-bottom:6px}
-  .footer-link{color:rgba(247,246,243,.7);text-decoration:none;font-size:.9rem;transition:color .2s}
-  .footer-link:hover{color:var(--warm)}
-  .foot-studio{color:rgba(247,246,243,.7);font-size:.9rem}
-  .foot-loc{color:rgba(247,246,243,.4);font-size:.78rem;margin-top:6px}
-  .foot-bottom{max-width:1140px;margin:48px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--muted)}
-  @media(max-width:820px){.foot-grid{grid-template-columns:1fr 1fr;gap:32px}}
-  @media(max-width:520px){.foot-grid{grid-template-columns:1fr}}
-
-  /* ============ ENQUIRY FORM ============ */
-  .enquiry{position:relative;z-index:2;background:var(--bg);border-top:1px solid rgba(255,255,255,.06);padding:16vh 6vw}
-  .enquiry-inner{max-width:760px;margin:0 auto}
-  .enq-title{font-family:"Clash Display",sans-serif;font-weight:700;font-size:clamp(2rem,5.2vw,3.4rem);line-height:1.04;letter-spacing:-.03em;margin-top:20px}
-  .enq-title em{font-style:normal;color:var(--warm)}
-  .enq-lead{margin-top:22px;font-weight:300;font-size:clamp(1.05rem,2vw,1.3rem);line-height:1.55;color:rgba(247,246,243,.74);max-width:54ch}
-  .enq-form{margin-top:7vh;display:flex;flex-direction:column;gap:22px}
-  .enq-row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  .enq-field{display:flex;flex-direction:column}
-  .enq-field label{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .enq-field input,.enq-field select,.enq-field textarea{
-    font-family:"General Sans",sans-serif;font-size:1rem;color:var(--ink);
-    background:rgba(247,246,243,.03);border:1px solid rgba(247,246,243,.14);border-radius:12px;
-    padding:14px 16px;width:100%;transition:border-color .2s,background .2s;
-  }
-  .enq-field textarea{resize:vertical}
-  .enq-field input::placeholder,.enq-field textarea::placeholder{color:rgba(247,246,243,.32)}
-  .enq-field input:focus,.enq-field select:focus,.enq-field textarea:focus{outline:none;border-color:var(--warm);background:rgba(247,246,243,.05)}
-  .enq-field select{appearance:none;-webkit-appearance:none;cursor:pointer;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237E8A99' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
-    background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
-  .enq-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:8px}
-  .enq-submit{margin-top:0}
-  .enq-note{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--muted)}
-  .enq-result,.enq-error{margin-top:7vh;text-align:center}
-  .enq-result[hidden],.enq-error[hidden]{display:none}
-  .enq-check{width:64px;height:64px;border-radius:50%;background:rgba(0,200,83,.18);color:var(--warm);display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 22px}
-  .enq-result h3{font-family:"Clash Display",sans-serif;font-weight:600;font-size:1.45rem;margin-bottom:12px}
-  .enq-result p{font-weight:300;color:rgba(247,246,243,.7);line-height:1.6;max-width:50ch;margin:0 auto}
-  .enq-error p{color:#FF8A8A}
-
-  @media (max-width:820px){.cards{grid-template-columns:1fr}}
-  @media (max-width:640px){.enq-row{grid-template-columns:1fr}}
-  @media (max-width:720px){
-    .count{display:none}
-    .flows{top:74px}
-    .pill{font-size:.6rem;padding:7px 11px}
-  }
-  @media (max-width:640px){
-    .node .note{max-width:26ch}
-    .hud{padding:16px 6vw}
-    .hero{padding:0 6vw}
-    .scrollcue{left:6vw}
-  }
-
-  /* ---- progressive-enhancement / reduced-motion fallback: a clean, readable stack ---- */
-  .no-js .flows,.no-js .progress,.no-js .scrollcue{display:none}
-  .reduced .count,.reduced .progress{display:none}
-  .no-js .track,.reduced .track{height:auto!important}
-  .no-js .stage,.reduced .stage{position:static;height:auto;overflow:visible;padding:13vh 6vw 6vh}
-  .no-js .field,.reduced .field,.no-js svg.paths,.reduced svg.paths{display:none}
-  .no-js .world,.reduced .world{
-    position:static;transform:none!important;opacity:1!important;
-    display:flex;flex-direction:column;gap:11vh;max-width:620px;margin:9vh auto 0;
-  }
-  .no-js .node,.reduced .node{
-    position:static!important;left:auto!important;top:auto!important;
-    width:auto!important;transform:none!important;opacity:1!important;
-  }
-  .no-js .hero,.reduced .hero{position:static;inset:auto;height:auto;padding:0}
-
-  @media (prefers-reduced-motion:reduce){
-    .field,.arrow{animation:none}
-  }
-</style>
-</head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
-
-  <nav class="site-nav" id="siteNav">
-    <a class="nav-brand" href="/" aria-label="Digital Artifacts home">
-      <img src="/brand/da-mark-tile.png" alt="" class="nav-mark">
-      <span class="nav-word">Digital Artifacts<span class="nav-dot">.</span></span>
-    </a>
-    <div class="nav-links">
-      <a href="/automations.html" class="nav-link is-active">Automation</a>
-      <a href="/websites.html" class="nav-link">Websites</a>
-      <a href="/#layers" class="nav-link">How it works</a>
-      <a href="#contact" class="nav-link nav-cta">Book a call</a>
-    </div>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/automations.html" class="mobile-link">Automation</a>
-    <a href="/websites.html" class="mobile-link">Websites</a>
-    <a href="/#layers" class="mobile-link">How it works</a>
-    <a href="#contact" class="mobile-link">Book a call</a>
-  </div>
-
-  <div class="flows" role="group" aria-label="Choose a flow">
-    <button class="pill" data-flow="lead" aria-pressed="true">Lead response</button>
-    <button class="pill" data-flow="reactivation" aria-pressed="false">Reactivation</button>
-    <button class="pill" data-flow="reputation" aria-pressed="false">Reputation</button>
-    <span class="count" id="stagecount">FLOW · 00</span>
-  </div>
-
-  <div class="progress" id="bar"></div>
-
-  <main id="main">
-    <div class="track" id="track">
-      <div class="stage">
-        <div class="hero" id="hero">
-          <p class="eyebrow" id="heroEyebrow">LEAD RESPONSE</p>
-          <h1 id="heroTitle">Imagine a flow that runs the <em>whole journey.</em></h1>
-          <div class="scrollcue"><span>SCROLL TO TRAVEL</span><span class="arrow" aria-hidden="true"></span></div>
-        </div>
-
-        <div class="field" id="field" aria-hidden="true"></div>
-
-        <svg class="paths" id="svg" width="100%" height="100%" aria-hidden="true">
-          <defs>
-            <linearGradient id="flow" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#4C7E8C"/>
-              <stop offset="55%" stop-color="#1AA86A"/>
-              <stop offset="100%" stop-color="#00C853"/>
-            </linearGradient>
-          </defs>
-          <path class="path-dim" id="pathDim"></path>
-          <path class="path-live" id="pathLive"></path>
-        </svg>
-
-        <div class="world" id="world"></div>
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enquiry Follow-up & Business Automation | Digital Artifacts</title>
+    <meta
+      name="description"
+      content="Capture enquiries, prepare replies and reduce repeat admin. Explore practical workflows built around your business, with clear scope and human approval."
+    />
+    <link rel="canonical" href="https://www.digitalartifacts.com.au/automations.html" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Enquiry Follow-up &amp; Business Automation | Digital Artifacts"
+    />
+    <meta
+      property="og:description"
+      content="Capture enquiries, prepare replies and reduce repeat admin. Explore practical workflows built around your business, with clear scope and human approval."
+    />
+    <meta property="og:url" content="https://www.digitalartifacts.com.au/automations.html" />
+    <meta property="og:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Enquiry Follow-up &amp; Business Automation | Digital Artifacts"
+    />
+    <meta
+      name="twitter:description"
+      content="Capture enquiries, prepare replies and reduce repeat admin. Explore practical workflows built around your business, with clear scope and human approval."
+    />
+    <meta name="twitter:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="theme-color" content="#1b2838" />
+    <link rel="icon" href="/brand/da-mark-tile.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="stylesheet" href="/assets/site.css" />
+    <script defer src="/assets/site.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Digital Artifacts",
+        "url": "https://www.digitalartifacts.com.au/",
+        "logo": "https://www.digitalartifacts.com.au/brand/da-mark-tile.png",
+        "email": "hello@digitalartifacts.com.au"
+      }
+    </script>
+  <link rel="stylesheet" href="/assets/journey.css"><script src="/assets/journey.js" defer></script></head>
+  <body data-page="automations">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Digital Artifacts home">
+          <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+          <span>Digital Artifacts<span class="brand-dot">.</span> </span>
+        </a>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="siteNav"
+          hidden
+        >
+          Menu
+        </button>
+        <nav class="nav-links" id="siteNav" aria-label="Main navigation">
+          <a href="/websites.html">Websites</a>
+          <a href="/automations.html" aria-current="page">Automation</a>
+          <a href="/websites.html#portfolio">Client work</a>
+          <a href="/#how">How it works</a>
+          <a class="button" href="#contact"
+            >Discuss your project<span class="button-arrow" aria-hidden="true">↗</span>
+          </a>
+        </nav>
       </div>
-    </div>
-
-    <!-- ============ WHAT'S UNDER THE HOOD ============ -->
-    <section class="hood" id="hood">
-      <div class="hood-inner">
-        <p class="eyebrow2">UNDER THE HOOD</p>
-        <h2>No chatbot pulling the strings.</h2>
-        <p class="lead">
-          What you just travelled is not a clever prompt hoping for the best. It is a real flow,
-          built once, that runs the same way on every single trigger. Here is the actual flow behind
-          lead response, the one that answers our own enquiries.
-        </p>
-
-        <div class="wf-card">
-          <div class="wf-card__head">
-            <span class="wf-badge">A</span>
+    </header>
+    <main id="main">
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <span class="eyebrow">Automation / One useful workflow at a time</span>
+            <h1>Less chasing.<br />More <span class="accent">following through.</span></h1>
+            <p class="lead">
+              Connect the steps that get missed when you are busy. Enquiries, follow-ups, review
+              requests and repeat admin, built around the tools you already use.
+            </p>
+            <div class="actions">
+              <a class="button" href="#demo"
+                >See an enquiry move through<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="button secondary" href="#contact"
+                >Discuss your project<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="hero-note">You can start here with your existing website.</p>
+          </div>
+          <div>
+<div class="enquiry-preview"><div class="sample-top"><span class="signal">One enquiry, a clear next step</span><span class="sample-tag">Example</span></div><div class="sample-message"><span class="eyebrow">01 / Website enquiry</span><h3>“Can you quote<br>on this job?”</h3><p>Contact details, the request and useful context, together.</p></div><div class="sample-connector" aria-hidden="true">↓</div><div class="sample-draft"><span class="eyebrow">02 / Prepared for review</span><p>“Thanks for getting in touch. I’ve got the details of your request…”</p><span class="review-status"><span aria-hidden="true">●</span> Draft only · waiting for you</span></div><div class="sample-owner"><span class="owner-icon" aria-hidden="true">✓</span><div><strong>03 / You take it from here.</strong><p>Review, edit and decide what goes out.</p></div></div></div><p class="visual-label">Illustrative example. No message is sent by this demo.</p>
+          </div>
+        </div>
+      </section>
+      <div class="wrap hero-summary">
+        <span>Start with one repeat job</span>
+        <span>Approval where it matters</span>
+        <span>Clear handover</span>
+        <span>Custom workflows you own</span>
+      </div>
+<section class="section" id="demo"><div class="wrap"><div class="section-head"><div><span class="eyebrow">A small workflow, explained</span><h2>From “new enquiry”<br>to “ready for review”.</h2></div><p>A 15-second example of the first few steps. Your tools and approval points are scoped around your business.</p></div><div class="demo-layout"><div><video class="journey-film" controls playsinline preload="none" poster="/assets/journey/poster.jpg" aria-label="An illustrative enquiry follow-up journey"><source src="/assets/journey/enquiry-journey-landscape-v01.mp4" type="video/mp4"><track kind="captions" src="/assets/journey/captions.vtt" srclang="en" label="English">Your browser cannot play this video. Read the steps alongside it.</video><p class="visual-label">Illustrative scene and example interface. Captions are included; sound is not needed.</p></div><ol class="demo-steps"><li><span>01</span><div><strong>An enquiry arrives.</strong><p>A website form captures the request and contact details.</p></div></li><li><span>02</span><div><strong>The details stay together.</strong><p>A record keeps the request and its next action visible.</p></div></li><li><span>03</span><div><strong>A draft is ready to review.</strong><p>Business context helps prepare a response for the owner.</p></div></li><li><span>04</span><div><strong>You decide what goes out.</strong><p>Check the details, edit the reply and take the conversation forward.</p></div></li></ol></div><div class="demo-bottom"><p><strong>Already have a website?</strong> Start with the follow-up. We’ll check how your current form can connect.</p><a class="button" href="#contact" data-interest="lead-response">Discuss my enquiry workflow <span aria-hidden="true">↗</span></a></div></div></section><section class="section mint" id="first-workflow"><div class="wrap scope-grid"><div><span class="eyebrow">What we would scope first</span><h2>One enquiry source.<br>One useful workflow.</h2><p class="lead">Start small enough to understand, review and use. Add more when the first part is working.</p><a class="text-link" href="#contact" data-interest="lead-response">Tell me where enquiries arrive ↗</a></div><div class="scope-summary"><article><h3>The first build</h3><p>Connect an agreed enquiry source, organise the request, prepare a response and notify the person reviewing it.</p></article><article><h3>What we need from you</h3><p>Your enquiry source, connected tools, business information, response preferences and the person who approves replies.</p></article><article><h3>What your proposal confirms</h3><p>The exact steps, approval method, testing, access, handover, setup price and ongoing tool or support costs.</p></article><article><h3>Where the scope ends</h3><p>Booking, quoting, CRM migration and further follow-up are separate work unless included in your proposal.</p></article></div></div></section>
+      <section class="section dark" id="flows">
+        <div class="wrap">
+          <div class="section-head">
             <div>
-              <h3 class="wf-card__title">Lead response</h3>
-              <p class="wf-card__sub">Inbound · the flow behind the journey above</p>
+              <span class="eyebrow">Explore the possibilities</span>
+              <h2>What keeps slipping<br />through the cracks?</h2>
             </div>
-            <span class="wf-live"><span class="wf-live__dot"></span>Live</span>
+            <p>
+              Choose a problem to see how the steps could connect. These examples are starting
+              points for your scope.
+            </p>
           </div>
-          <div class="wf-flow">
-            <div class="wf-node"><div class="wf-node__chip" data-kind="trigger"><i data-lucide="globe"></i></div><div class="wf-node__label">Website form</div><div class="wf-node__sub">webhook</div></div>
-            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-            <div class="wf-node"><div class="wf-node__chip" data-kind="brain"><i data-lucide="brain"></i></div><div class="wf-node__label">Reads the brain</div><div class="wf-node__sub">6 files</div></div>
-            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-            <div class="wf-node"><div class="wf-node__chip" data-kind="ai"><i data-lucide="sparkles"></i></div><div class="wf-node__label">Claude drafts</div><div class="wf-node__sub">hot · warm · cool</div></div>
-            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-            <div class="wf-node"><div class="wf-node__chip" data-kind="human"><i data-lucide="user-check"></i></div><div class="wf-node__label">You approve</div><div class="wf-node__sub">telegram</div></div>
-            <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
-            <div class="wf-node"><div class="wf-node__chip" data-kind="send"><i data-lucide="send"></i></div><div class="wf-node__label">Sends + logs</div><div class="wf-node__sub">gmail · sheet</div></div>
+          <div class="flow-tabs" role="tablist" aria-label="Choose a workflow" hidden>
+            <button
+              type="button"
+              class="flow-tab"
+              id="tab-lead"
+              role="tab"
+              aria-controls="flow-lead"
+              aria-selected="false"
+              tabindex="-1"
+              data-flow="lead"
+            >
+              Enquiry follow-up
+            </button>
+            <button
+              type="button"
+              class="flow-tab"
+              id="tab-reactivation"
+              role="tab"
+              aria-controls="flow-reactivation"
+              aria-selected="false"
+              tabindex="-1"
+              data-flow="reactivation"
+            >
+              Past-client follow-up
+            </button>
+            <button
+              type="button"
+              class="flow-tab"
+              id="tab-reputation"
+              role="tab"
+              aria-controls="flow-reputation"
+              aria-selected="false"
+              tabindex="-1"
+              data-flow="reputation"
+            >
+              Review requests
+            </button>
           </div>
-          <p class="wf-foot">Notice the AI writes exactly one thing: the draft. Every other step is fixed. Read the brain, wait for your approval, send and log. Same path, every lead. And if a step ever fails, the failure is loud: it pages a human. It never hides in a log.</p>
+          <section
+            class="flow-panel"
+            id="flow-lead"
+            data-flow-panel="lead"
+            aria-labelledby="flow-title-lead"
+          >
+            <div class="flow-intro">
+              <div>
+                <span class="eyebrow">Enquiry follow-up</span>
+                <h3 id="flow-title-lead">Make the first reply easier.</h3>
+              </div>
+              <p>
+                For businesses where enquiries arrive while you are busy doing the work. Capture the
+                details and prepare the next action in one flow.
+              </p>
+            </div>
+            <ol class="flow-steps">
+              <li>
+                <span class="eyebrow">01</span>
+                <h4>Enquiry arrives</h4>
+                <p>A form, inbox or another agreed source starts the workflow.</p>
+              </li>
+              <li>
+                <span class="eyebrow">02</span>
+                <h4>Details are captured</h4>
+                <p>The enquiry is recorded and routed to the right place.</p>
+              </li>
+              <li>
+                <span class="eyebrow">03</span>
+                <h4>A reply is prepared</h4>
+                <p>Use your business information to draft a response for review.</p>
+              </li>
+              <li>
+                <span class="eyebrow">04</span>
+                <h4>You stay in control</h4>
+                <p>Approve the reply and see the next action. Booking can be scoped separately.</p>
+              </li>
+            </ol>
+            <div class="actions">
+              <p>
+                Example workflow. Sources, approval rules and integrations are agreed for each
+                build.
+              </p>
+              <a class="button" href="#contact" data-interest="lead-response"
+                >Discuss this workflow<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </section>
+          <section
+            class="flow-panel"
+            id="flow-reactivation"
+            data-flow-panel="reactivation"
+            aria-labelledby="flow-title-reactivation"
+          >
+            <div class="flow-intro">
+              <div>
+                <span class="eyebrow">Past-client follow-up</span>
+                <h3 id="flow-title-reactivation">Give old conversations a useful next step.</h3>
+              </div>
+              <p>
+                For past clients and suitable contacts you have permission to follow up. Start with
+                a small, relevant group and a reason to get in touch.
+              </p>
+            </div>
+            <ol class="flow-steps">
+              <li>
+                <span class="eyebrow">01</span>
+                <h4>Choose the audience</h4>
+                <p>Agree on eligible contacts, the reason to reconnect and exclusions.</p>
+              </li>
+              <li>
+                <span class="eyebrow">02</span>
+                <h4>Prepare the message</h4>
+                <p>Write a relevant follow-up and review it before sending.</p>
+              </li>
+              <li>
+                <span class="eyebrow">03</span>
+                <h4>Handle the reply</h4>
+                <p>Stop the sequence when someone replies or opts out, and notify you.</p>
+              </li>
+              <li>
+                <span class="eyebrow">04</span>
+                <h4>Track the next step</h4>
+                <p>Record conversations and opportunities so you can judge what helped.</p>
+              </li>
+            </ol>
+            <div class="actions">
+              <p>
+                Example workflow. A follow-up creates an opportunity for a conversation, not a
+                guaranteed booking.
+              </p>
+              <a class="button" href="#contact" data-interest="reactivation"
+                >Discuss this workflow<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </section>
+          <section
+            class="flow-panel"
+            id="flow-reputation"
+            data-flow-panel="reputation"
+            aria-labelledby="flow-title-reputation"
+          >
+            <div class="flow-intro">
+              <div>
+                <span class="eyebrow">Review requests</span>
+                <h3 id="flow-title-reputation">Make honest feedback easier to leave.</h3>
+              </div>
+              <p>
+                For businesses that finish good work but forget to ask for feedback. Give every
+                eligible customer the same straightforward review opportunity.
+              </p>
+            </div>
+            <ol class="flow-steps">
+              <li>
+                <span class="eyebrow">01</span>
+                <h4>The job is complete</h4>
+                <p>An agreed completion event starts the request.</p>
+              </li>
+              <li>
+                <span class="eyebrow">02</span>
+                <h4>Ask at the right time</h4>
+                <p>Send a neutral request for an honest review.</p>
+              </li>
+              <li>
+                <span class="eyebrow">03</span>
+                <h4>Keep access equal</h4>
+                <p>Offer the same review link to everyone, with a separate support option.</p>
+              </li>
+              <li>
+                <span class="eyebrow">04</span>
+                <h4>Stay informed</h4>
+                <p>Track requests and responses without filtering people by their rating.</p>
+              </li>
+            </ol>
+            <div class="actions">
+              <p>
+                Example workflow. No incentives, five-star requirement or diversion of unhappy
+                customers.
+              </p>
+              <a class="button" href="#contact" data-interest="reputation"
+                >Discuss this workflow<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </section>
         </div>
-
-        <div class="cards">
-          <article class="card">
-            <p class="n">01</p>
-            <h3>Same input, same result.</h3>
-            <p>Deterministic just means predictable. The same trigger follows the same path and lands the same outcome, whether it fires once or ten thousand times. No mood. No drift. No surprises on a Monday.</p>
-          </article>
-          <article class="card">
-            <p class="n">02</p>
-            <h3>The AI has one job, not every job.</h3>
-            <p>A model writes a line of copy or reads a photo, only where judgment actually helps. It never decides what happens next. The flow does. So a model having a bad day can never derail your business.</p>
-          </article>
-          <article class="card">
-            <p class="n">03</p>
-            <h3>You can see every step.</h3>
-            <p>Each box is a named step you can open, test and fix. When something needs to change, you change that one step. A black box prompt can never tell you why it did what it did.</p>
-          </article>
+      </section>
+      <section class="section" id="custom">
+        <div class="wrap scope-grid">
+          <div>
+            <span class="eyebrow">A different repeat job?</span>
+            <h2>Start with the work<br />you wish you could hand over.</h2>
+            <p class="lead">
+              Daily updates, internal handovers, invoice reminders or preparing a quote. We map the
+              job first, then work out what should run automatically and where you should stay
+              involved.
+            </p>
+            <div class="actions">
+              <a class="button" href="#contact" data-interest="automation"
+                >Describe your workflow<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+          <ul class="scope-list">
+            <li>
+              <span>01</span>
+              <div>
+                <strong>A clear first scope</strong>
+                <p>One recurring job, its inputs, the expected result and the tools it touches.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>A price before we build</strong>
+                <p>
+                  Setup, timeline, ongoing care and third-party usage costs are explained in your
+                  proposal.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Practical controls</strong>
+                <p>Approval points, failure handling and a way to see what has happened.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <strong>A handover you can use</strong>
+                <p>
+                  Access to the custom workflow and a walkthrough, with ongoing help scoped if you
+                  need it.
+                </p>
+              </div>
+            </li>
+          </ul>
         </div>
-
-        <p class="pullquote">You are not betting your business on a model behaving <em>today.</em> You are running a system that behaves the same <em>tomorrow.</em></p>
-
-        <div class="hood-cta-wrap">
-          <a class="cta" href="#contact">SEE WHAT WE'D BUILD YOU <span aria-hidden="true">&#8599;</span></a>
+        <div class="wrap">
+          <div class="live-proof">
+            <span class="eyebrow">How Digital Artifacts uses this</span>
+            <h3>Our own enquiry workflow.</h3>
+            <p>
+              The configured flow reads business context, prepares a draft reply and asks Isaiah to
+              review it before sending. It is a narrower example than a full booking system: the
+              human still handles the conversation. The form below starts that enquiry process.
+            </p>
+            <p class="inline-note">
+              The aim is simple: give each enquiry a useful response, with a person reviewing what
+              goes out.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="section dark" id="how">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">From first conversation to working system</span>
+              <h2>Start with one useful improvement.</h2>
+            </div>
+            <p>A clear scope, a build you can review, and a handover you can use.</p>
+          </div>
+          <div class="process-grid">
+            <article class="process-step">
+              <span class="eyebrow">01 / Understand</span>
+              <h3>Find the sticking point.</h3>
+              <p>
+                We look at what happens today and agree on the first thing worth improving. You
+                receive a scope and fixed project price.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="eyebrow">02 / Build & test</span>
+              <h3>See it before it goes live.</h3>
+              <p>
+                You review the design or workflow. We check real scenarios, including what happens
+                when something goes wrong.
+              </p>
+            </article>
+            <article class="process-step">
+              <span class="eyebrow">03 / Handover</span>
+              <h3>Know what you own.</h3>
+              <p>
+                You get access to the custom code and workflows, with a walkthrough. Ongoing care
+                and third-party costs are agreed separately.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="wrap founder-grid">
+          <div>
+            <span class="eyebrow">Before you start</span>
+            <h2>A workflow should fit<br />the way you work.</h2>
+            <p class="lead" style="margin-top: 24px">
+              We can begin with a short conversation about the recurring task. You do not need to
+              arrive with a diagram or a list of software.
+            </p>
+          </div>
+          <div class="details-list">
+            <details>
+              <summary>Does every workflow need AI?</summary>
+              <p>
+                No. Fixed rules work well for many jobs. AI can help with drafting or interpreting
+                information, with review and limits appropriate to the task.
+              </p>
+            </details>
+            <details>
+              <summary>Can you work with my existing tools?</summary>
+              <p>
+                We check how your tools can connect during scoping. Some support direct
+                integrations; others need a different approach. The proposal names what is included.
+              </p>
+            </details>
+            <details>
+              <summary>What happens if a step fails?</summary>
+              <p>
+                Failure handling is part of the scope: what gets retried, what is recorded, and who
+                is notified. We test these paths before handover.
+              </p>
+            </details>
+            <details>
+              <summary>Can I expand it later?</summary>
+              <p>
+                Yes. Start with a useful workflow and review how it performs. Further workflows can
+                be scoped separately using the context and connections already in place.
+              </p>
+            </details>
+            <details>
+              <summary>How does the four-layer framework fit?</summary>
+              <p>
+                It separates business context, task instructions, workflow triggers and the
+                interface you use. It helps keep a larger system understandable as it grows.
+                <a href="/#layers">Read the short explanation</a>.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+      <section class="section dark" id="contact">
+        <div class="wrap contact-grid">
+          <div class="contact-copy">
+            <span class="eyebrow">A useful first conversation</span>
+            <h2>What needs to work better?</h2>
+            <p class="lead">
+              Tell me what you have and what is getting in the way. You do not need a technical
+              brief.
+            </p>
+            <ol class="next-steps">
+              <li><span>01</span> I’ll reply within one business day.</li>
+              <li><span>02</span> We’ll talk through what would help first.</li>
+              <li><span>03</span> You’ll get a clear scope and price before committing.</li>
+            </ol>
+            <a href="mailto:hello@digitalartifacts.com.au"
+              >Prefer email? hello@digitalartifacts.com.au</a
+            >
+          </div>
+          <div>
+            <p class="selection-note" id="selectionNote" hidden></p>
+            <form
+              class="contact-form"
+              id="contactForm"
+              action="https://formspree.io/f/mreypwgk"
+              method="POST"
+              data-page="automations"
+            >
+              <input type="hidden" name="lead_magnet" value="false" />
+              <input type="hidden" name="page" value="automations" />
+              <input type="hidden" name="package" value="" />
+              <div class="form-row">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input
+                    id="name"
+                    name="name"
+                    autocomplete="name"
+                    required
+                    placeholder="Your name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="you@business.com.au"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label for="service">I’m interested in</label>
+                <select id="service" name="service">
+                  <option value="not-sure">Help choosing where to start</option>
+                  <option value="website">A website</option>
+                  <option value="lead-response" selected>Enquiry follow-up</option>
+                  <option value="both">Website + follow-up</option>
+                  <option value="reactivation">Past-client follow-up</option>
+                  <option value="reputation">Review requests</option>
+                  <option value="automation">Repeat admin or a custom workflow</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="message">What would you like to improve?</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows="4"
+                  placeholder="A new website, enquiries going quiet, admin taking up your evenings…"
+                ></textarea>
+              </div>
+              <details class="form-extra">
+                <summary>
+                  Add a phone number or budget <span class="optional">Optional</span>
+                </summary>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="phone">Phone <span class="optional">Optional</span> </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      placeholder="04XX XXX XXX"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="budget">Budget <span class="optional">Optional</span> </label>
+                    <select id="budget" name="budget">
+                      <option value="not-sure">Not sure yet</option>
+                      <option value="800-1500">A$800 to A$1,500</option>
+                      <option value="2000-4000">A$2,000 to A$4,000</option>
+                      <option value="4500-8000">A$4,500 to A$8,000</option>
+                      <option value="8000+">A$8,000+</option>
+                    </select>
+                  </div>
+                </div>
+              </details>
+              <p class="form-error" id="formError" role="alert" hidden></p>
+              <button class="button" type="submit">
+                <span data-submit-label>Send my brief</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+              <p class="form-note">
+                An enquiry starts a conversation. It does not book a call or commit you to a
+                project. <a href="#data-use">How your details are used</a>.
+              </p>
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+            <div class="form-result" id="formSuccess" tabindex="-1" hidden>
+              <span class="eyebrow">Brief received</span>
+              <h3>Thanks. I’ll take a look.</h3>
+              <p>
+                Your brief has been received. I’ll reply within one business day to talk through the
+                next step.
+              </p>
+              <p class="small">
+                If you need to add anything, email
+                <a href="mailto:hello@digitalartifacts.com.au">hello@digitalartifacts.com.au</a>.
+              </p>
+            </div>
+            <details class="data-note" id="data-use">
+              <summary>How your details are used</summary>
+              <p>
+                Your brief is sent to our enquiry workflow and Formspree, a backup delivery service.
+                It may be processed with AI to help draft a response, which Isaiah reviews. Your
+                details are used to respond to your enquiry. Please leave out passwords and
+                sensitive client information. Email hello@digitalartifacts.com.au with questions
+                about your details.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-main">
+          <div>
+            <a class="brand" href="/">
+              <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+              <span>Digital Artifacts<span class="brand-dot">.</span> </span>
+            </a>
+            <p>Websites and automation for the way your business actually works.</p>
+          </div>
+          <nav class="footer-links" aria-label="Footer">
+            <a href="/websites.html">Websites</a>
+            <a href="/automations.html">Automation</a>
+            <a href="mailto:hello@digitalartifacts.com.au">Email Isaiah</a>
+            <a href="/#contact" data-interest="referral">Refer a business</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Digital Artifacts. Isaiah Wong, Australia.</span>
+          <span>Direct work. Clear scope. You own the custom work.</span>
         </div>
       </div>
-    </section>
-
-    <!-- ============ ENQUIRY ============ -->
-    <section class="enquiry" id="contact">
-      <div class="enquiry-inner">
-        <p class="eyebrow2">ENQUIRY</p>
-        <h2 class="enq-title">What would your <em>flow</em> run?</h2>
-        <p class="enq-lead">One short brief. We map your first flow free and send back a one-page plan of what we would build. Send this and you trigger the exact lead-response flow above.</p>
-
-        <form id="contactForm" class="enq-form" action="https://formspree.io/f/mreypwgk" method="POST">
-          <input type="hidden" name="lead_magnet" value="false">
-          <input type="hidden" name="page" value="automations">
-          <div class="enq-row">
-            <div class="enq-field">
-              <label for="name">Name *</label>
-              <input type="text" name="name" id="name" required placeholder="Your name">
-            </div>
-            <div class="enq-field">
-              <label for="email">Email *</label>
-              <input type="email" name="email" id="email" required placeholder="you@company.com">
-            </div>
-          </div>
-          <div class="enq-row">
-            <div class="enq-field">
-              <label for="phone">Phone</label>
-              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX">
-            </div>
-            <div class="enq-field">
-              <label for="service">Service</label>
-              <select name="service" id="service">
-                <option value="lead-response" selected>Lead response (answer every enquiry)</option>
-                <option value="reactivation">Database reactivation</option>
-                <option value="reputation">Reviews and reputation</option>
-                <option value="operating-system">Full 4-layer operating system</option>
-                <option value="automation">A specific workflow or automation</option>
-                <option value="website">Website or interface work</option>
-                <option value="not-sure">Not sure yet, want to talk it through</option>
-              </select>
-            </div>
-          </div>
-          <div class="enq-row">
-            <div class="enq-field">
-              <label for="budget">Budget range</label>
-              <select name="budget" id="budget">
-                <option value="" disabled selected>Select your budget</option>
-                <option value="2500-5000">$2,500 to $5,000</option>
-                <option value="5000-10000">$5,000 to $10,000</option>
-                <option value="10000-15000">$10,000 to $15,000</option>
-                <option value="15000+">$15,000+</option>
-                <option value="not-sure">Not sure yet</option>
-              </select>
-            </div>
-            <div class="enq-field">
-              <label for="how-heard">How did you find us?</label>
-              <select name="how-heard" id="how-heard">
-                <option value="" disabled selected>Select an option</option>
-                <option value="google">Google search</option>
-                <option value="social-media">Social media</option>
-                <option value="referral">Referral</option>
-                <option value="existing-client">Existing client</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="enq-field">
-            <label for="message">What would you have it do?</label>
-            <textarea name="message" id="message" rows="4" placeholder="The jobs your team does every week that you wish ran themselves. Tools you use now. What done looks like."></textarea>
-          </div>
-          <div class="enq-actions">
-            <button type="submit" class="cta enq-submit"><span>Send enquiry</span> <span aria-hidden="true">&#8599;</span></button>
-            <span class="enq-note">Based in Australia. Replies from hello@digitalartifacts.com.au</span>
-          </div>
-        </form>
-
-        <div id="formSuccess" class="enq-result" role="status" aria-live="polite" hidden>
-          <div class="enq-check" aria-hidden="true">&#10003;</div>
-          <h3>Got it. You just watched the product work.</h3>
-          <p>You just triggered the same flow shown on this page. Claude read six files about our business, classified the enquiry, drafted a reply in our voice, and pinged us to approve. Outside business hours, a holding note goes out on its own.</p>
-        </div>
-        <div id="formError" class="enq-error" role="alert" hidden>
-          <p>Something went wrong. Please try again, or email hello@digitalartifacts.com.au directly.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-foot">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="foot-mark">
-        <p class="foot-tag">AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.</p>
-      </div>
-      <div class="foot-col">
-        <h4>Navigate</h4>
-        <a href="/" class="footer-link">Home</a>
-        <a href="/automations.html" class="footer-link">Automation</a>
-        <a href="/websites.html" class="footer-link">Websites</a>
-        <a href="/#layers" class="footer-link">The 4 layers</a>
-        <a href="#contact" class="footer-link">Contact</a>
-      </div>
-      <div class="foot-col">
-        <h4>Connect</h4>
-        <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
-        <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
-      </div>
-      <div class="foot-col">
-        <h4>Studio</h4>
-        <p class="foot-studio">Digital Artifacts</p>
-        <p class="foot-loc">Australia</p>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>&copy; Digital Artifacts</span>
-      <span>Australia</span>
-    </div>
-  </footer>
-
-<!-- Lucide icons for the under-the-hood flow (same source the live site uses) -->
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-const CTA_HREF = '#contact';
-
-const FLOWS = {
-  lead: {
-    eyebrow: 'LEAD RESPONSE',
-    h1: 'Imagine a flow that runs the <em>whole journey.</em>',
-    layout: { pattern:'zigzag' },                 // weaves left and right as it descends
-    nodes: [
-      { tag:'TRIGGER · 00', kicker:'It starts with one moment', title:'Someone reaches out.', note:'A form, a message, a missed call. The journey begins the instant they do.' },
-      { tag:'NODE 01 · RESPOND', kicker:'No lead left waiting', title:'They hear back in seconds.', note:'While they are still interested. Not three hours later.' },
-      { tag:'NODE 02 · QUALIFY', kicker:'The right ones rise up', title:'The right questions, asked for you.', note:'Every enquiry sorted before it reaches your desk.' },
-      { tag:'NODE 03 · BOOK', kicker:'Straight into the calendar', title:'A booking, already made.', note:'No back and forth. No phone tag.' },
-      { tag:'NODE 04 · HAND OVER', kicker:'Your team steps in warm', title:'You meet a ready client.', note:'Briefed, booked, and expecting you.' },
-      { tag:'OUTCOME', kicker:'Built once. Runs every time.', title:'Same result. Every time.', note:'This is one flow. Yours is mapped around your business.', cta:'MAP MY FLOW' },
-    ],
-  },
-  reactivation: {
-    eyebrow: 'DATABASE REACTIVATION',
-    h1: 'Imagine a list that <em>books its own work.</em>',
-    layout: { pattern:'sweep', dir:1 },           // one steady diagonal sweeping down to the right
-    nodes: [
-      { tag:'TRIGGER · 00', kicker:'The value already in your list', title:'A list sitting idle.', note:'Old leads, past clients, quotes that went quiet. You already paid to win them.' },
-      { tag:'NODE 01 · REACH', kicker:'The right message, the right moment', title:'A personal touch, sent for you.', note:'Timely and human, never the same blast twice.' },
-      { tag:'NODE 02 · STIR', kicker:'Old interest, woken up', title:'Conversations restart on their own.', note:'People reply, and the flow keeps the thread warm.' },
-      { tag:'NODE 03 · ROUTE', kicker:'Hot and warm, sorted', title:'Replies land where they should.', note:'The ready ones flagged for you, the rest nurtured.' },
-      { tag:'NODE 04 · CONVERT', kicker:'Revenue from what you owned', title:'Booked work from a list you forgot.', note:'Money that was sitting there the whole time.' },
-      { tag:'OUTCOME', kicker:'Built once. Runs across everyone.', title:'Your database, earning again.', note:'One flow, run over every contact you own.', cta:'REACTIVATE MY LIST' },
-    ],
-  },
-  reputation: {
-    eyebrow: 'REPUTATION ENGINE',
-    h1: 'Imagine reviews that <em>arrive on their own.</em>',
-    layout: { pattern:'sweep', dir:-1, steep:1.18 },  // steeper diagonal sweeping down to the left
-    nodes: [
-      { tag:'TRIGGER · 00', kicker:'The moment to ask', title:'A job, done well.', note:'The instant the work is finished is the instant to ask.' },
-      { tag:'NODE 01 · ASK', kicker:'Timed to the happy moment', title:'The review request, sent for you.', note:'Every time, without you remembering to.' },
-      { tag:'NODE 02 · GUIDE', kicker:'Friction removed', title:'A two-tap path to five stars.', note:'So they actually finish, not just intend to.' },
-      { tag:'NODE 03 · CATCH', kicker:'Problems, caught first', title:'Unhappy ones reach you privately.', note:'Sorted quietly, before they ever go public.' },
-      { tag:'NODE 04 · SHOW', kicker:'Where buyers look', title:'Fresh reviews, out in the world.', note:'Your reputation building while you work.' },
-      { tag:'OUTCOME', kicker:'Built once. Runs after every job.', title:'More reviews. Better ones. On their own.', note:'One flow, running after every job you finish.', cta:'BUILD MY REPUTATION' },
-    ],
-  },
-};
-
-const world = document.getElementById('world');
-const svg = document.getElementById('svg');
-const pathDim = document.getElementById('pathDim');
-const pathLive = document.getElementById('pathLive');
-const field = document.getElementById('field');
-const hero = document.getElementById('hero');
-const heroEyebrow = document.getElementById('heroEyebrow');
-const heroTitle = document.getElementById('heroTitle');
-const bar = document.getElementById('bar');
-const track = document.getElementById('track');
-const stagecount = document.getElementById('stagecount');
-const pills = Array.from(document.querySelectorAll('.pill'));
-
-let nodes = [];
-let els = [];
-let pos = [];
-let currentLayout = { pattern:'zigzag' };
-let vw, vh, reduce;
-
-function buildFlow(flow){
-  heroEyebrow.textContent = flow.eyebrow;
-  heroTitle.innerHTML = flow.h1;
-  nodes = flow.nodes;
-  currentLayout = flow.layout || { pattern:'zigzag' };
-  world.innerHTML = '';
-  els = nodes.map(n => {
-    const d = document.createElement('article');
-    d.className = 'node';
-    d.innerHTML = `
-      <span class="dot" aria-hidden="true"></span>
-      <p class="tag">${n.tag}</p>
-      <p class="kicker">${n.kicker}</p>
-      <h2 class="title">${n.title}</h2>
-      <p class="note">${n.note}</p>
-      ${n.cta ? `<a class="cta" href="${CTA_HREF}">${n.cta} <span aria-hidden="true">&#8599;</span></a>` : ''}
-    `;
-    world.appendChild(d);
-    return d;
-  });
-  layout();
-}
-
-function layout(){
-  vw = window.innerWidth; vh = window.innerHeight;
-  const narrow = vw < 720;
-  const spreadX = reduce ? 0 : (narrow ? vw*0.20 : vw*0.26);
-  const spreadY = vh*0.92;
-  const baseX = vw*0.5;
-
-  // each flow travels in its own direction: a weaving zigzag, or a steady one-way diagonal sweep
-  const cfg = currentLayout || { pattern:'zigzag' };
-  const sx = spreadX * (cfg.steep || 1);
-  const mid = (nodes.length - 1) / 2;
-  pos = nodes.map((_,i)=>{
-    const x = cfg.pattern === 'sweep'
-      ? baseX + (cfg.dir || 1) * (i - mid) * (sx * 0.9)
-      : baseX + (i % 2 === 0 ? -sx : sx);
-    return { x, y: vh*0.5 + i*spreadY };
-  });
-
-  els.forEach((el,i)=>{ el.style.left = pos[i].x+'px'; el.style.top = pos[i].y+'px'; });
-
-  const dStr = pos.map((p,i)=> (i?'L':'M')+p.x+' '+p.y).join(' ');
-  pathDim.setAttribute('d', dStr);
-  pathLive.setAttribute('d', dStr);
-  const len = pathLive.getTotalLength();
-  pathLive.style.strokeDasharray = len;
-  pathLive.style.strokeDashoffset = len;
-  pathLive._len = len;
-}
-
-const lerp=(a,b,t)=>a+(b-a)*t;
-const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-const easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-
-const LEAD = 0.08;   // fraction of scroll spent on the intro: hero fades out, node 00 fades in, no overlap
-let target=0, cur=0, locked=false;
-
-function onScroll(){
-  if(locked) return;          // dev cam pin holds the camera still
-  const rect = track.getBoundingClientRect();
-  target = clamp(-rect.top / (track.offsetHeight - vh), 0, 1);
-  document.body.classList.toggle('past-journey', rect.bottom <= vh*0.6);
-}
-
-function frame(){
-  cur += (target-cur)*0.12;             // smoothing
-  const p = cur;
-  const N = nodes.length;
-  const jp = clamp((p-LEAD)/(1-LEAD), 0, 1);   // journey progress after the intro hold
-  const f = jp*(N-1);                    // position along the node chain
-  const i0 = Math.floor(f);
-  const frac = easeInOut(f-i0);
-  const a = pos[i0], b = pos[Math.min(i0+1,N-1)];
-
-  // camera centres the current point of the journey
-  const camX = lerp(a.x,b.x,frac);
-  const camY = lerp(a.y,b.y,frac);
-  const tx = vw/2 - camX;
-  const ty = vh/2 - camY;
-
-  world.style.transform = `translate(${tx}px,${ty}px)`;
-  svg.style.transform = `translate(${tx}px,${ty}px)`;
-  field.style.transform = `translate(${tx*0.35}px,${ty*0.35}px)`;
-
-  // the whole node layer fades in across the intro, so it never sits on top of the hero
-  world.style.opacity = clamp(p/(LEAD*0.95), 0, 1).toFixed(3);
-
-  // light up nodes near the camera
-  els.forEach((el,i)=>{
-    const focus = clamp(1-Math.abs(f-i),0,1);
-    const fp = Math.pow(focus,1.6);
-    el.style.opacity = (0.12 + 0.88*fp).toFixed(3);
-    el.style.transform = `translate(-50%,-50%) scale(${(0.82+0.18*fp).toFixed(3)})`;
-    el.classList.toggle('lit', focus>0.55);
-  });
-
-  // draw the signal along the path as the journey runs
-  if(pathLive._len){
-    pathLive.style.strokeDashoffset = pathLive._len*(1-jp);
-  }
-
-  // hero fades out within the intro, ahead of the nodes fading in
-  const h = clamp(1 - p/(LEAD*0.85), 0, 1);
-  hero.style.opacity = h;
-  hero.style.transform = `translateY(${(1-h)*-30}px)`;
-  hero.style.pointerEvents = h>0.1 ? 'auto':'none';
-
-  bar.style.width = (jp*100)+'%';
-  const idx = clamp(Math.round(f),0,N-1);
-  stagecount.textContent = 'FLOW · '+String(idx).padStart(2,'0');
-
-  requestAnimationFrame(frame);
-}
-
-// the enquiry form's service follows the flow being viewed, until the visitor picks one themselves
-const serviceSelect = document.getElementById('service');
-const FLOW_TO_SERVICE = { lead:'lead-response', reactivation:'reactivation', reputation:'reputation' };
-let serviceTouched = false;
-if(serviceSelect){ serviceSelect.addEventListener('change', ()=> serviceTouched = true); }
-function syncService(key){
-  if(serviceSelect && !serviceTouched && FLOW_TO_SERVICE[key]) serviceSelect.value = FLOW_TO_SERVICE[key];
-}
-
-function setFlow(key){
-  pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===key)));
-  buildFlow(FLOWS[key]);
-  syncService(key);
-  window.scrollTo(0,0);
-  target = 0; cur = 0;
-}
-
-pills.forEach(p=> p.addEventListener('click', ()=> setFlow(p.dataset.flow)));
-
-// dev helper: ?only=hood hides the journey so the under-the-hood section can be screenshotted
-if(new URLSearchParams(location.search).get('only')==='hood'){ track.style.display='none'; }
-
-// init
-reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-// a flow can be deep-linked, e.g. /automations?flow=reputation, for per-vertical entry points
-const startKey = (k => FLOWS[k] ? k : 'lead')(new URLSearchParams(location.search).get('flow'));
-pills.forEach(p=> p.setAttribute('aria-pressed', String(p.dataset.flow===startKey)));
-buildFlow(FLOWS[startKey]);
-syncService(startKey);
-
-if(reduce){
-  document.documentElement.classList.add('reduced');
-} else {
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', ()=>{ layout(); onScroll(); });
-  onScroll();
-  // dev helper: ?cam=0.0-1.0 pins the camera at a journey position at first paint, for screenshots
-  const cam = new URLSearchParams(location.search).get('cam');
-  if(cam!==null){ locked = true; target = cur = parseFloat(cam); }   // dev: pin the camera at a journey position for screenshots
-  requestAnimationFrame(frame);
-}
-
-// render the under-the-hood flow icons
-if(window.lucide){ lucide.createIcons(); }
-
-// === enquiry form: posts to the same n8n webhook + Formspree as the rest of the site ===
-const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
-const contactForm = document.getElementById('contactForm');
-if(contactForm){
-  const FORMSPREE_URL = contactForm.getAttribute('action');
-  contactForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const btn = contactForm.querySelector('button[type="submit"]');
-    const span = btn.querySelector('span');
-    const original = span.textContent;
-    span.textContent = 'Sending...';
-    btn.disabled = true;
-
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData.entries());
-    data.lead_magnet = false;
-    data.submitted_at = new Date().toISOString();
-    data.source_page = 'automations';
-    data.source_url = window.location.href;
-
-    try{
-      await Promise.allSettled([
-        fetch(N8N_WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(()=>null),
-        fetch(FORMSPREE_URL, { method:'POST', headers:{'Accept':'application/json'}, body:formData }).catch(()=>null),
-      ]);
-      contactForm.hidden = true;
-      document.getElementById('formSuccess').hidden = false;
-    }catch(err){
-      document.getElementById('formError').hidden = false;
-    }finally{
-      span.textContent = original;
-      btn.disabled = false;
-    }
-  });
-}
-
-// === mobile nav ===
-const hamburger = document.getElementById('hamburgerBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-if(hamburger && mobileMenu){
-  const setMenu = (open)=>{
-    mobileMenu.classList.toggle('is-open', open);
-    hamburger.classList.toggle('is-open', open);
-    hamburger.setAttribute('aria-expanded', String(open));
-    document.body.style.overflow = open ? 'hidden' : '';
-  };
-  hamburger.addEventListener('click', ()=> setMenu(!mobileMenu.classList.contains('is-open')));
-  mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> setMenu(false)));
-}
-</script>
-</body>
+    </footer>
+  </body>
 </html>

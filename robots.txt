@@ -3,4 +3,4 @@ Allow: /
 Disallow: /storefront/
 Disallow: /downloads/
 
-Sitemap: https://digitalartifacts.com.au/sitemap.xml
+Sitemap: https://www.digitalartifacts.com.au/sitemap.xml

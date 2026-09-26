@@ -1,1732 +1,747 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Progressive-enhancement flag: set before paint so reveal animations only apply when JS runs -->
-  <script>document.documentElement.classList.add('js');</script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGKKW3ERQ5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-FGKKW3ERQ5');
-  </script>
-
-  <title>Websites | The interface your operating system needs | Digital Artifacts</title>
-  <link rel="icon" type="image/png" href="/brand/da-mark-tile.png">
-  <link rel="apple-touch-icon" href="/brand/da-mark-tile.png">
-  <meta name="description" content="Marketing sites, client portals, internal dashboards, job-tracking tools. The front-end surface of the 4-layer AI operating systems we build for small business in Australia.">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Websites | The interface your operating system needs">
-  <meta property="og:description" content="Marketing sites, client portals, internal dashboards, job-tracking tools. Layer 4 rendered as a front-end. Built by Digital Artifacts.">
-  <meta property="og:url" content="https://digitalartifacts.com.au/websites.html">
-  <meta property="og:site_name" content="Digital Artifacts">
-  <meta property="og:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Websites | The interface your operating system needs">
-  <meta name="twitter:description" content="Marketing sites, client portals, internal dashboards, job-tracking tools. Layer 4 rendered as a front-end. Built by Digital Artifacts.">
-  <meta name="twitter:image" content="https://digitalartifacts.com.au/og/og-image.png">
-
-  <link rel="canonical" href="https://digitalartifacts.com.au/websites.html">
-
-  <!-- Fonts: Clash Display + General Sans from Fontshare -->
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#1B2838',
-            cream: '#F7F6F3',
-            warm: '#8A8A80',
-            divider: '#E8E6E1',
-            accent: '#00C853',
-            surface: '#FFFFFF',
-            mint: '#E8F5E9',
-          },
-          fontFamily: {
-            display: ['"Clash Display"', 'sans-serif'],
-            body: ['"General Sans"', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
-
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <!-- Lenis Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
-
-  <style>
-    /* === Base Reset === */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      background: #F7F6F3;
-      color: #1B2838;
-      font-family: 'General Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html.lenis, html.lenis body { height: auto; }
-    .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-    .lenis.lenis-stopped { overflow: hidden; }
-
-    /* === Typography === */
-    .font-display { font-family: 'Clash Display', sans-serif; }
-    .font-body { font-family: 'General Sans', sans-serif; }
-
-    .heading-xl {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-    }
-
-    .heading-lg {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-    }
-
-    .heading-md {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-    }
-
-    .body-text {
-      font-family: 'General Sans', sans-serif;
-      font-weight: 400;
-      line-height: 1.7;
-      color: #8A8A80;
-    }
-
-    /* Accessibility: lift secondary-text contrast on dark sections to pass WCAG AA */
-    .bg-navy [class*="text-warm"],
-    .bg-navy .body-text { color: #A8A89E; }
-
-    /* === FAQ (native details, works without JS) === */
-    .faq-item { border-bottom: 1px solid #E8E6E1; }
-    .faq-item summary {
-      list-style: none; cursor: pointer; padding: 1.4rem 0; display: flex; align-items: center;
-      justify-content: space-between; gap: 1.5rem;
-      font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 1.05rem; color: #1B2838;
-      letter-spacing: -0.01em;
-    }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after {
-      content: '+'; font-family: 'General Sans', sans-serif; font-weight: 400; font-size: 1.5rem;
-      color: #00C853; flex-shrink: 0; transition: transform 0.3s ease; line-height: 1;
-    }
-    .faq-item[open] summary::after { transform: rotate(45deg); }
-    .faq-item summary:focus-visible { outline: 2px solid #00C853; outline-offset: 4px; border-radius: 4px; }
-    .faq-item__body { padding: 0 0 1.5rem; color: #8A8A80; font-size: 0.95rem; line-height: 1.7; max-width: 70ch; }
-
-    /* === Portfolio gallery === */
-    .pf-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-    .pf-filter { padding: 0.45rem 1.1rem; border-radius: 9999px; border: 1px solid #E8E6E1; background: transparent; color: #8A8A80; font-family: 'General Sans', sans-serif; font-weight: 500; font-size: 0.8rem; cursor: pointer; transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease; }
-    .pf-filter:hover { color: #1B2838; border-color: #1B2838; }
-    .pf-filter.is-active { color: #F7F6F3; background: #1B2838; border-color: #1B2838; }
-    .pf-filter:focus-visible { outline: 2px solid #00C853; outline-offset: 2px; }
-    .pf-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
-    @media (min-width: 640px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .pf-grid { grid-template-columns: repeat(3, 1fr); } }
-    .pf-card { display: block; border: 1px solid #E8E6E1; border-radius: 0.9rem; overflow: hidden; background: #FFFFFF; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
-    .pf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(27, 40, 56, 0.12); border-color: rgba(0, 200, 83, 0.4); }
-    .pf-card.is-hidden { display: none; }
-    .pf-card__shot { aspect-ratio: 16 / 10; overflow: hidden; background: #F1EFE8; position: relative; }
-    .pf-card__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
-    .pf-card:hover .pf-card__shot img { transform: scale(1.03); }
-    .pf-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(0, 200, 83, 0.92); color: #0A1A12; padding: 0.2rem 0.55rem; border-radius: 9999px; }
-    .pf-badge--muted { background: rgba(138, 138, 128, 0.92); color: #F7F6F3; }
-    .pf-card__meta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.1rem; }
-    .pf-card__name { font-family: 'Clash Display', sans-serif; font-weight: 600; color: #1B2838; font-size: 0.95rem; display: block; line-height: 1.2; }
-    .pf-card__tag { color: #8A8A80; font-size: 0.74rem; }
-    .pf-card__icon { width: 1.1rem; height: 1.1rem; color: #8A8A80; margin-left: auto; flex-shrink: 0; transition: color 0.3s ease, transform 0.3s ease; }
-    .pf-card:hover .pf-card__icon { color: #00C853; transform: translate(2px, -2px); }
-
-    /* === Nav === */
-    .nav-fixed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      transition: background-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .nav-fixed.scrolled {
-      background: rgba(247, 246, 243, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 1px 0 0 #E8E6E1;
-    }
-
-    .nav-link {
-      position: relative;
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 500;
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 0.25rem 0;
-      transition: color 0.4s ease;
-    }
-
-    .nav-fixed.scrolled .nav-link {
-      color: #1B2838;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0%;
-      height: 1.5px;
-      background: #00C853;
-      transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .nav-link:hover::after,
-    .nav-link:focus-visible::after {
-      width: 100%;
-    }
-
-    .nav-link:active {
-      opacity: 0.7;
-    }
-
-    .nav-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    /* === Hero === */
-    .hero-section {
-      min-height: 70vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 5rem;
-    }
-
-    .hero-subtitle {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    /* === Reveal Animations (gated on .js so content is visible without JavaScript) === */
-    html.js .reveal-up {
-      opacity: 0;
-      transform: translateY(60px);
-    }
-
-    .reveal-word {
-      display: inline-block;
-      overflow: hidden;
-    }
-
-    html.js .reveal-word-inner {
-      display: inline-block;
-      transform: translateY(100%);
-      opacity: 0;
-    }
-
-    /* === Respect reduced-motion: reveal everything, stop animation === */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Custom Websites & Packages | Digital Artifacts</title>
+    <meta
+      name="description"
+      content="Custom websites for Australian service businesses. Explore client work, website packages and optional enquiry follow-up. Work directly with Isaiah Wong."
+    />
+    <link rel="canonical" href="https://www.digitalartifacts.com.au/websites.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Custom Websites &amp; Packages | Digital Artifacts" />
+    <meta
+      property="og:description"
+      content="Custom websites for Australian service businesses. Explore client work, website packages and optional enquiry follow-up. Work directly with Isaiah Wong."
+    />
+    <meta property="og:url" content="https://www.digitalartifacts.com.au/websites.html" />
+    <meta property="og:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Custom Websites &amp; Packages | Digital Artifacts" />
+    <meta
+      name="twitter:description"
+      content="Custom websites for Australian service businesses. Explore client work, website packages and optional enquiry follow-up. Work directly with Isaiah Wong."
+    />
+    <meta name="twitter:image" content="https://www.digitalartifacts.com.au/og/og-image.png" />
+    <meta name="theme-color" content="#1b2838" />
+    <link rel="icon" href="/brand/da-mark-tile.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="stylesheet" href="/assets/site.css" />
+    <script defer src="/assets/site.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Digital Artifacts",
+        "url": "https://www.digitalartifacts.com.au/",
+        "logo": "https://www.digitalartifacts.com.au/brand/da-mark-tile.png",
+        "email": "hello@digitalartifacts.com.au"
       }
-      .reveal-up, .reveal-word-inner {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-
-    /* === Project Row === */
-    .project-row {
-      border-top: 1px solid #E8E6E1;
-      transition: background-color 0.3s ease;
-    }
-
-    .project-row:last-child {
-      border-bottom: 1px solid #E8E6E1;
-    }
-
-    .project-row:hover {
-      background: rgba(0, 200, 83, 0.03);
-    }
-
-    .project-row:hover .project-name {
-      color: #00C853;
-    }
-
-    .project-name {
-      transition: color 0.3s ease;
-    }
-
-    /* === Tag Pills === */
-    .tag-pill {
-      display: inline-block;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      background: rgba(0, 200, 83, 0.08);
-      color: #00C853;
-      letter-spacing: 0.02em;
-    }
-
-    /* === Service Card === */
-    .service-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(27, 40, 56, 0.08);
-    }
-
-    /* === Pricing Card === */
-    .pricing-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(27, 40, 56, 0.1);
-    }
-
-    .pricing-card.featured {
-      border: 2px solid #00C853;
-    }
-
-    /* === CTA Shimmer Button === */
-    .cta-btn {
-      --shimmer-color: rgba(255, 255, 255, 0.6);
-      --bg: #00C853;
-      --radius: 100px;
-      --speed: 3s;
-      --cut: 0.05em;
-      --spread: 90deg;
-      position: relative;
-      z-index: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem 2.25rem;
-      background: var(--bg);
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.875rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      overflow: hidden;
-      transform: translateZ(0);
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover {
-      transform: scale(1.04);
-    }
-
-    .cta-btn:active {
-      transform: scale(0.98) translateY(1px);
-    }
-
-    .cta-btn:focus-visible {
-      outline: 2px solid #F7F6F3;
-      outline-offset: 4px;
-    }
-
-    .cta-btn-dark {
-      --bg: #1B2838;
-      --shimmer-color: rgba(0, 200, 83, 0.5);
-    }
-
-    .cta-btn .shimmer-spark {
-      position: absolute;
-      inset: 0;
-      z-index: -3;
-      overflow: visible;
-      filter: blur(2px);
-    }
-
-    .cta-btn .shimmer-slide {
-      position: absolute;
-      inset: 0;
-      aspect-ratio: 1;
-      height: 100cqh;
-      animation: shimmerSlide var(--speed) ease-in-out infinite;
-    }
-
-    .cta-btn .shimmer-spin {
-      position: absolute;
-      inset: -100%;
-      width: auto;
-      background: conic-gradient(
-        from calc(270deg - (var(--spread) * 0.5)),
-        transparent 0,
-        var(--shimmer-color) var(--spread),
-        transparent var(--spread)
-      );
-      animation: shimmerSpin 2s linear infinite;
-    }
-
-    .cta-btn .shimmer-highlight {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      box-shadow: inset 0 -8px 10px rgba(255, 255, 255, 0.12);
-      transition: box-shadow 0.3s ease;
-      pointer-events: none;
-    }
-
-    .cta-btn:hover .shimmer-highlight {
-      box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn:active .shimmer-highlight {
-      box-shadow: inset 0 -10px 10px rgba(255, 255, 255, 0.25);
-    }
-
-    .cta-btn .shimmer-backdrop {
-      position: absolute;
-      inset: var(--cut);
-      z-index: -2;
-      background: var(--bg);
-      border-radius: var(--radius);
-    }
-
-    @keyframes shimmerSlide {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-    }
-
-    @keyframes shimmerSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* === Arrow Icon === */
-    .arrow-icon {
-      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    .cta-btn:hover .arrow-icon {
-      transform: translateX(4px);
-    }
-
-    /* === Mobile Menu === */
-    .mobile-menu {
-      position: fixed;
-      inset: 0;
-      z-index: 99;
-      background: #F7F6F3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .mobile-menu.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .mobile-menu-link {
-      font-family: 'Clash Display', sans-serif;
-      font-weight: 600;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      color: #1B2838;
-      text-decoration: none;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: color 0.3s ease;
-    }
-
-    .mobile-menu.open .mobile-menu-link {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .mobile-menu-link:hover {
-      color: #00C853;
-    }
-
-    .mobile-menu-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-    }
-
-    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-    .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; transition-property: opacity, transform; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); }
-
-    /* === Hamburger === */
-    .hamburger {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      z-index: 101;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 1.5px;
-      background: #F7F6F3;
-      display: block;
-      transition: transform 0.3s ease, opacity 0.3s ease, background 0.4s ease;
-    }
-
-    .nav-fixed.scrolled .hamburger span {
-      background: #1B2838;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: translateY(7.5px) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: translateY(-7.5px) rotate(-45deg);
-    }
-
-    /* === Footer Links === */
-    .footer-link {
-      color: #8A8A80;
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.3s ease;
-    }
-
-    .footer-link:hover {
-      color: #F7F6F3;
-    }
-
-    .footer-link:focus-visible {
-      outline: 2px solid #00C853;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    /* === Grain Texture Overlay === */
-    .grain-overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
-    }
-
-    /* === Selection === */
-    ::selection {
-      background: rgba(0, 200, 83, 0.12);
-      color: #1B2838;
-    }
-
-    /* === Tech Label === */
-    .tech-label {
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .tech-label::before {
-      content: '// ';
-      opacity: 0.4;
-    }
-
-    /* === Terminal cursor blink === */
-    .cursor-blink {
-      animation: cursorBlink 1.2s step-end infinite;
-    }
-
-    @keyframes cursorBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* === Tech grid background === */
-    .tech-grid-bg {
-      background-image:
-        linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    /* === Form Styles === */
-    .form-input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 0.5rem;
-      color: #F7F6F3;
-      font-family: 'General Sans', sans-serif;
-      font-size: 0.9rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-input::placeholder {
-      color: rgba(247, 246, 243, 0.4);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #00C853;
-      box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
-    }
-
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238A8A80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
-    }
-
-    .form-select option {
-      background: #1B2838;
-      color: #F7F6F3;
-    }
-
-    /* === Why Card === */
-    .why-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .why-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(27, 40, 56, 0.06);
-    }
-
-    .why-card:hover .why-icon {
-      background: rgba(0, 200, 83, 0.15);
-      color: #00C853;
-    }
-
-    .why-icon {
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-  </style>
-  <noscript><style>.reveal-up,.reveal-word-inner{opacity:1 !important;transform:none !important}[style*="opacity:0"],[style*="opacity: 0"]{opacity:1 !important;transform:none !important}</style></noscript>
-  <!-- Structured data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Digital Artifacts",
-    "url": "https://digitalartifacts.com.au/",
-    "logo": "https://digitalartifacts.com.au/brand/da-mark-tile.png",
-    "image": "https://digitalartifacts.com.au/og/og-image.png",
-    "description": "Digital Artifacts builds AI operating systems for small business: a 4-layer framework of Context, Skills, Automation, and Agent.",
-    "email": "hello@digitalartifacts.com.au",
-    "founder": { "@type": "Person", "name": "Isaiah Wong" },
-    "areaServed": "AU",
-    "address": { "@type": "PostalAddress", "addressCountry": "AU" },
-    "sameAs": ["https://www.etsy.com/shop/DigitalArtifactsAU"]
-  }
-  </script>
-</head>
-
-<body class="bg-cream text-navy font-body overflow-x-hidden">
-
-  <!-- Grain Overlay -->
-  <div class="grain-overlay"></div>
-
-  <!-- ============================== -->
-  <!-- NAVIGATION -->
-  <!-- ============================== -->
-  <nav class="nav-fixed" id="mainNav">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">
-      <a href="/" class="relative z-[101] flex items-center gap-3" aria-label="Digital Artifacts Home">
-        <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-10 w-10">
-        <span id="navBrandText" class="font-display font-semibold text-cream text-lg tracking-tight hidden sm:inline" style="transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;">Digital Artifacts<span class="text-accent">.</span></span>
-      </a>
-
-      <div class="hidden md:flex items-center gap-10">
-        <a href="/automations.html" class="nav-link">Automation</a>
-        <a href="/websites.html" class="nav-link active">Websites</a>
-        <a href="/#layers" class="nav-link">How it works</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-
-      <button class="hamburger md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/automations.html" class="mobile-menu-link" onclick="closeMobileMenu()">Automation</a>
-    <a href="/websites.html" class="mobile-menu-link" onclick="closeMobileMenu()">Websites</a>
-    <a href="/#layers" class="mobile-menu-link" onclick="closeMobileMenu()">How it works</a>
-    <a href="#contact" class="mobile-menu-link" onclick="closeMobileMenu()">Contact</a>
-  </div>
-
-  <!-- ============================== -->
-  <!-- HERO SECTION -->
-  <!-- ============================== -->
-  <section class="hero-section bg-navy relative px-6 md:px-12 lg:px-16 overflow-hidden">
-    <!-- Decorative circles -->
-    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
-    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
-
-    <div class="max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center relative z-10">
-      <!-- Hero H1 Headline -->
-      <div class="hero-headline" style="opacity: 0; transform: translateY(30px);">
-        <span class="tag-pill text-xs uppercase tracking-wider mb-6 inline-block">Layer 04 / the face</span>
-        <h1 class="heading-xl text-cream text-center" style="font-size: clamp(2rem, 5vw, 4.75rem);">
-          The interface your<br class="hidden sm:inline"> operating system needs<span class="text-accent cursor-blink">_</span>
-        </h1>
-      </div>
-
-      <p class="hero-subtitle text-warm max-w-2xl mx-auto text-base md:text-lg mt-6" style="opacity: 0; transform: translateY(20px); line-height: 1.7;">
-        Marketing sites, client portals, internal dashboards, job-tracking tools. Front-ends for the systems we automate. Same system your team talks to, different surface for the customer.
-      </p>
-
-      <!-- Hero CTA -->
-      <div class="hero-cta mt-10 flex flex-col sm:flex-row items-center gap-4" style="opacity: 0; transform: translateY(20px);">
-        <a href="#contact" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Start Your Project</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </script>
+  <link rel="stylesheet" href="/assets/journey.css"><script src="/assets/journey.js" defer></script></head>
+  <body data-page="websites">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Digital Artifacts home">
+          <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+          <span>Digital Artifacts<span class="brand-dot">.</span> </span>
         </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- CONTEXT BLOCK (for visitors from /automations) -->
-  <!-- ============================== -->
-  <section class="py-16 md:py-20 px-6 md:px-12 lg:px-16 bg-cream border-b border-divider">
-    <div class="max-w-[1000px] mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
-        <div class="md:col-span-8">
-          <p class="text-navy text-base md:text-lg reveal-up" style="line-height: 1.65;">
-            Landed here straight from the automation framework? Websites are <strong>Layer 04</strong>: the visible surface that sits on top of Context, Skills, and Automation. If you just need a standalone marketing site or portfolio, you're in the right place too. We build both.
-          </p>
-        </div>
-        <div class="md:col-span-4 md:text-right">
-          <a href="/automations.html" class="inline-flex items-center gap-2 text-accent font-medium text-sm hover:gap-3 transition-all reveal-up">
-            Read about Layers 01-03
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="siteNav"
+          hidden
+        >
+          Menu
+        </button>
+        <nav class="nav-links" id="siteNav" aria-label="Main navigation">
+          <a href="/websites.html" aria-current="page">Websites</a>
+          <a href="/automations.html">Automation</a>
+          <a href="/websites.html#portfolio">Client work</a>
+          <a href="/#how">How it works</a>
+          <a class="button" href="#contact"
+            >Discuss your project<span class="button-arrow" aria-hidden="true">↗</span>
           </a>
-        </div>
+        </nav>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHAT WE DO — SERVICES -->
-  <!-- ============================== -->
-  <section id="services" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="w-full h-px bg-divider mb-20 md:mb-28"></div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-20">
-        <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">01 Services</span>
-        </div>
-        <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy mb-6" style="font-size: clamp(1.75rem, 3.5vw, 3rem);">
-            <span class="about-reveal-text">What We Do</span>
-          </h2>
-          <p class="body-text max-w-2xl text-base md:text-lg reveal-up">
-            A website most designers can't build: one that answers back. Yours loads in under a second, has a page for every suburb you serve, and catches every enquiry in your inbox in seconds, formatted and ready, not a raw data dump. Live in 14 days. You own the code, the domain, and the content.
-          </p>
-        </div>
-      </div>
-
-      <!-- 4-Card Services Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="palette" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Website Design</h3>
-          <p class="body-text text-sm">Custom responsive sites that look brilliant on every screen</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="code-2" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Development</h3>
-          <p class="body-text text-sm">Built with modern tools like React, Vite and Next.js. Fast and reliable</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="rocket" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Launch & Hosting</h3>
-          <p class="body-text text-sm">Deployed on Vercel with lightning-fast global CDN</p>
-        </div>
-
-        <div class="service-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="bar-chart-2" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">SEO & Analytics</h3>
-          <p class="body-text text-sm">Found on Google from day one with built-in best practices</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- PORTFOLIO AT A GLANCE -->
-  <!-- ============================== -->
-  <section id="stats" class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">The portfolio at a glance.</h2>
-        <p class="body-text text-base md:text-lg reveal-up">Here's what we've been up to. Real projects, real results.</p>
-      </div>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
-          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="globe" class="w-7 h-7 text-accent"></i>
-          </div>
-          <span class="heading-xl text-accent block" style="font-size: clamp(2rem, 4vw, 3rem);">9+</span>
-          <span class="body-text text-sm mt-1 block">Live Sites Delivered</span>
-        </div>
-
-        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-navy reveal-up">
-          <div class="w-14 h-14 rounded-full bg-navy/10 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="rocket" class="w-7 h-7 text-navy"></i>
-          </div>
-          <span class="heading-xl text-navy block" style="font-size: clamp(2rem, 4vw, 3rem);">6+</span>
-          <span class="body-text text-sm mt-1 block">Industries Served</span>
-        </div>
-
-        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-accent reveal-up">
-          <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="shield" class="w-7 h-7 text-accent"></i>
-          </div>
-          <span class="heading-xl text-accent block" style="font-size: clamp(2rem, 4vw, 3rem);">100%</span>
-          <span class="body-text text-sm mt-1 block">Uptime Guaranteed</span>
-        </div>
-
-        <div class="stat-card bg-surface rounded-xl p-8 text-center border-t-4 border-navy reveal-up">
-          <div class="w-14 h-14 rounded-full bg-navy/10 flex items-center justify-center mx-auto mb-4">
-            <i data-lucide="check-circle" class="w-7 h-7 text-navy"></i>
-          </div>
-          <span class="heading-xl text-navy block" style="font-size: clamp(1.5rem, 3vw, 2.5rem);">AU & UK</span>
-          <span class="body-text text-sm mt-1 block">International Clients</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- CLIENT PROJECTS -->
-  <!-- ============================== -->
-  <section id="portfolio" class="py-28 md:py-40 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-12 md:mb-16">
-        <div class="lg:col-span-3">
-          <span class="tech-label text-warm font-medium reveal-up">02 Work</span>
-        </div>
-        <div class="lg:col-span-9">
-          <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 3.5rem);">Selected work</h2>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="pf-filters reveal-up" role="group" aria-label="Filter work">
-        <button type="button" class="pf-filter is-active" data-filter="all" aria-pressed="true">All</button>
-        <button type="button" class="pf-filter" data-filter="clients" aria-pressed="false">Client work</button>
-        <button type="button" class="pf-filter" data-filter="templates" aria-pressed="false">Templates</button>
-      </div>
-
-      <!-- Gallery -->
-      <div class="pf-grid reveal-up" id="pfGrid">
-        <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><img src="/assets/portfolio/cee-ess.jpg" alt="Cee Ess Designs website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Cee Ess Designs</span><span class="pf-card__tag">Design studio</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="/#valley-arbor" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><span class="pf-badge">Case study</span><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Valley Arbor</span><span class="pf-card__tag">Arborist, site + quote automation</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://lumberjord.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><img src="/assets/portfolio/lumberjord.jpg" alt="LumberJord arborist website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">LumberJord</span><span class="pf-card__tag">Arborist, bayside Melbourne</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://fullcirclesolutions.com.au" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><img src="/assets/portfolio/fullcircle.jpg" alt="Full Circle Solutions website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Full Circle Solutions</span><span class="pf-card__tag">Business solutions</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://baysolar-uk.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><img src="/assets/portfolio/baysolar.jpg" alt="BaySolar UK website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">BaySolar UK</span><span class="pf-card__tag">Solar energy, United Kingdom</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://peninsula-makers-hub.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="clients">
-          <div class="pf-card__shot"><img src="/assets/portfolio/pmh.jpg" alt="Peninsula Makers Hub website" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Peninsula Makers Hub</span><span class="pf-card__tag">Makerspace, Mornington Peninsula</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://robert-green-carpenter.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
-          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/robert-green.jpg" alt="Robert Green Carpenter template" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Robert Green Carpenter</span><span class="pf-card__tag">Carpentry template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://eastern-suburbs-painting.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
-          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/eastern-painting.jpg" alt="Eastern Suburbs Painting template" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Eastern Suburbs Painting</span><span class="pf-card__tag">Painting template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://toms-firewood.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
-          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/toms-firewood.jpg" alt="Toms Firewood template" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Tom's Firewood</span><span class="pf-card__tag">Firewood supply template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://yaz-services.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
-          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/yaz.jpg" alt="Yaz Services template" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Yaz Services</span><span class="pf-card__tag">Multi-trade template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-        <a href="https://stoafinance.vercel.app" target="_blank" rel="noopener noreferrer" class="pf-card" data-cat="templates">
-          <div class="pf-card__shot"><span class="pf-badge pf-badge--muted">Template</span><img src="/assets/portfolio/stoa.jpg" alt="Stoa Finance professional services template" loading="lazy" width="800" height="500"></div>
-          <div class="pf-card__meta"><div><span class="pf-card__name">Stoa Finance</span><span class="pf-card__tag">Professional services template</span></div><i data-lucide="arrow-up-right" class="pf-card__icon"></i></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FEATURED PROJECT — CEE ESS DESIGNS -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 overflow-hidden">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-xl reveal-up">
-        <!-- Left Panel -->
-        <div class="bg-mint p-10 md:p-14 flex flex-col justify-center">
-          <span class="tech-label text-accent font-medium mb-6" style="font-size: 0.7rem;">Featured Project</span>
-          <h3 class="heading-xl text-navy mb-3" style="font-size: clamp(2rem, 3.5vw, 3rem);">Cee Ess Designs</h3>
-          <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer" class="text-accent text-sm font-medium mb-6 hover:underline">cee-essdesigns.com.au &rarr;</a>
-          <p class="body-text text-sm mb-8 max-w-md">Melbourne graphic design studio. Full brand portfolio with animated UI, contact forms, SEO optimisation, structured data, and a custom .com.au domain.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="tag-pill">5 brand case studies</span>
-            <span class="tag-pill">Custom domain</span>
-            <span class="tag-pill">Full SEO</span>
-          </div>
-        </div>
-
-        <!-- Right Panel -->
-        <div class="bg-surface p-10 md:p-14 flex flex-col justify-center gap-6">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="lock" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-navy text-base mb-1">Custom Domain + SSL</h4>
-              <p class="body-text text-sm">Live on cee-essdesigns.com.au with HTTPS by default</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="search" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-navy text-base mb-1">Full SEO Suite</h4>
-              <p class="body-text text-sm">Open Graph, Twitter Cards, structured data (JSON-LD)</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="smartphone" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-navy text-base mb-1">Mobile-First Design</h4>
-              <p class="body-text text-sm">Animated loading, custom cursor, responsive throughout</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="mail" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-navy text-base mb-1">Smart Contact Forms</h4>
-              <p class="body-text text-sm">Formspree integration with service type selector</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="star" class="w-5 h-5 text-accent"></i>
-            </div>
-            <div>
-              <h4 class="font-display font-semibold text-navy text-base mb-1">Portfolio Showcase</h4>
-              <p class="body-text text-sm">5 dedicated brand case study pages with galleries</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-  <!-- ============================== -->
-  <!-- PRICING — WEBSITE PACKAGES -->
-  <!-- ============================== -->
-  <section id="pricing" class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream tech-grid-bg">
-    <div class="max-w-[1200px] mx-auto">
-      <div class="text-center mb-10 md:mb-14">
-        <span class="tech-label text-accent font-medium mb-3 block reveal-up">03 Pricing</span>
-        <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Website packages.</h2>
-        <p class="body-text text-sm md:text-base reveal-up max-w-xl mx-auto">Transparent pricing, built on what a site actually needs, not a guess. 14-day turnaround, and you see the number before any money changes hands.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-16">
-        <!-- Silver -->
-        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider reveal-up">
-          <h3 class="font-display font-semibold text-navy text-base mb-1">Silver</h3>
-          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$800 – $1,500</p>
-          <p class="body-text text-xs mb-5">Single-page landing site</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>1-page responsive design</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Mobile optimized</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Contact form</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Basic SEO setup</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Vercel deployment</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>1 round of revisions</li>
-          </ul>
-        </div>
-
-        <!-- Gold (Featured) -->
-        <div class="pricing-card featured bg-navy rounded-xl p-6 md:p-7 reveal-up relative">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[0.65rem] font-semibold px-3 py-0.5 rounded-full uppercase tracking-wider">Most Popular</span>
-          <h3 class="font-display font-semibold text-cream text-base mb-1">Gold</h3>
-          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$2,000 – $4,000</p>
-          <p class="text-warm text-xs mb-5">Multi-page business site</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>3-6 page site</li>
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Custom design & branding</li>
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SEO & structured data</li>
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Contact forms & maps</li>
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Custom domain setup</li>
-            <li class="flex items-center gap-2 text-xs text-cream"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>3 rounds of revisions</li>
-          </ul>
-        </div>
-
-        <!-- Platinum -->
-        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider reveal-up">
-          <h3 class="font-display font-semibold text-navy text-base mb-1">Platinum</h3>
-          <p class="heading-lg text-accent mb-1" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">$4,500 – $8,000+</p>
-          <p class="body-text text-xs mb-5">Full brand experience</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>6+ pages with CMS</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Advanced animations/UI</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>E-commerce or booking</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Analytics integration</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Full SEO & Open Graph</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Ongoing support included</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- ONGOING CARE & HOSTING -->
-      <div class="text-center mb-10 md:mb-14">
-        <h2 class="heading-lg text-navy mb-3 reveal-up" style="font-size: clamp(1.5rem, 3vw, 2.25rem);">Ongoing care and hosting.</h2>
-        <p class="body-text text-sm reveal-up">Your site stays fast, secure, and looking fresh. You don't have to lift a finger</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-10">
-        <!-- Basic Hosting -->
-        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-accent reveal-up">
-          <h3 class="font-display font-semibold text-navy text-base mb-1">Basic Hosting</h3>
-          <p class="heading-lg text-accent mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$30/month</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Vercel hosting & CDN</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SSL certificate</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Uptime monitoring</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Monthly security check</li>
-          </ul>
-        </div>
-
-        <!-- Care Plan -->
-        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-navy reveal-up">
-          <h3 class="font-display font-semibold text-navy text-base mb-1">Care Plan</h3>
-          <p class="heading-lg text-navy mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$80 – $150/mo</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Everything in Basic</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Up to 2hrs content updates</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Performance monitoring</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-navy flex-shrink-0"></i>Monthly backup & report</li>
-          </ul>
-        </div>
-
-        <!-- Growth Plan -->
-        <div class="pricing-card bg-surface rounded-xl p-6 md:p-7 border border-divider border-t-4 border-t-accent reveal-up">
-          <h3 class="font-display font-semibold text-navy text-base mb-1">Growth Plan</h3>
-          <p class="heading-lg text-accent mb-4" style="font-size: clamp(1.25rem, 2vw, 1.5rem);">$200 – $400/mo</p>
-          <ul class="space-y-2">
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Everything in Care</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>SEO monitoring & tweaks</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Analytics review</li>
-            <li class="flex items-center gap-2 text-xs text-navy"><i data-lucide="check" class="w-3.5 h-3.5 text-accent flex-shrink-0"></i>Priority support & new features</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Add-ons -->
-      <div class="text-center reveal-up">
-        <p class="body-text text-xs">
-          <span class="font-semibold text-navy">Common Add-ons:</span>
-          Domain registration ($20-50/yr) &bull; Email setup ($5-15/mo) &bull; Extra content updates ($60/hr) &bull; New page or feature (quoted)
-        </p>
-      </div>
-
-      <div class="text-center mt-12 reveal-up">
-        <a href="#contact" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Start Your Project</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- WHY CLIENTS LOVE WORKING WITH US -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="text-center mb-16 md:mb-20">
-        <h2 class="heading-xl text-navy mb-4 reveal-up" style="font-size: clamp(2rem, 4vw, 3.5rem);">Why clients stay.</h2>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="zap" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">14-Day Turnaround</h3>
-          <p class="body-text text-sm">Most sites go live in just 14 days. Fast, reliable delivery</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="shield" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Modern & Secure</h3>
-          <p class="body-text text-sm">Vercel edge network, SSL included, blazing fast globally</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="heart" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Personal Touch</h3>
-          <p class="body-text text-sm">You work directly with our team. No outsourcing, no middlemen</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="dollar-sign" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Honest Pricing</h3>
-          <p class="body-text text-sm">What we quote is what you pay. No surprise invoices.</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="trending-up" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Built to Grow</h3>
-          <p class="body-text text-sm">Your site scales with your business. No rebuilds needed</p>
-        </div>
-
-        <div class="why-card bg-surface rounded-xl p-8 border border-divider reveal-up">
-          <div class="why-icon w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
-            <i data-lucide="refresh-cw" class="w-6 h-6 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-navy text-lg mb-2">Ongoing Care</h3>
-          <p class="body-text text-sm">We stick around to keep things running beautifully</p>
-        </div>
-      </div>
-
-      <div class="text-center mt-12 reveal-up">
-        <a href="#contact" class="cta-btn">
-          <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-          <div class="shimmer-backdrop"></div>
-          <div class="shimmer-highlight"></div>
-          <span>Ready to Start?</span>
-          <svg class="arrow-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FAQ -->
-  <!-- ============================== -->
-  <section class="py-20 md:py-28 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[860px] mx-auto">
-      <div class="text-center mb-10 md:mb-14">
-        <span class="tech-label text-accent font-medium mb-3 block reveal-up">04 Questions</span>
-        <h2 class="heading-lg text-navy reveal-up" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Before you ask.</h2>
-      </div>
-      <div class="reveal-up">
-        <details class="faq-item">
-          <summary>How long does a site take?</summary>
-          <div class="faq-item__body">Most sites go live in about 14 days from kickoff. Bigger builds with a CMS or booking run a little longer. You get a clear timeline before any money changes hands.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Do you write the content?</summary>
-          <div class="faq-item__body">We shape and tighten what you have, and write the structure and the SEO copy. If you are starting from a blank page, we draft it together. You sign off on every word.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Will it rank on Google?</summary>
-          <div class="faq-item__body">Every site ships with the on-page basics done properly: titles, meta, structured data, a sitemap, and fast hosting. Ranking over time also depends on your reviews and fresh content, which we can help you keep up.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What if I need changes later?</summary>
-          <div class="faq-item__body">A care plan covers ongoing tweaks and updates, or you can edit the site yourself. Either way you are never stuck waiting.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Who owns the site?</summary>
-          <div class="faq-item__body">You do. The code, the domain, and the content are yours, with no lock-in. Hosting is on Vercel under your own account if you want it that way.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Can you automate the back end too?</summary>
-          <div class="faq-item__body">Yes. A website is Layer 4 of a bigger system. We can wire the quote form, the follow-ups, the review requests, and more behind it. See the <a href="/automations.html" class="text-accent hover:underline">automation page</a>.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FORMS THAT DO SOMETHING -->
-  <!-- ============================== -->
-  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-16 bg-cream border-t border-divider">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-        <!-- Form mock -->
-        <div class="lg:col-span-5 reveal-up">
-          <div class="bg-surface border border-divider rounded-2xl p-6 md:p-8 shadow-xl">
-            <div class="flex items-center gap-2 mb-6">
-              <span class="w-2.5 h-2.5 rounded-full bg-accent"></span>
-              <span class="tech-label text-warm" style="font-size: 0.65rem;">your-site.com.au / contact</span>
-            </div>
-            <div class="space-y-4">
-              <div>
-                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Name</span>
-                <div class="h-11 rounded-lg border border-divider bg-cream/50 px-4 flex items-center text-navy text-sm">Sarah Chen</div>
-              </div>
-              <div>
-                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Email</span>
-                <div class="h-11 rounded-lg border border-divider bg-cream/50 px-4 flex items-center text-navy text-sm">sarah@meridianlegal.com.au</div>
-              </div>
-              <div>
-                <span class="text-warm text-xs uppercase tracking-wider font-medium mb-2 block">Your project</span>
-                <div class="min-h-[76px] rounded-lg border border-divider bg-cream/50 px-4 py-3 text-navy text-sm" style="line-height: 1.6;">New site, and a way to stop losing enquiries when we are flat out.</div>
-              </div>
-              <div class="pt-1">
-                <span class="w-full inline-flex items-center justify-center gap-2 bg-accent text-cream font-semibold text-sm uppercase tracking-wide py-3.5 rounded-lg">
-                  Send enquiry <i data-lucide="send" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- The point -->
-        <div class="lg:col-span-7 reveal-up">
-          <span class="tech-label text-accent font-medium mb-4 block">The clever bit</span>
-          <h2 class="heading-lg text-navy mb-5" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">Your form should do more than sit there.</h2>
-          <p class="body-text text-base md:text-lg mb-8 max-w-2xl" style="color: #1B2838;">Most website forms fire off an email you will miss at the bottom of your inbox. The ones we build catch every enquiry, drop it somewhere you will actually see it, and can start the follow-up on their own.</p>
-          <div class="space-y-5 border-t border-divider pt-7">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="inbox" class="w-5 h-5 text-accent"></i></div>
-              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Lands in your inbox in seconds</h3><p class="text-warm text-sm" style="line-height: 1.6;">Formatted and ready to action, not a raw data dump.</p></div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="table" class="w-5 h-5 text-accent"></i></div>
-              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Logged so nothing slips</h3><p class="text-warm text-sm" style="line-height: 1.6;">Every lead captured in one place, with the date and the detail.</p></div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/12 flex items-center justify-center flex-shrink-0"><i data-lucide="sparkles" class="w-5 h-5 text-accent"></i></div>
-              <div><h3 class="font-display font-semibold text-navy text-base mb-1">Followed up automatically, if you want</h3><p class="text-warm text-sm" style="line-height: 1.6;">An instant reply or a gentle nudge sequence, written in your voice, that you approve.</p></div>
-            </div>
-          </div>
-          <p class="text-navy text-sm mt-7 flex items-start gap-2" style="line-height: 1.6;"><i data-lucide="check-circle" class="w-4 h-4 text-accent flex-shrink-0 mt-0.5"></i><span><strong>This is live work.</strong> Matt's quote form at <a href="/#valley-arbor" class="text-accent hover:underline">Valley Arbor</a> emails him the moment an enquiry lands.</span></p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- CONTACT / CTA SECTION -->
-  <!-- ============================== -->
-  <section id="contact" class="py-32 md:py-48 px-6 md:px-12 lg:px-16 bg-navy relative overflow-hidden">
-    <!-- Decorative circles -->
-    <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] rounded-full" style="background: rgba(0,200,83,0.05); filter: blur(80px);"></div>
-    <div class="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] rounded-full" style="background: rgba(27,40,56,0.3); filter: blur(80px);"></div>
-
-    <div class="max-w-[1440px] mx-auto relative z-10">
-      <div class="text-center mb-14">
-        <span class="tech-label text-warm font-medium reveal-up block mb-8">04 Contact</span>
-        <h2 class="heading-xl text-cream mb-6 reveal-up" style="font-size: clamp(2.5rem, 6vw, 5rem);">
-          Let's make something<br>great together<span class="text-accent cursor-blink">_</span>
-        </h2>
-        <p class="body-text text-warm max-w-xl mx-auto text-base md:text-lg reveal-up">
-          Ready to get your business online? We'd love to chat.
-        </p>
-      </div>
-
-      <!-- Lead Capture Form -->
-      <div class="max-w-2xl mx-auto reveal-up">
-        <form id="contactForm" action="https://formspree.io/f/mreypwgk" method="POST" class="space-y-5">
-          <input type="hidden" name="lead_magnet" value="false">
-          <input type="hidden" name="source_page" value="websites">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="name" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Name *</label>
-              <input type="text" name="name" id="name" required placeholder="Your name" class="form-input">
-            </div>
-            <div>
-              <label for="email" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Email *</label>
-              <input type="email" name="email" id="email" required placeholder="you@company.com" class="form-input">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="phone" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Phone Number</label>
-              <input type="tel" name="phone" id="phone" placeholder="04XX XXX XXX" class="form-input">
-            </div>
-            <div>
-              <label for="service" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Service</label>
-              <select name="service" id="service" class="form-input form-select">
-                <option value="" disabled>Select a service</option>
-                <option value="website" selected>Website Design</option>
-                <option value="automation">Automation & Workflows</option>
-                <option value="both">Both: Automation + Website</option>
-                <option value="not-sure">Not sure yet</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label for="budget" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Budget Range</label>
-              <select name="budget" id="budget" class="form-input form-select">
-                <option value="" disabled selected>Select your budget</option>
-                <option value="800-1500">$800 – $1,500</option>
-                <option value="2000-4000">$2,000 – $4,000</option>
-                <option value="4500-8000">$4,500 – $8,000+</option>
-                <option value="not-sure">Not sure yet</option>
-              </select>
-            </div>
-            <div>
-              <label for="how-heard" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">How did you find us?</label>
-              <select name="how-heard" id="how-heard" class="form-input form-select">
-                <option value="" disabled selected>Select an option</option>
-                <option value="google">Google Search</option>
-                <option value="social-media">Social Media</option>
-                <option value="referral">Referral</option>
-                <option value="etsy">Etsy</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-
+    </header>
+    <main id="main">
+      <section class="hero">
+        <div class="wrap hero-grid">
           <div>
-            <label for="message" class="text-cream/60 text-xs uppercase tracking-wider font-medium mb-2 block">Tell us about your project</label>
-            <textarea name="message" id="message" rows="4" placeholder="What are you looking for? Any details help..." class="form-input" style="resize: vertical;"></textarea>
+            <span class="eyebrow">Websites / Built around your business</span>
+            <h1>Show your work.<br />Make the next step <span class="accent">easy.</span></h1>
+            <p class="lead">
+              A custom website that explains what you do and makes it easy to get in touch. Design,
+              build and launch, with one person looking after the details.
+            </p>
+            <div class="actions">
+              <a class="button" href="#pricing"
+                >See website packages<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="button secondary" href="#portfolio"
+                >See client work<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="hero-note">
+              Standalone websites welcome. Enquiry automation can be added when you need it.
+            </p>
           </div>
-
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-6">
-            <button type="submit" class="cta-btn w-full sm:w-auto">
-              <div class="shimmer-spark" style="container-type: size;"><div class="shimmer-slide"><div class="shimmer-spin"></div></div></div>
-              <div class="shimmer-backdrop"></div>
-              <div class="shimmer-highlight"></div>
-              <span>Send Message</span>
-              <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
-            <span class="text-warm/50 text-xs flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-3 h-3"></i> Based in Australia
-            </span>
+          <div class="website-hero-image">
+            <div class="browser-bar">
+              <span aria-hidden="true">● ● ●</span>
+              <span>Client work / Cee Ess Designs</span>
+            </div>
+            <img
+              src="/assets/portfolio/cee-ess.jpg"
+              width="800"
+              height="500"
+              fetchpriority="high"
+              alt="Cee Ess Designs custom website"
+            />
+            <div class="image-caption">
+              <span>Made for a Melbourne design studio.</span>
+              <a href="https://cee-essdesigns.com.au" target="_blank" rel="noopener noreferrer"
+                >View site ↗</a
+              >
+            </div>
           </div>
-        </form>
-
-        <!-- Success/Error Messages -->
-        <div id="formSuccess" class="hidden text-center py-12" role="status" aria-live="polite">
-          <div class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
-            <i data-lucide="check-circle" class="w-8 h-8 text-accent"></i>
-          </div>
-          <h3 class="heading-md text-cream text-xl mb-3">Got it. You just watched the product work.</h3>
-          <p class="text-warm text-sm max-w-md mx-auto" style="line-height: 1.7;">
-            Even a website enquiry runs through the same system: Claude read six files about our business, classified the ask, drafted a reply in our voice, and pinged Isaiah on Telegram to approve. It lands from hello@digitalartifacts.com.au shortly. Outside business hours, a holding note goes out on its own.
-          </p>
         </div>
-        <div id="formError" class="hidden text-center py-6" role="alert">
-          <p class="text-red-400 text-sm flex items-center justify-center gap-2">
-            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-            Something went wrong. Please try again or email us directly.
+      </section>
+      <div class="wrap hero-summary">
+        <span>Custom design</span>
+        <span>Mobile-friendly</span>
+        <span>Clear scope before kickoff</span>
+        <span>Your code, domain and content</span>
+      </div>
+      <section class="section" id="pricing">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">A clear place to start</span>
+              <h2>Website packages.</h2>
+            </div>
+            <p>
+              Choose the shape that fits. We agree on your content, scope, price and timeline before
+              the build starts.
+            </p>
+          </div>
+          <div class="package-fit"><strong>Choose by the job your website needs to do.</strong><p>One offer → Landing Site. Several services and projects → Business Website. Booking, selling or a more involved function → Custom Build.</p></div><div class="cards package-grid">
+            <article class="route-card">
+              <span class="eyebrow">01 / A focused first site</span>
+              <h3>Landing Site</h3>
+              <p class="price">A$800–$1,500</p>
+              <p>One page for one clear offer.</p>
+              <ul class="package-list">
+                <li>One responsive page</li>
+                <li>Contact form</li>
+                <li>Basic on-page SEO</li>
+                <li>One round of revisions</li>
+              </ul>
+              <div class="card-foot">
+                <a class="button" href="#contact" data-package="landing" data-interest="website"
+                  >Discuss this site<span class="button-arrow" aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+            <article class="route-card featured">
+              <span class="eyebrow">02 / Room to show your work</span>
+              <h3>Business Website</h3>
+              <p class="price">A$2,000–$4,000</p>
+              <p>A home for your services and projects.</p>
+              <ul class="package-list">
+                <li>3–6 pages</li>
+                <li>Custom design and branding</li>
+                <li>Contact forms and maps</li>
+                <li>On-page SEO and structured data</li>
+                <li>Three rounds of revisions</li>
+              </ul>
+              <div class="card-foot">
+                <a class="button" href="#contact" data-package="business" data-interest="website"
+                  >Discuss this site<span class="button-arrow" aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+            <article class="route-card">
+              <span class="eyebrow">03 / A more involved build</span>
+              <h3>Custom Build</h3>
+              <p class="price">A$4,500–$8,000+</p>
+              <p>More pages or a specific function.</p>
+              <ul class="package-list">
+                <li>6+ pages with a CMS</li>
+                <li>Booking or e-commerce, as scoped</li>
+                <li>Analytics integration</li>
+                <li>Custom interactions</li>
+                <li>Support scope agreed in your quote</li>
+              </ul>
+              <div class="card-foot">
+                <a class="button" href="#contact" data-package="custom" data-interest="website"
+                  >Discuss this site<span class="button-arrow" aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+          </div>
+          <p class="pricing-note">
+            Indicative prices in Australian dollars. Your written quote confirms the total payable
+            and applicable tax treatment. Domain, hosting and third-party subscriptions are scoped
+            separately. Service-area pages, integrations and automation are included only where
+            agreed in your scope.
           </p>
+          <div class="care-grid">
+            <article>
+              <h3>Basic hosting · A$30/month</h3>
+              <p>Hosting, SSL and uptime monitoring.</p>
+            </article>
+            <article>
+              <h3>Care · A$80–A$150/month</h3>
+              <p>
+                Hosting plus up to two hours of content updates, monitoring and a monthly report.
+              </p>
+            </article>
+            <article>
+              <h3>Growth · A$200–A$400/month</h3>
+              <p>
+                Care plus SEO monitoring, analytics review and priority support. New features are
+                scoped before work begins.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+<section class="section mint" id="website-case"><div class="wrap case-grid"><div class="case-image"><img src="/assets/portfolio/valley-arbor.jpg" alt="Valley Arbor’s tree-services website" width="800" height="500" loading="lazy"></div><div class="case-copy"><span class="eyebrow">A website in practice / Valley Arbor</span><h2>A clear service.<br>A direct way to enquire.</h2><p class="lead">A local tree-services business needs to show the work, explain where it operates and make a quote request straightforward.</p><ul class="case-points"><li><strong>On the page:</strong> services, project imagery, reviews and local service-area information.</li><li><strong>Behind the form:</strong> quote details delivered to the owner’s inbox.</li><li><strong>The human part:</strong> Matt follows up, discusses the job and prepares the quote.</li></ul><a class="text-link" href="#contact" data-interest="website">Discuss a website for my business ↗</a></div></div></section><section class="section"><div class="wrap scope-grid"><div><span class="eyebrow">A useful first conversation</span><h2>Bring what you have.<br>We’ll map what’s missing.</h2><p class="lead">Your services, existing website, photos or a rough idea are enough to start the conversation.</p></div><ul class="scope-list"><li><span>01</span><div><strong>Your business and material</strong><p>We review your services, audience, photos, wording and brand assets.</p></div></li><li><span>02</span><div><strong>A scope before the build</strong><p>Your proposal sets the pages, content responsibilities, revisions, integrations, total price and ongoing costs.</p></div></li><li><span>03</span><div><strong>A site you can review</strong><p>Check the design and enquiry path in a preview before launch. Access and ongoing support are agreed in the handover.</p></div></li></ul></div></section>
+      <section class="section" id="portfolio">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Client work</span>
+              <h2>Built for their business.<br />Not the next one.</h2>
+            </div>
+            <p>
+              Different businesses, different needs. A selection of websites you can visit for
+              yourself.
+            </p>
+          </div>
+          <div class="work-grid">
+            <a class="work-card" href="/#valley-arbor">
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/valley-arbor.jpg"
+                  alt="Valley Arbor website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>Valley Arbor</h3>
+                  <p>Website + quote enquiry delivery</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://lumberjord.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/lumberjord.jpg"
+                  alt="LumberJord website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>LumberJord</h3>
+                  <p>Arborist, bayside Melbourne</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://cee-essdesigns.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/cee-ess.jpg"
+                  alt="Cee Ess Designs website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>Cee Ess Designs</h3>
+                  <p>Graphic design studio, Melbourne</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://fullcirclesolutions.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/fullcircle.jpg"
+                  alt="Full Circle Solutions website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>Full Circle Solutions</h3>
+                  <p>Hospitality consulting</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://baysolar-uk.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/baysolar.jpg"
+                  alt="BaySolar UK website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>BaySolar UK</h3>
+                  <p>Solar energy, United Kingdom</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+            <a
+              class="work-card"
+              href="https://peninsula-makers-hub.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="work-shot">
+                <img
+                  src="/assets/portfolio/pmh.jpg"
+                  alt="Peninsula Makers Hub website"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="work-caption">
+                <div>
+                  <h3>Peninsula Makers Hub</h3>
+                  <p>Makerspace, Mornington Peninsula</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </div>
+          <details class="template-gallery">
+            <summary>Explore template concepts</summary>
+            <p class="small muted">
+              Design explorations, shown separately from client commissions.
+            </p>
+            <div class="work-grid">
+              <a
+                class="work-card"
+                href="https://robert-green-carpenter.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="work-shot">
+                  <img
+                    src="/assets/portfolio/robert-green.jpg"
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                    alt="Robert Green Carpenter concept website"
+                  />
+                </div>
+                <div class="work-caption">
+                  <div>
+                    <h3>Robert Green Carpenter</h3>
+                    <p>Template concept</p>
+                  </div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <a
+                class="work-card"
+                href="https://eastern-suburbs-painting.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="work-shot">
+                  <img
+                    src="/assets/portfolio/eastern-painting.jpg"
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                    alt="Eastern Suburbs Painting concept website"
+                  />
+                </div>
+                <div class="work-caption">
+                  <div>
+                    <h3>Eastern Suburbs Painting</h3>
+                    <p>Template concept</p>
+                  </div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <a
+                class="work-card"
+                href="https://toms-firewood.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="work-shot">
+                  <img
+                    src="/assets/portfolio/toms-firewood.jpg"
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                    alt="Tom’s Firewood concept website"
+                  />
+                </div>
+                <div class="work-caption">
+                  <div>
+                    <h3>Tom’s Firewood</h3>
+                    <p>Template concept</p>
+                  </div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <a
+                class="work-card"
+                href="https://yaz-services.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="work-shot">
+                  <img
+                    src="/assets/portfolio/yaz.jpg"
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                    alt="Yaz Services concept website"
+                  />
+                </div>
+                <div class="work-caption">
+                  <div>
+                    <h3>Yaz Services</h3>
+                    <p>Template concept</p>
+                  </div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <a
+                class="work-card"
+                href="https://stoafinance.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="work-shot">
+                  <img
+                    src="/assets/portfolio/stoa.jpg"
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                    alt="Stoa Finance concept website"
+                  />
+                </div>
+                <div class="work-caption">
+                  <div>
+                    <h3>Stoa Finance</h3>
+                    <p>Template concept</p>
+                  </div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
+            </div>
+          </details>
+        </div>
+      </section>
+      <section class="section dark">
+        <div class="wrap bridge">
+          <div>
+            <span class="eyebrow">When the website is only the beginning</span>
+            <h2>Give the enquiry<br />a next step.</h2>
+            <p class="lead">
+              A form can do more than send an email. Connect it to a workflow that captures the
+              details, prepares a reply and keeps you in the loop.
+            </p>
+            <div class="actions">
+              <a class="button" href="/automations.html?flow=lead#flows"
+                >Explore enquiry follow-up<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="hero-note">An optional addition, scoped around your tools.</p>
+          </div>
+          <ol class="compact-flow">
+            <li>
+              <span class="step-mark">01</span>
+              <div>
+                <strong>Someone enquires.</strong>
+                <p>The website asks for the details you need.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-mark">02</span>
+              <div>
+                <strong>The details reach you.</strong>
+                <p>A record and notification in the tools you use.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-mark">03</span>
+              <div>
+                <strong>You have a response ready.</strong>
+                <p>A draft or next action, with approval where needed.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+      <section class="section">
+        <div class="wrap founder-grid">
+          <div>
+            <span class="eyebrow">Before you decide</span>
+            <h2>A few practical answers.</h2>
+            <p class="lead" style="margin-top: 24px">
+              You work directly with Isaiah, from the first conversation to launch and handover.
+            </p>
+            <div class="actions">
+              <a class="button" href="#contact"
+                >Discuss your website<span class="button-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+          <div class="details-list">
+            <details>
+              <summary>How long does a website take?</summary>
+              <p>
+                Standard builds usually take about 14 days from kickoff, once content and scope are
+                ready. Larger builds take longer. Your proposal includes a timeline and review
+                points.
+              </p>
+            </details>
+            <details>
+              <summary>Can you help with the words and images?</summary>
+              <p>
+                Yes. We shape your content, plan the pages and draft copy together where needed. You
+                approve it before launch. Photography or other additional production is scoped
+                separately.
+              </p>
+            </details>
+            <details>
+              <summary>Will I need automation too?</summary>
+              <p>
+                No. Every package can be a standalone website. If enquiry follow-up needs attention,
+                we can scope that separately and connect it later.
+              </p>
+            </details>
+            <details>
+              <summary>Will the site appear on Google?</summary>
+              <p>
+                The build includes the agreed on-page search basics. Visibility also depends on
+                competition, useful content, links and reputation. Search rankings are not
+                guaranteed.
+              </p>
+            </details>
+            <details>
+              <summary>Who owns it, and what about later changes?</summary>
+              <p>
+                You own the custom code, domain and content. We agree on how you will manage updates
+                at handover. Care plans are optional; individual changes can also be quoted.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+      <section class="section dark" id="contact">
+        <div class="wrap contact-grid">
+          <div class="contact-copy">
+            <span class="eyebrow">A useful first conversation</span>
+            <h2>What needs to work better?</h2>
+            <p class="lead">
+              Tell me what you have and what is getting in the way. You do not need a technical
+              brief.
+            </p>
+            <ol class="next-steps">
+              <li><span>01</span> I’ll reply within one business day.</li>
+              <li><span>02</span> We’ll talk through what would help first.</li>
+              <li><span>03</span> You’ll get a clear scope and price before committing.</li>
+            </ol>
+            <a href="mailto:hello@digitalartifacts.com.au"
+              >Prefer email? hello@digitalartifacts.com.au</a
+            >
+          </div>
+          <div>
+            <p class="selection-note" id="selectionNote" hidden></p>
+            <form
+              class="contact-form"
+              id="contactForm"
+              action="https://formspree.io/f/mreypwgk"
+              method="POST"
+              data-page="websites"
+            >
+              <input type="hidden" name="lead_magnet" value="false" />
+              <input type="hidden" name="page" value="websites" />
+              <input type="hidden" name="package" value="" />
+              <div class="form-row">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input
+                    id="name"
+                    name="name"
+                    autocomplete="name"
+                    required
+                    placeholder="Your name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="you@business.com.au"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label for="service">I’m interested in</label>
+                <select id="service" name="service">
+                  <option value="not-sure">Help choosing where to start</option>
+                  <option value="website" selected>A website</option>
+                  <option value="lead-response">Enquiry follow-up</option>
+                  <option value="both">Website + follow-up</option>
+                  <option value="reactivation">Past-client follow-up</option>
+                  <option value="reputation">Review requests</option>
+                  <option value="automation">Repeat admin or a custom workflow</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="message">What would you like to improve?</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows="4"
+                  placeholder="A new website, enquiries going quiet, admin taking up your evenings…"
+                ></textarea>
+              </div>
+              <details class="form-extra">
+                <summary>
+                  Add a phone number or budget <span class="optional">Optional</span>
+                </summary>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="phone">Phone <span class="optional">Optional</span> </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      placeholder="04XX XXX XXX"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="budget">Budget <span class="optional">Optional</span> </label>
+                    <select id="budget" name="budget">
+                      <option value="not-sure">Not sure yet</option>
+                      <option value="800-1500">A$800 to A$1,500</option>
+                      <option value="2000-4000">A$2,000 to A$4,000</option>
+                      <option value="4500-8000">A$4,500 to A$8,000</option>
+                      <option value="8000+">A$8,000+</option>
+                    </select>
+                  </div>
+                </div>
+              </details>
+              <p class="form-error" id="formError" role="alert" hidden></p>
+              <button class="button" type="submit">
+                <span data-submit-label>Send my brief</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+              <p class="form-note">
+                An enquiry starts a conversation. It does not book a call or commit you to a
+                project. <a href="#data-use">How your details are used</a>.
+              </p>
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+            <div class="form-result" id="formSuccess" tabindex="-1" hidden>
+              <span class="eyebrow">Brief received</span>
+              <h3>Thanks. I’ll take a look.</h3>
+              <p>
+                Your brief has been received. I’ll reply within one business day to talk through the
+                next step.
+              </p>
+              <p class="small">
+                If you need to add anything, email
+                <a href="mailto:hello@digitalartifacts.com.au">hello@digitalartifacts.com.au</a>.
+              </p>
+            </div>
+            <details class="data-note" id="data-use">
+              <summary>How your details are used</summary>
+              <p>
+                Your brief is sent to our enquiry workflow and Formspree, a backup delivery service.
+                It may be processed with AI to help draft a response, which Isaiah reviews. Your
+                details are used to respond to your enquiry. Please leave out passwords and
+                sensitive client information. Email hello@digitalartifacts.com.au with questions
+                about your details.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-main">
+          <div>
+            <a class="brand" href="/">
+              <img src="/brand/da-mark-tile.svg" width="40" height="40" alt="" />
+              <span>Digital Artifacts<span class="brand-dot">.</span> </span>
+            </a>
+            <p>Websites and automation for the way your business actually works.</p>
+          </div>
+          <nav class="footer-links" aria-label="Footer">
+            <a href="/websites.html">Websites</a>
+            <a href="/automations.html">Automation</a>
+            <a href="mailto:hello@digitalartifacts.com.au">Email Isaiah</a>
+            <a href="/#contact" data-interest="referral">Refer a business</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Digital Artifacts. Isaiah Wong, Australia.</span>
+          <span>Direct work. Clear scope. You own the custom work.</span>
         </div>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ============================== -->
-  <!-- FOOTER -->
-  <!-- ============================== -->
-  <footer class="bg-navy py-16 md:py-20 px-6 md:px-12 lg:px-16 border-t border-white/10">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
-        <!-- Logo + Tagline -->
-        <div class="md:col-span-4">
-          <img src="/brand/da-mark-tile.png" alt="Digital Artifacts" class="h-12 w-12 mb-6">
-          <p class="text-warm text-sm max-w-xs" style="line-height: 1.7;">
-            AI operating systems for small business. Built in 4 layers: Context, Skills, Automation, Agent.
-          </p>
-        </div>
-
-        <!-- Navigation -->
-        <div class="md:col-span-2 md:col-start-7">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Navigate</h4>
-          <div class="flex flex-col gap-3">
-            <a href="/" class="footer-link">Home</a>
-            <a href="/automations.html" class="footer-link">Automation</a>
-            <a href="/websites.html" class="footer-link">Websites</a>
-            <a href="/#layers" class="footer-link">The 4 layers</a>
-            <a href="#contact" class="footer-link">Contact</a>
-          </div>
-        </div>
-
-        <!-- Connect -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Connect</h4>
-          <div class="flex flex-col gap-3">
-            <a href="mailto:hello@digitalartifacts.com.au" class="footer-link">hello@digitalartifacts.com.au</a>
-            <a href="https://www.etsy.com/shop/DigitalArtifactsAU" target="_blank" rel="noopener noreferrer" class="footer-link">Digital Products</a>
-          </div>
-        </div>
-
-        <!-- Branding -->
-        <div class="md:col-span-2">
-          <h4 class="text-cream/50 text-xs uppercase tracking-widest font-body font-medium mb-5">Studio</h4>
-          <p class="text-warm text-sm">Digital Artifacts</p>
-          <p class="text-warm/50 text-xs mt-2">Australia</p>
-        </div>
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <p class="text-warm/50 text-xs">&copy; 2026 Digital Artifacts. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-
-  <!-- ============================== -->
-  <!-- SCRIPTS -->
-  <!-- ============================== -->
-  <script>
-    // === Initialize Lucide Icons (guarded so a CDN failure cannot hide content) ===
-    try { lucide.createIcons(); } catch (e) {}
-    // Failsafe: if GSAP did not load, drop the js flag so reveal-up content stays visible
-    if (!window.gsap) { document.documentElement.classList.remove('js'); }
-
-    // === Mobile Menu ===
-    const hamburger = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
-
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    // === Lenis Smooth Scroll ===
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    // Sync GSAP ScrollTrigger with Lenis
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-
-    // === Nav Scroll State ===
-    const nav = document.getElementById('mainNav');
-    const navBrandText = document.getElementById('navBrandText');
-    ScrollTrigger.create({
-      start: 'top -80',
-      onUpdate: (self) => {
-        if (self.scroll() > 80) {
-          nav.classList.add('scrolled');
-          navBrandText.style.opacity = '0';
-          navBrandText.style.transform = 'translateX(-8px)';
-          navBrandText.style.pointerEvents = 'none';
-          navBrandText.style.color = '#1B2838';
-        } else {
-          nav.classList.remove('scrolled');
-          navBrandText.style.opacity = '1';
-          navBrandText.style.transform = 'translateX(0)';
-          navBrandText.style.pointerEvents = '';
-          navBrandText.style.color = '#F7F6F3';
-        }
-      }
-    });
-
-    // === Hero Animation ===
-    gsap.to('.hero-headline', {
-      y: 0,
-      opacity: 1,
-      duration: 1,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
-
-    gsap.to('.hero-subtitle', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 0.6,
-    });
-
-    gsap.to('.hero-cta', {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 0.9,
-      stagger: 0.15,
-    });
-
-    // === Scroll Reveal Animations ===
-    gsap.utils.toArray('.reveal-up').forEach(el => {
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: 'power3.out',
-      });
-    });
-
-    // === About Section: Word-by-word reveal ===
-    const aboutText = document.querySelector('.about-reveal-text');
-    if (aboutText) {
-      const words = aboutText.textContent.trim().split(/\s+/);
-      aboutText.innerHTML = words.map(word =>
-        `<span class="reveal-word"><span class="reveal-word-inner">${word}</span></span>`
-      ).join(' ');
-
-      const wordInners = aboutText.querySelectorAll('.reveal-word-inner');
-      gsap.to(wordInners, {
-        scrollTrigger: {
-          trigger: aboutText,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.03,
-        ease: 'power3.out',
-      });
-    }
-
-    // === Stat Cards Stagger ===
-    const statCards = gsap.utils.toArray('.stat-card');
-    if (statCards.length) {
-      statCards.forEach(card => card.classList.remove('reveal-up'));
-      statCards.forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            delay: i * 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 90%',
-              toggleActions: 'play none none none',
-            }
-          }
-        );
-      });
-    }
-
-    // === Portfolio filter ===
-    const pfFilters = document.querySelectorAll('.pf-filter');
-    const pfCards = document.querySelectorAll('#pfGrid .pf-card');
-    pfFilters.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter;
-        pfFilters.forEach(b => { const on = b === btn; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
-        pfCards.forEach(card => { const show = filter === 'all' || card.dataset.cat === filter; card.classList.toggle('is-hidden', !show); });
-      });
-    });
-
-    // === Form Submission Handler (Dual: Formspree + n8n Webhook) ===
-    const N8N_WEBHOOK_URL = 'https://n8nbeginner-sga.app.n8n.cloud/webhook/da-lead-capture';
-    const FORMSPREE_URL = document.getElementById('contactForm')?.getAttribute('action');
-
-    function handleFormSubmit(form, isLeadMagnet) {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      data.lead_magnet = isLeadMagnet;
-      data.submitted_at = new Date().toISOString();
-      data.source_page = 'websites';
-      data.source_url = window.location.href;
-
-      const promises = [];
-
-      // Send to n8n webhook (if configured)
-      if (N8N_WEBHOOK_URL) {
-        promises.push(
-          fetch(N8N_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          }).catch(() => null)
-        );
-      }
-
-      // Send to Formspree (if configured)
-      if (!isLeadMagnet && FORMSPREE_URL && !FORMSPREE_URL.includes('{FORM_ID}')) {
-        promises.push(
-          fetch(FORMSPREE_URL, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: formData,
-          }).catch(() => null)
-        );
-      }
-
-      return Promise.allSettled(promises);
-    }
-
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = contactForm.querySelector('button[type="submit"]');
-        const originalText = btn.querySelector('span').textContent;
-        btn.querySelector('span').textContent = 'Sending...';
-        btn.disabled = true;
-
-        try {
-          await handleFormSubmit(contactForm, false);
-          contactForm.classList.add('hidden');
-          document.getElementById('formSuccess').classList.remove('hidden');
-          lucide.createIcons();
-        } catch (err) {
-          document.getElementById('formError').classList.remove('hidden');
-        } finally {
-          btn.querySelector('span').textContent = originalText;
-          btn.disabled = false;
-        }
-      });
-    }
-  </script>
-</body>
+    </footer>
+  </body>
 </html>
